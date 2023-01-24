@@ -1,0 +1,13 @@
+﻿@model bool?
+@{
+    var o = ViewData.ModelMetadata;
+    var isChecked = Model.HasValue ? Model.Value : false;
+    var radioId = ViewData.TemplateInfo.GetFullHtmlFieldId("");
+}
+
+<div class="vd_radio radio-success">
+    @Html.RadioButton("", "true", isChecked, new { id = @radioId + "_1", @class = "yes" })
+    <label for="@(radioId)_1"> Consumeable </label>
+    @Html.RadioButton("", "false", !isChecked, new { id = @radioId + "_2", @class = "no" })
+    <label for="@(radioId)_2"> Reuseable </label>
+</div>

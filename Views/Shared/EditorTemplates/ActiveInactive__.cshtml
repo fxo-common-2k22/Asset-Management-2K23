@@ -1,0 +1,88 @@
+﻿@model bool?
+@{
+    var o = ViewData.ModelMetadata;
+    var isChecked = Model.HasValue ? Model.Value : false;
+    var radioId = ViewData.TemplateInfo.GetFullHtmlFieldId("");
+}
+
+@if (Model.HasValue)
+{
+    if (Model.Value)
+    {
+        @Html.TextBoxFor(model => model, new
+   {
+       id = @radioId + "_1",
+               @checked = true,
+       @Value = true,
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline"  style="padding-left: 2px; float: left;margin-right: 20px; ">Yes</label>
+        @Html.TextBoxFor(model => model, new
+        {
+            @Value = false,
+            type = "radio",
+            @class = "icheck-me",
+            @data_skin = "square",
+            @data_color = "blue",
+            @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+        })
+        <label class="inline"  style="padding-left: 2px;float: left;margin-right: 20px;">No</label>
+    }
+    else
+    {
+        @Html.TextBoxFor(model => model, new
+   {
+       id = @radioId + "_1",
+       @checked = false,
+       @Value = true,
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline"  style="padding-left: 2px;float: left;margin-right: 20px;">Yes</label>
+        @Html.TextBoxFor(model => model, new
+   {
+       id = @radioId + "_2",
+       @Value = false,
+       @checked = true,
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline"  style="padding-left: 2px;float: left;margin-right: 20px;">No</label>
+    }
+}
+else
+{
+    @Html.TextBoxFor(model => model, new
+{
+    id = @radioId + "_1",
+    @Value = true,
+    type = "radio",
+    @class = "icheck-me",
+    @data_skin = "square",
+    @data_color = "blue",
+    @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+})
+    <label class="inline"  style="padding-left: 2px;float: left;margin-right: 20px;">Yes</label>
+        @Html.TextBoxFor(model => model, new
+   {
+       @Value = false,
+       id = @radioId + "_2",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline"  style="padding-left: 2px;float: left;margin-right: 20px;">No</label>
+
+}

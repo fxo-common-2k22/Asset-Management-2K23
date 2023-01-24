@@ -1,0 +1,42 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageAMUnitsViewModel
+<div id="todisplay">
+    <table class="table table-hover">
+        <tr>
+            <th width="20px">Sr</th>
+            <th> Name</th>
+            <th width="20%">Action</th>
+        </tr>
+        @{var count = 1;}
+        @foreach (var item in Model.Units)
+        {
+            <tr id="row_@item.UnitId">
+                <td><span class="label label-default current-theme">@(count++)</span></td>
+                <td>@Html.DisplayFor(modelItem => item.UnitName)</td>
+                <td>
+                    @using (Ajax.BeginForm("EditUnit", "Setup",
+                        new AjaxOptions
+                        {
+                            OnBegin = "OnEditBegin",
+                            OnSuccess = "OnEditSuccess",
+                            OnFailure = "OnFailure",
+                            UpdateTargetId = "EditModalTarget"
+                            //LoadingElementId = "progress"
+                        }))
+                    {
+                        <input type="hidden" name="UnitId" value="@item.UnitId" />
+                        if (ViewBag.CanUpdate)
+                        {
+                            <input type="submit" class="btn btn-primary load" value="Edit" />
+                        }
+                        if (ViewBag.CanDelete)
+                        {
+                            <input type="button" class="btn btn-danger" value="Delete" onclick="DeleteUnit(@item.UnitId)" />
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+

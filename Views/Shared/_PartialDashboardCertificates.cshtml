@@ -1,0 +1,128 @@
+﻿
+@model List<FAPP.Model.Form>
+@using FAPP.Model
+
+@helper  TopMenu(List<Form> nodeList)
+{
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="desktop-icons clearfix" style="clear: both; margin: 1em;">
+
+                @{
+                    var action = Request.RequestContext.RouteData.Values["action"].ToString();
+                    var controller = Request.RequestContext.RouteData.Values["controller"].ToString();
+                    var area = HttpContext.Current.Request.RequestContext.RouteData.DataTokens["area"] ?? "";
+                    //var types = (List<TemplateType>)ViewBag.TypesList;
+                    //ActionLinks node = GetParentMenu(action, controller, area.ToString(), nodeList);
+                    //if (node!=null)
+                    {
+
+                        //foreach (var type in types)
+                        {
+                            //var list = nodeList.Where(l => l.ParentForm == type.TemplateTypeId).ToList();
+                            // if (list.Any())
+                            {
+                                @*<h3>@type.TemplateTypeName</h3>*@
+                                <ul class="">
+                                    @foreach (var item in Model)
+                                    {
+                                        if (item.FormName == "Dashboard")
+                                        {
+                                            continue;
+                                        }
+                                        string url = item.FormURL;
+                                        if (item.FormName == "Add New")
+                                        {
+
+                                            <li>
+                                                <a id="HyperLink1" title="@item.FormName" href="@url" data-toggle="tooltip">
+                                                    <span style="margin-left:15px" class="@item.Icon">
+                                                        @*<img src="@item.FontIcon">*@
+                                                    </span>
+                                                    <em style="padding-top:10px">@item.FormName</em>
+                                                </a>
+                                            </li>
+
+                                        }
+                                        else
+                                        {
+                                            <li class="dropdown setup">
+                                                <a id="HyperLink1" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="@item.FormName" href="#">
+                                                    @*href="@url"*@
+                                                    <span style="margin-left:15px" class="@item.Icon">
+                                                        @*<img src="@item.FontIcon">*@
+                                                    </span>
+                                                    @*<span class="caret"></span>*@
+                                                    <em style="padding-top:10px">@item.FormName</em>
+                                                </a>
+                                                <ul class="dropdown-menu pull-left setup" style="margin-top: -45%;">
+                                                    <li style="width: 100% !important;height: 30px;">
+                                                        <a target="_blank" href="@url" style="width: auto;text-align: left;height: 20px;height: 30px;min-height: 0 !important;">
+                                                            <span style="width: 100% !important;height: auto;">
+                                                                Issue Certificate
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li style="width: 100% !important;height: 30px;">
+                                                        <a style="width: auto;text-align: left;height: 30px;min-height: 0 !important;">
+                                                            <span onclick="GetIssuedCertificatesUrl('@url')"  style="width: 100% !important;height: auto;">
+                                                                Issued Certificates
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li style="width: 100% !important;height: 30px;">
+                                                        <a style="width: auto;text-align: left;height: 30px;min-height: 0 !important;">
+                                                            <span onclick="GetEditCertificatesUrl('@url')"  style="width: 100% !important;height: auto;">
+                                                                Edit @item.FormName
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            }
+                        }
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+}
+@functions {
+    public static Form GetParentMenu(string action, string controller, string area, List<Form> nodeList)
+    {
+        return nodeList.Where(s => s.Action == action && s.Controller == controller).FirstOrDefault();
+        //bool found = false;
+        //ActionLinks node = null;
+        //foreach (var item in nodeList)
+        //{
+        //    if (item.Action == action && item.Controller == controller && item.Area == area)
+        //    {
+        //        return item;
+        //    }
+        //    node = GetParentMenu(action, controller, area, nodeList.Where(s=> s.ParentForm == item.FormId).ToList());
+        //    if (node != null) { return node; }
+        //}
+        //return node;
+    }
+
+}
+@TopMenu(Model)
+
+<script>
+    function GetIssuedCertificatesUrl(oldUrl) {
+         ;
+        var newUrl = oldUrl.replace('Issue/', 'Issued/');
+        //window.location.href = newUrl;
+        window.open(newUrl, '_blank');
+    }
+    function GetEditCertificatesUrl(oldUrl) {
+         ;
+        var newUrl = oldUrl.replace('Issue/', 'AddEdit/');
+        //window.location.href = newUrl;
+        window.open(newUrl, '_blank');
+    }
+</script>

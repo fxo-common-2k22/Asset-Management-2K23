@@ -1,0 +1,7 @@
+﻿GO
+use ezBIZ_PRO_SCHEMAONLY
+Alter TABLE Fee.FeeTypeGroups
+	ADD Priority smallint null;
+GO
+ 
+ 

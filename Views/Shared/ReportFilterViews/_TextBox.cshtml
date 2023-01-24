@@ -1,0 +1,11 @@
+﻿@model FAPP.Models.TemplateFilter
+@{
+    var value = "";
+    if (TempData[Model.FilterName] != null)
+    {
+        value = TempData[Model.FilterName].ToString();
+    }
+}
+
+@Html.Editor(Model.FilterName, new { htmlAttributes = new {@Value=value, @style = "width:100% !important", @class = "form-control input-sm", @placeholder = Model.FilterTitle } })
+@Html.ValidationMessage(Model.FilterName, "", new { @class = "text-danger" })

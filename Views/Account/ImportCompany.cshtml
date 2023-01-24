@@ -1,0 +1,166 @@
+﻿@model FAPP.ViewModel.PrimaryDataViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Import Company</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link href="~/css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/form-elements.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="shortcut icon" type="image/x-png" href="~/Images/ez-favicon.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+    <link href="~/Scripts/Toaster/toastr.css" rel="stylesheet" />
+</head>
+
+<body class="container-fluid">
+
+    <style>
+        .first {
+            height: 0% !important;
+        }
+
+        .inner-bg {
+            background: rgb(238, 238, 238) !important;
+        }
+
+        .form-top {
+            background: rgb(238, 238, 238) !important;
+            padding: 0;
+        }
+
+        .form-top-left {
+            background: rgb(238, 238, 238) !important;
+        }
+    </style>
+    <!-- Top content -->
+    <div class="top-content">
+        <div class="inner-bg">
+            <div class="first">
+                <div class="col-sm-4 col-sm-offset-4 form-box f">
+                    <div class="form-top form-top1">
+                        <div class="form-top-left" id="topdiv" style="text-align:center; width:100%">
+                            @if (ViewBag.logoimage != null)
+                            {
+                                @*<h3><img src="data:image;base64,@System.Info.Convert.ToBase64String(ViewBag.logoimage)" id="logo" /></h3>*@
+                            }
+                            else
+                            {
+                                <h3><img id="logo" src="/uploads/Logos/CompanyLogo.png" /></h3>
+                            }
+                            @*<h3><img id="logo" /></h3>*@
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="second">
+                <div class="row">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        @Html.Partial("_PartialAlerts")
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box box-bordered blue">
+                            <div class="box-title">
+                                <h3 class="Bold">
+                                    <strong>Server Info</strong>
+                                </h3>
+                            </div>
+                            <div class="box-content nopadding">
+                                @using (Ajax.BeginForm("GetOldCompany", "Account", new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnSuccess = "OnCreateUpdateSuccess", OnFailure = "OnFailure" }, new { @class = "new-task-form form-horizontal form-bordered" }))
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Credential.Server, "Server", new { @class = "control-label col-sm-3" })
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Credential.Server, new { htmlAttributes = new { @class = "form-control", @placeholder = "10.0.0.0" } })
+                                            @Html.ValidationMessageFor(m => m.Credential.Server, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Credential.UserName, "User Name", new { @class = "control-label col-sm-3" })
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Credential.UserName, new { htmlAttributes = new { @class = "form-control", @placeholder = "User Name" } })
+                                            @Html.ValidationMessageFor(m => m.Credential.UserName, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Credential.Password, "Password", new { @class = "control-label col-sm-3" })
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Credential.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Password" } })
+                                            @Html.ValidationMessageFor(m => m.Credential.Password, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Credential.Database, "Database", new { @class = "control-label col-sm-3" })
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Credential.Database, new { htmlAttributes = new { @class = "form-control", @placeholder = "Database" } })
+                                            @Html.ValidationMessageFor(m => m.Credential.Database, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-8">
+                                            <input type="submit" name="Credential.Command" value="Submit" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box box-bordered blue">
+                            <div class="box-title">
+                                <h3 class="Bold">
+                                    <strong>  Create Company</strong>
+                                </h3>
+                            </div>
+                            <div class="box-content nopadding">
+                                <div id="companyFormDivId">
+                                    @Html.Partial("_CompanyForm", Model)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Javascript -->
+    <script src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.backstretch.min.js"></script>
+    <script src="~/Scripts/scripts.js"></script>
+    @*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>*@
+    <script src="~/Scripts/jquery.mask.js"></script>
+    <script src="/frameworks/blockUI/jquery.blockUI.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/Toaster/toastr.min.js"></script>
+    <script src="~/frameworks/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+
+    <script src="~/Scripts/custom_1.js"></script>
+
+    <script>
+        $('.mobile').mask("0000-0000000", { placeholder: "____-_______" });
+        function showBlockUI() {
+            $.blockUI({ message: '<div style="font-size: 18px;padding: 9px;"><i class="fa fa-cog fa-spin fa-fw"></i><span class="">Please wait. We are setting things up.</span></div>' });
+        }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,12 @@
+﻿@model List<string>
+@{
+    Layout = null;
+    }
+<h4>Template Fields</h4>
+<ul class="tags email header">
+    @foreach (var item in Model)
+    {
+       <li>{<a href="javascript:;" class="append">@item</a>}</li> 
+    }
+</ul>
+ 

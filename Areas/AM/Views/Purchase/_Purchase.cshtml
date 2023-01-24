@@ -1,0 +1,196 @@
+﻿@model FAPP.Areas.AM.ViewModels.AMPurchaseModel
+
+<div class="vbox">
+    <table class="fv fw">
+        <tr>
+            <td>Purchase Invoice Date</td>
+            <td>
+                @Html.TextBoxFor(model => model.PurchaseInvoice.PurchaseInvoiceDate, new { @class = "form-control datepicker" })
+            </td>
+            <td>Supplier</td>
+            <td>
+                @Html.DropDownListFor(m => m.PurchaseInvoice.SupplierId, new SelectList(ViewBag.Suppliers, "ClientId", "Name", Model.PurchaseInvoice.SupplierId), new { @class = "form-control chosen-select", @style = "width:100%;" })
+            </td>
+        </tr>
+        <tr>
+            <td>Currency</td>
+            <td>
+                @Html.DropDownListFor(m => m.PurchaseInvoice.CurrencyId, new SelectList(ViewBag.Currency, "CurrencyId", "CurrencyName", Model.PurchaseInvoice.CurrencyId), new { @class = "form-control chosen-select", @style = "width:100%;" })
+            </td>
+            <td>Exchange Rate</td>
+            <td>
+                @Html.TextBoxFor(model => model.PurchaseInvoice.ExchangeRate, new { @class = "form-control ", @readonly = "readonly" })
+            </td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td colspan="2">
+                @Html.TextBoxFor(model => model.PurchaseInvoice.Description, new { @class = "form-control " })
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="voucherdetails" class="downpadding">
+    <table id="trans_details" class="table table-hover table-striped no-head-border table-responsive">
+        <thead>
+            <tr class="gvheader">
+                <th>Barcode</th>
+                <th>Product</th>
+                <th>Manufacturer No</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Line Total</th>
+                <th style="width: 104px">Discount</th>
+                <th>Net Total</th>
+                <th style="width: 115px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="tr_clone" style="display:none;">
+                <td>
+                    @Html.Hidden("PurchaseInvoiceProduct[-1].PurchaseInvoiceProductId")
+                    @Html.Hidden("PurchaseInvoiceProduct[-1].PurchaseInvoiceId")
+                    @Html.TextBox("PurchaseInvoiceProduct[-1].Barcode", null, new { @class = "cloneable", @placeholder = "Barcode" })
+                    <div class="help-block" id="PurchaseInvoiceProduct_0__item_no_lbl"></div>
+                </td>
+                <td style="width:200px;">
+                    @Html.DropDownList("PurchaseInvoiceProduct[-1].ProductId", new SelectList(ViewBag.Products, "ProductId", "ProductName"), "--Select--", new { @class = "form-control nochosen chosenafterclone cloneable", @style = "width:100%;" })
+                </td>
+                <td>
+                    @Html.TextBox("PurchaseInvoiceProduct[-1].ManufacturerProductNo", null, new { @class = "cloneable", @placeholder = "Manufacturer Product No" })
+                </td>
+                <td>
+                    @Html.TextBox("PurchaseInvoiceProduct[-1].Quantity", null, new { @class = "numeric cloneable", @placeholder = "Quantity" })
+                </td>
+                <td>
+                    @Html.TextBox("PurchaseInvoiceProduct[-1].UnitPrice", null, new { @class = "numeric cloneable", @placeholder = "Unit Price" })
+                </td>
+                <td>
+                    @Html.TextBox("PurchaseInvoiceProduct[-1].LineTotal", null, new { @class = "numeric cloneable", @placeholder = "Line Total", @readonly = "readonly" })
+                </td>
+                <td>
+                    <div class="input-group">
+                        @Html.TextBox("PurchaseInvoiceProduct[-1].Discount", null, new { @class = "numeric cloneable", @placeholder = "Discount" })
+                        <span class="input-group-addon">%</span>
+                    </div>
+                </td>
+                <td>
+                    @Html.TextBox("PurchaseInvoiceProduct[-1].NetTotal", null, new { @class = "numeric cloneable", @placeholder = "Net Total" })
+                </td>
+                <td>
+                    <a href="#" class="btn btn-danger" data-action="Delete" data-id="-1">Delete</a>
+                </td>
+            </tr>
+
+        </tbody>
+        @*<tr>
+                <td>
+                    <input name="ctl00$BodyContent$lvPurchaseInvoiceProducts$ctrl0$TextBox1" type="text" id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_TextBox1" class="form-control" Placeholder="Bracode" />
+                </td>
+                <td>
+                    <select name="ctl00$BodyContent$lvPurchaseInvoiceProducts$ctrl0$ddlProductId" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$BodyContent$lvPurchaseInvoiceProducts$ctrl0$ddlProductId\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_ddlProductId" class="form-control" style="width:200px;">
+                        <option selected="selected" value="">Select Product</option>
+                        <option value="1">Aspire E1-571</option>
+                        <option value="2">intel Corei3</option>
+                        <option value="3">j-3</option>
+                        <option value="5">sds</option>
+                        <option value="8">df</option>
+                        <option value="9">err</option>
+                        <option value="10">234</option>
+                        <option value="11">234test</option>
+                        <option value="12">234</option>
+                        <option value="13">3424</option>
+                        <option value="14">Mob</option>
+                        <option value="15">mob</option>
+                        <option value="16">Mob</option>
+                        <option value="17">mob</option>
+                        <option value="18">mob</option>
+                        <option value="19">mob</option>
+                        <option value="20">mob</option>
+                        <option value="21">eee</option>
+                        <option value="22">er</option>
+                        <option value="23">df</option>
+                        <option value="24">Mob</option>
+                        <option value="26">ee</option>
+                        <option value="27">mob</option>
+                        <option value="28">mob</option>
+                        <option value="29">ddd</option>
+                        <option value="30">ee</option>
+                        <option value="31">ew</option>
+                        <option value="1017">www</option>
+                        <option value="1018">eee</option>
+                        <option value="1019">asf</option>
+                        <option value="1021">ddd</option>
+                        <option value="1022">dsf</option>
+                        <option value="1023">sdfsf</option>
+                        <option value="1024">sdfsadf</option>
+                        <option value="1025">ss</option>
+                        <option value="1026">ff</option>
+                        <option value="1027">sdf</option>
+                        <option value="1028">sdfs</option>
+                        <option value="1029">3243</option>
+                        <option value="2017">Lumia</option>
+                        <option value="2018">Lumia</option>
+                        <option value="3017">Galxy</option>
+                        <option value="3018">QMoinker</option>
+                        <option value="3019">Galaxy Node S4</option>
+                        <option value="3020">Galaxy Node S4e</option>
+                        <option value="3021">232</option>
+                        <option value="3022">new prod</option>
+                        <option value="4021">N2</option>
+                        <option value="4022">test</option>
+                    </select>
+                    <span id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_rfvProductId" style="color:Red;display:none;">*</span>
+                </td>
+                <td>
+                    <input name="ctl00$BodyContent$lvPurchaseInvoiceProducts$ctrl0$TextBoxManufacturerProductNo" type="text" id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_TextBoxManufacturerProductNo" class="form-control" Placeholder="Manufacturer No" />
+                </td>
+                <td>
+                    <input name="ctl00$BodyContent$lvPurchaseInvoiceProducts$ctrl0$TextBoxQuantity" type="text" value="1" id="TextBoxQuantity" class="form-control" Placeholder="Quantity" style="width:72px;" />
+                    <span id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_rfvQuantity" style="color:Red;display:none;">*</span>
+                    <span id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_cvQuantity" style="color:Red;display:none;">!</span>
+                </td>
+                <td>
+                    <input name="ctl00$BodyContent$lvPurchaseInvoiceProducts$ctrl0$TextBoxUnitPrice" type="text" id="TextBoxUnitPrice" class="form-control" Placeholder="Unit Price" style="width:110px;" />
+                    <span id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_rfvUnitPrice" style="color:Red;display:none;">*</span>
+                    <span id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_cvUnitPrice" style="color:Red;display:none;">!</span>
+                </td>
+                <td>
+                    <input name="ctl00$BodyContent$lvPurchaseInvoiceProducts$ctrl0$LabelLineTotal" type="text" value="0" readonly="readonly" id="LabelLineTotal" />
+                </td>
+                <td>
+                    <div class="input-group">
+                        <input name="ctl00$BodyContent$lvPurchaseInvoiceProducts$ctrl0$TextBoxDiscount" type="text" value="0" id="TextBoxDiscount" class="form-control" Placeholder="Disc" />
+                        <span class="input-group-addon">%</span>
+                    </div>
+                    <span id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_rfvDiscount" style="color:Red;display:none;">*</span>
+                    <span id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_cvDiscount" style="color:Red;display:none;">!</span>
+                </td>
+                <td>
+                    <input name="ctl00$BodyContent$lvPurchaseInvoiceProducts$ctrl0$LabelNetTotal" type="text" value="0" readonly="readonly" id="LabelNetTotal" />
+                </td>
+                <td>
+                    <a id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_InsertButton" class="btn small green" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$BodyContent$lvPurchaseInvoiceProducts$ctrl0$InsertButton&quot;, &quot;&quot;, true, &quot;InsertPurchaseInvoiceProductsGroup&quot;, &quot;&quot;, false, true))">Save</a>
+                    <a id="ctl00_BodyContent_lvPurchaseInvoiceProducts_ctrl0_CancelButton" class="btn small rosy" href="javascript:__doPostBack(&#39;ctl00$BodyContent$lvPurchaseInvoiceProducts$ctrl0$CancelButton&#39;,&#39;&#39;)">Cancel</a>
+                </td>
+            </tr>*@
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <span id="ctl00_BodyContent_lvPurchaseInvoiceProducts_LabelGrandDiscount">0.00</span>
+                </td>
+                <td>
+                    <span id="ctl00_BodyContent_lvPurchaseInvoiceProducts_LabelGrandTotal">0.00</span>
+                </td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>

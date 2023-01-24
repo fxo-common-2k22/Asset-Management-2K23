@@ -1,0 +1,641 @@
+﻿@model  FAPP.Areas.AM.ViewModels.GraphsModel
+<style>
+    .stats > li {
+        min-width: 171px;
+    }
+</style>
+<div class="row">
+    <div id="replace">
+    </div>
+</div>
+
+<script type="text/javascript">
+    var Module = @Html.Raw(Json.Encode(Model.Module));
+
+    var Area = @Html.Raw(Json.Encode(Model.Area));
+    var Contoller = @Html.Raw(Json.Encode(Model.Contoller));
+    var Action = @Html.Raw(Json.Encode(Model.Action));
+    var url='';
+    if (Area)
+        url += "/" + Area;
+    if (Contoller)
+        url += "/" + Contoller;
+    if (Action)
+        url += "/" + Action;
+
+    $(function () {
+        DashboardGraphData();
+    });
+    var arr = new Array();
+
+    function DashboardGraphData() {
+        $.get('@Url.Action("DashboardGraphs","Home",new { area=string.Empty})', {id:Module,url:url,area:Area,contoller:Contoller,actionnn:Action}, function (d) {
+            try{
+                var partialViews;
+                if (jQuery.type(d._views) != "undefined") {
+                    $.each(d._views, function (index, val) {
+                        $('#' + val.divToReplace).html(val.partialData);
+                    });
+                }
+                AppConstraintsMsg=d.DashboardConstraint;
+                DisplayConstraint();
+                var series = new Array();
+
+                $('#valuespan1').text(d.logins);
+                $('#valuespan2').text(d.clients);
+                $('#valuespan3').text(d.suppliers);
+                $('#valuespan4').text(d.users);
+
+
+                //$('#deps').text(d.Deparments);
+                //$('#degns').text(d.Designations);
+                //$('#males').text(d.Males);
+                //$('#females').text(d.Females);
+
+                if(d.WeeklySaleList && $('#ShowWeeklySale').length){
+                    $.each(d.WeeklySaleList, function () {
+                        var serie = new Array(this.MM, this.Percentage);
+                        series.push(serie);
+                        arr.push(this.ED);
+                    });
+                    if (series)
+                        DrawWeeklySaleChart(series);
+                }
+                if (d.MonthlyAttendanceList && $('#ShowMonthlyAttendance').length) {
+                    $.each(d.MonthlyAttendanceList, function () {
+                        var serie = new Array(this.MM, this.Percentage);
+                        series.push(serie);
+                        arr.push(this.ED);
+                    });
+                    if (series)
+                        DrawMonthlyAttendanceChart(series);
+                }
+                //financechart
+                if(d.TransactionList && $('#ShowTransactions').length){
+                    series = new Array();
+                    $.each(d.TransactionList, function () {
+                        var serie = new Array(this.MM, this.Percentage);
+                        series.push(serie);
+                        arr.push(this.ED);
+                    });
+                    if (series)
+                        DrawfiananceChart(series);
+                }
+                //left side chart
+
+                DrawStudentGenderGraph(d);
+                DrawStudentStrenthGraph(d)
+                DrawStudentAdmissionWithdrawlGraph(d)
+                //DrawPieChartLeft();
+
+                //Income expense chart
+
+                DrawIncomeExpense();
+
+                if (d.DailyAttendanceGraph != null && d.DailyAttendanceGraph != '') {
+                    DrawAttendanceGraph(d);
+                }
+
+                if (d.DepartmentWiseEmployeeGraph != null && d.DepartmentWiseEmployeeGraph != '') {
+                    DrawDepartmentEmployeesBarGraph(d.DepartmentWiseEmployeeGraph.Departments, d.DepartmentWiseEmployeeGraph.Employees);
+                }
+
+                DrawEmployeeGendersPieChart(d);
+
+
+            } catch (exc) {
+
+                console.log("expections")
+            }
+        });
+    }
+
+    function DrawWeeklySaleChart(series) {
+        if($('#container').length){
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'column'
+                }, credits: {
+                    enabled: false
+                },
+                title: {
+                    text: ' '
+                },
+                xAxis: {
+                    categories: arr
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td></tr>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    colorByPoint: true,
+                    type: 'column',
+                    name: 'Sales ',
+                    data: series
+                }]
+            });
+        }
+    }
+    function DrawMonthlyAttendanceChart(series) {
+        if ($('#container').length) {
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'column'
+                }, credits: {
+                    enabled: false
+                },
+                title: {
+                    text: ' '
+                },
+                xAxis: {
+                    categories: arr
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    colorByPoint: true,
+                    type: 'column',
+                    name: 'Monthly Attendance ',
+                    data: series
+                }]
+            });
+        }
+    }
+    function DrawfiananceChart(series) {
+        if($('#container2').length){
+            Highcharts.chart('container2', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.y}Rs</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Amount',
+                    colorByPoint: true,
+                    data: series
+                }]
+            });
+        }
+    }
+
+    //function DrawPieChartLeft() {
+    //    if($('#container3').length){
+    //        Highcharts.chart('container3', {
+    //            chart: {
+    //                plotBackgroundColor: null,
+    //                plotBorderWidth: null,
+    //                plotShadow: false,
+    //                type: 'pie'
+    //            },
+    //            credits: {
+    //                enabled: false
+    //            },
+    //            title: {
+    //                text: ''
+    //            },
+    //            tooltip: {
+    //                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    //            },
+    //            plotOptions: {
+    //                pie: {
+    //                    allowPointSelect: true,
+    //                    cursor: 'pointer',
+    //                    dataLabels: {
+    //                        enabled: false
+    //                    },
+    //                    showInLegend: false
+    //                }
+    //            },
+    //            series: [{
+    //                name: 'Brands',
+    //                colorByPoint: true,
+    //                data: [{
+    //                    name: 'Chrome',
+    //                    y: 61.41,
+    //                    sliced: true,
+    //                    selected: true
+    //                }, {
+    //                    name: 'Internet Explorer',
+    //                    y: 11.84
+    //                }, {
+    //                    name: 'Firefox',
+    //                    y: 10.85
+    //                }, {
+    //                    name: 'Edge',
+    //                    y: 4.67
+    //                }, {
+    //                    name: 'Safari',
+    //                    y: 4.18
+    //                }, {
+    //                    name: 'Other',
+    //                    y: 7.05
+    //                }]
+    //            }]
+    //        });
+    //    }
+    //}
+
+    function DrawIncomeExpense() {
+        if($('#IncomeExpenseContainer').length){
+            Highcharts.chart('IncomeExpenseContainer', {
+
+                title: {
+                    text: ''
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                },
+                credits: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        label: {
+                            connectorAllowed: false
+                        },
+                        pointStart: 2010
+                    }
+                },
+
+                series: [{
+                    name: 'Income',
+                    data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+                }, {
+                    name: 'Expense',
+                    data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+                }, {
+                    name: 'Liabilities',
+                    data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+                }, {
+                    name: 'Sale',
+                    data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+                }],
+
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                    }]
+                }
+
+            });
+        }
+    }
+
+    function DrawAttendanceGraph(d) {
+        console.log(d.DailyAttendanceGraph);
+        if ($('#container5').length) {
+
+            Highcharts.chart('container5', {
+                chart: {
+                    type: 'spline'
+                },
+
+                accessibility: {
+                    description: 'Attendance Trends for the Months.'
+                },
+
+                legend: {
+                    symbolWidth: 40
+                },
+
+                title: {
+                    text: 'Attendance Trend for the Month'
+                },
+
+                subtitle: {
+                    text: 'Click on point to visit official website'
+                },
+
+                yAxis: {
+                    title: {
+                        text: 'Percentage usage'
+                    }
+                },
+
+                xAxis: {
+                    title: {
+                        text: 'Time'
+                    },
+                    accessibility: {
+                        description: ''
+                    },
+                    categories: d.DailyAttendanceGraph.Days
+                },
+
+                tooltip: {
+                    split: true
+                },
+
+                plotOptions: {
+                    series: {
+                        point: {
+                            //events: {
+                            //    click: function () {
+                            //        window.location.href = this.series.options.website;
+                            //    }
+                            //}
+                        },
+                        cursor: 'pointer'
+                    }
+                },
+
+                series: d.DailyAttendanceGraph.DailyAttendanceResults,
+
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                itemWidth: 150
+                            }
+                        }
+                    }]
+                }
+            });
+
+        }
+    }
+
+
+    function DrawDepartmentEmployeesBarGraph(xAxis, yAxis) {
+        console.log(xAxis);
+        console.log(yAxis);
+        if ($('#DepartmentEmployeesContainer').length) {
+        Highcharts.chart('DepartmentEmployeesContainer', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Department-Emlpoyees Totals '
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: xAxis
+                ,
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Employee Count'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y} </b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                colorByPoint: true,
+                data: yAxis
+
+
+            }]
+        });
+        }
+
+        $('.highcharts-credits').hide();
+    }
+
+    function DrawEmployeeGendersPieChart(d) {
+        console.log(d.EmployeeGendersGraph.GenderSlices);
+        if ($('#EmpGendersContaier').length) {
+            Highcharts.chart('EmpGendersContaier', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: false
+                    }
+                },
+                series: [{
+                        name: 'Employees Gender Weightage',
+                        colorByPoint: true,
+                    data: d.EmployeeGendersGraph.GenderSlices
+                    }],
+            });
+        }
+
+        $('.highcharts-credits').hide();
+    }
+
+    function DrawStudentGenderGraph(d) {
+        console.log(d.StudentGendersGraph.GenderSlices);
+        if ($('#container3').length) {
+            Highcharts.chart('container3', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: false
+                    }
+                },
+                series: [{
+                    name: 'Student Gender Weightage',
+                    colorByPoint: true,
+                    data: d.StudentGendersGraph.GenderSlices
+                }],
+            });
+        }
+
+        //$('.highcharts-credits').hide();
+    }
+    function DrawStudentStrenthGraph(d) {
+        if ($('#StudentStrengthContainer').length) {
+            Highcharts.chart('StudentStrengthContainer', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Student Strength'
+                },
+                subtitle: {
+                    text: 'Class and Section wise'
+                },
+                xAxis: {
+                    categories: d.StudentStrengthGraphDataList.Classes,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Number of Students'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: d.StudentStrengthGraphDataList.StudentStrengthSectionWiseList
+            });
+        }
+    }
+    function DrawStudentAdmissionWithdrawlGraph(d) {
+        if ($('#StudentAdmissionWithDrawlContainer').length) {
+            Highcharts.chart('StudentAdmissionWithDrawlContainer', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Student Admission/Withdrawl'
+                },
+                subtitle: {
+                    text: 'Admission and WithDrawl'
+                },
+                xAxis: {
+                    categories: d.StudentAdmissionWithDrawlList.Days,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Number of Students'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td></tr>' +
+                        '<td style="padding:0"><b>{point.y:.1f} </b></td>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: d.StudentAdmissionWithDrawlList.studentAdmissionWithDrawl
+            });
+        }
+    }
+</script>

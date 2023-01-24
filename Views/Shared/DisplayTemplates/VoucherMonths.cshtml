@@ -1,0 +1,11 @@
+﻿@model IEnumerable<FAPP.Model.VoucherMonth>
+
+
+<ul class="list-unstyled">
+    @foreach (var item in Model)
+    {
+    <li>
+        @String.Format("{0:dd/MM/yyyy}", item.FeeMonth)
+    </li>
+    }
+</ul>

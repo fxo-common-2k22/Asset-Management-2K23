@@ -1,0 +1,392 @@
+﻿@model FAPP.ViewModel.MessagingVM
+<style>
+    .form-group {
+        background: none !important;
+    }
+
+    .col-sm-8 {
+        background: none !important;
+        border-left: none !important;
+    }
+
+    .col-sm-12 {
+        background: none !important;
+    }
+</style>
+<link href="~/Scripts/summernote/summernote.css" rel="stylesheet" />
+
+@*<div class="searchbox" style="margin-top:10px">*@
+<form action="/Messaging/AddEdit" area="" autocomplete="off" class="new-task-form form-horizontal form-bordered" data-ajax="true" data-ajax-begin="OnBegin" data-ajax-failure="OnFailure" data-ajax-method="POST" data-ajax-success="OnCreateUpdateSuccess" id="frmadd" method="post" novalidate="novalidate">
+    @*@using (Ajax.BeginForm("", "Messaging", new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnSuccess = "OnCreateUpdateSuccess", OnFailure = "OnFailure" }, new { area = "", @class = "new-task-form form-horizontal form-bordered", @id = "frmadd", autocomplete = "off" }))*@
+
+    @{
+        if (Model.Template.TemplateId != Guid.Empty)
+        {
+            @Html.HiddenFor(m => m.Template.TemplateId)
+            @Html.HiddenFor(m => m.Template.Title, new { id = "Template_Title_" })
+        }
+        @Html.Hidden("ckinput", Model.Template.SMSTemplate)
+        @Html.HiddenFor(m => m.Template.TemplateTypeId)
+        @Html.HiddenFor(m => m.TemplateType.TemplateTypeName)
+        <div class="searchbox" style="margin-top:10px">
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group ">
+                        <label for="@Model.Template.Title" class="col-sm-4 control-label">Title</label>
+                        <div class="col-sm-8">
+                            @Html.EditorFor(model => model.Template.Title, new { htmlAttributes = new { @class = " form-control", @required = "required", @data_val_required = "This field is required.", @placeholder = "Title" } })
+                            @Html.ValidationMessageFor(model => model.Template.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="@Model.Template.FaIcon" class="control-label col-sm-4">Select Icon</label>
+                        <div class="col-sm-8">
+                            @{ var icon = "fa-th";
+                                if (Model.Template.TemplateId != Guid.Empty)
+                                {
+                                    icon = Model.Template.FaIcon;
+                                }
+                            }
+                            <button class="btn btn-default" name="Template.FaIcon" id="Template_FaIcon" data-iconset="fontawesome" required data-icon="@icon" role="iconpicker"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="@Model.Template.Description" class="control-label col-sm-2">Description</label>
+                        <div class="col-sm-10" style="background: #DFE8F1;padding-left: 4px;">
+                            @Html.TextBoxFor(model => model.Template.Description, new { @class = "form-control ", @placeholder = "Template Description" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10">
+                    <input type="submit" class="btn btn-primary" id="FirstSaveBtn" value="Save">
+                </div>
+            </div>
+        </div>
+        if (Model.Template.TemplateId != Guid.Empty)
+        {
+            <div class="box box-bordered box-color">
+                <div class="box-title">
+                    <h3>
+                        Details
+                    </h3>
+                    <ul class="tabs tabs-inline tabs-top">
+                        <li class="active">
+                            <a href="#smsGrid" data-toggle="tab" aria-expanded="true">
+                                SMS
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="#emailContent" data-toggle="tab">
+                                Email
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="box-content nopadding" style="min-height:430px">
+                    <div class="tab-content padding tab-content-inline tab-content-bottom" style="padding:0;">
+                        <div class="tab-pane" id="emailContent">
+                            <div class="tabs-container">
+                                <ul class="tabs tabs-inline tabs-left">
+                                    <li>
+                                        <a href="#emailSubject" data-toggle="tab" aria-expanded="true">
+                                            <i class="fa fa-user-circle"></i>Email Subject
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#emailHeader" data-toggle="tab" id="scheduleTestTab">
+                                            <i class="fa fa-address-card-o"></i>Email Header
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#emailBody" data-toggle="tab" id="resultTab">
+                                            <i class="fa fa-key"></i>Email Body
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#emailFooter" data-toggle="tab">
+                                            <i class="fa fa-twitter"></i>Email Footer
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <div class="tab-content nopadding tab-content-inline" style="padding:5px !important">
+                                <div class="tab-pane active" id="emailSubject">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    @if (Model.ViewFields != null)
+                                                    {
+                                                        if (Model.ViewFields.Count > 0)
+                                                        {
+                                                            @Html.Partial("_EmailSubjectPartialFields", Model.ViewFields)
+                                                        }
+                                                    }
+                                                    @Html.TextBoxFor(model => model.Template.MailSubject, new { @class = "form-control ", @placeholder = "Email Subject" })
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="emailHeader">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="col-sm-12" id="fieldsGrid">
+                                                    @if (Model.ViewFields != null)
+                                                    {
+                                                        if (Model.ViewFields.Count > 0)
+                                                        {
+                                                            @Html.Partial("_EmailHeaderPartialFields", Model.ViewFields)
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            @Html.TextAreaFor(model => model.Template.MailTemplateHeader, new { @class = "form-control", @style = "width:100%;height:300px;margin-left:10px;margin-right:10px;", @placeholder = "Email Header" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="emailBody">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="col-sm-12" id="fieldsGrid">
+                                                    @if (Model.ViewFields != null)
+                                                    {
+                                                        if (Model.ViewFields.Count > 0)
+                                                        {
+                                                            @Html.Partial("_EmailPartialFields", Model.ViewFields)
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            @Html.TextAreaFor(model => model.Template.MailTemplate, new { @class = "form-control", @style = "width:100%;height:300px;margin-left:10px;margin-right:10px;", @placeholder = "Email Body" })
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="emailFooter">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="col-sm-12" id="fieldsGrid">
+                                                    @if (Model.ViewFields != null)
+                                                    {
+                                                        if (Model.ViewFields.Count > 0)
+                                                        {
+                                                            @Html.Partial("_EmailFooterPartialFields", Model.ViewFields)
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            @Html.TextAreaFor(model => model.Template.MailTemplateFooter, new { @class = "form-control", @style = "width:100%;height:300px;margin-left:10px;margin-right:10px;", @placeholder = "Email Footer" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane active" id="smsGrid">
+                            <div class="tabs-container">
+                                <ul class="tabs tabs-inline tabs-left">
+                                    <li class="active">
+                                        <a href="#smsHeader" data-toggle="tab" aria-expanded="true">
+                                            <i class="fa fa-user-circle"></i>SMS Header
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#smsBody" data-toggle="tab" id="resultTab">
+                                            <i class="fa fa-key"></i>SMS Body
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#smsFooter" data-toggle="tab">
+                                            <i class="fa fa-twitter"></i>SMS Footer
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <div class="tab-content nopadding tab-content-inline" style="padding:5px !important">
+                                <div class="tab-pane active" id="profile">
+                                </div>
+                                <div class="tab-pane active" id="smsHeader">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="col-sm-12" id="fieldsGrid">
+                                                    @if (Model.ViewFields != null)
+                                                    {
+                                                        if (Model.ViewFields.Count > 0)
+                                                        {
+                                                            @Html.Partial("_HeaderPartialFields", Model.ViewFields)
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            @Html.TextAreaFor(model => model.Template.SMSTemplateHeader, new { @class = "form-control ", @style = "height:300px;", @placeholder = "SMS Header" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="smsBody">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="col-sm-12" id="fieldsGrid">
+                                                    @if (Model.ViewFields != null)
+                                                    {
+                                                        if (Model.ViewFields.Count > 0)
+                                                        {
+                                                            @Html.Partial("_PartialFields", Model.ViewFields)
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            @Html.TextAreaFor(model => model.Template.SMSTemplate, new { @class = "form-control ", @style = "height:300px;", @placeholder = "SMS Body" })
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="smsFooter">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="col-sm-12" id="fieldsGrid">
+                                                    @if (Model.ViewFields != null)
+                                                    {
+                                                        if (Model.ViewFields.Count > 0)
+                                                        {
+                                                            @Html.Partial("_FooterPartialFields", Model.ViewFields)
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            @Html.TextAreaFor(model => model.Template.SMSTemplateFooter, new { @class = "form-control ", @style = "height:300px;", @placeholder = "SMS Footer" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-left: 160px;padding-left: 5px;">
+                            <input type="submit" class="btn btn-primary" id="saveInnerBtn" value="Save">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+        <div class="col-sm-8 " style="display:none;padding:0;padding-bottom: 1%;">
+            <input type="submit" class="btn btn-primary" id="saveBtn" value="Save">
+        </div>
+
+    }
+</form>
+
+@*<script src="~/Scripts/ckeditor/ckeditor.js"></script>*@
+<script src="~/Scripts/summernote/summernote.min.js"></script>
+<script src="~/Scripts/summernote/summernote-data.js"></script>
+<script src="~/Scripts/iconPicker/bootstrap-iconpicker-iconset-all.min.js"></script>
+<script src="~/Scripts/iconPicker/bootstrap-iconpicker.min.js"></script>
+<script>
+    $(function () {
+        $("#Template_MailTemplateHeader").summernote({height: 100});
+        $("#Template_MailTemplate").summernote({height: 600});
+        $("#Template_MailTemplateFooter").summernote({height: 100});
+
+        $('.append').click(function () {
+            $("#Template_SMSTemplate").val($("#Template_SMSTemplate").val() + '{' + $(this).text() + '}');
+        //CKEDITOR.instances['Certificate_CertificateContent'].insertText('{' + $(this).text() + '}');
+        return false;
+    });
+        $('.appendToHeader').click(function () {
+            $("#Template_SMSTemplateHeader").val($("#Template_SMSTemplateHeader").val() + '{' + $(this).text() + '}');
+        return false;
+    });
+        $('.appendToFooter').click(function () {
+            $("#Template_SMSTemplateFooter").val($("#Template_SMSTemplateFooter").val() + '{' + $(this).text() + '}');
+        return false;
+    });
+        $('.appendtoEmailBody').click(function () {
+            $("#Template_MailTemplate").summernote('editor.insertText', '{' + $(this).text() + '}');
+        //CKEDITOR.instances['Certificate_CertificateContent'].insertText('{' + $(this).text() + '}');
+        return false;
+    });
+        $('.appendToEmailHeader').click(function () {
+            $("#Template_MailTemplateHeader").summernote('editor.insertText', '{' + $(this).text() + '}');
+        return false;
+    });
+        $('.appendToEmailFooter').click(function () {
+            $("#Template_MailTemplateFooter").summernote('editor.insertText', '{' + $(this).text() + '}');
+        return false;
+    });
+    $('.appendtoEmailSubject').click(function () {
+            $("#Template_MailSubject").val($("#Template_MailSubject").val() + '{' + $(this).text() + '}');
+        return false;
+    });
+    });
+
+
+    if ($("#Template_TemplateId").val() != undefined) {
+        $("#pageHeading").html("Edit " + $("#Template_Title").val());
+        //$("#topDetBtn").show();
+        //$("#editbtn1").hide();
+    }
+
+@*$("select#Template_TemplateId").change(function () {
+        var selected = this.value;
+        if (selected !== '') {
+            $("#fieldsGrid").load('@Url.Action("GetMediaTypeFields", "Certificates")/', { id: selected }, function (responseTxt, statusTxt, xhr) {
+                //alert(responseTxt.length);
+                if (responseTxt.length === 306) {
+                    $("#fieldsGrid").html("This type has No Fields!");
+                }
+                if (responseTxt.Messages !== '' && responseTxt.Messages !== undefined) {
+                    toastr.error(responseTxt.Messages, 'Failed');
+                }
+            });
+        }
+    });*@
+
+    //if (CKEDITOR.instances['Certificate_CertificateContent'])
+    //    delete CKEDITOR.instances['Certificate_CertificateContent'];
+
+    //CKEDITOR.replace('Certificate_CertificateContent');
+    //CKEDITOR.instances['Certificate_CertificateContent'].setData($("#ckinput").val());
+</script>

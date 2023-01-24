@@ -1,0 +1,24 @@
+﻿@if (TempData["Warning"] != null)
+{
+    <div class="alert alert-danger">
+        <i class="fa fa-warning"></i> @TempData["Warning"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <i class="fa fa-danger"></i> @TempData["Error"]
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <i class="fa fa-check"></i> @TempData["Success"]
+    </div>
+}
+@if (TempData["Info"] != null)
+{
+    <div class="alert alert-danger">
+        <i class="fa fa-info"></i> @TempData["Info"]
+    </div>
+}

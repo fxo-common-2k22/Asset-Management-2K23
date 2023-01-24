@@ -1,0 +1,295 @@
+﻿@model FAPP.Areas.AM.ViewModels.FixedAssetVM
+@using PagedList.Mvc;
+@using FAPP.DAL
+<div class="row">
+
+    <div class="col-sm-12 downpadding">
+        <table class="table table-hover no-head-border table-responsive table-striped" id="tblIssueItems">
+            <thead class="vd_bg-green vd_white">
+                <tr>
+                    <th width="20px">Sr.</th>
+                    <th> <input id="CheckBoxAll" type="checkbox" onchange="OnCheckboxChange(this)" /></th>
+                    <th>Item Code</th>
+                    <th width="200px">Product</th>
+                    <th>Date</th>
+                    <th width="20px">Quantity</th>
+                    <th>Department-Employees</th>
+                    <th>Descriptions</th>
+                    <th>Location</th>
+                    @*<th>Description</th>*@
+                    @*<th>Condition</th>*@
+                    @*<th>Department</th>
+                        <th>Employee</th>
+                        <th>Location</th>*@
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null)
+                {
+                    if (Model.FixedAssetRegVM != null)
+                    {
+                        int count = 0;
+                        count = (Model.pagesize * Model.FixedAssetRegPager.PageNumber) - (Model.pagesize);
+                        for (int i = 0; i < Model.FixedAssetRegVM.Count(); i++)
+                        {
+                            <tr class="tr_row">
+                                <td class="hidden">
+                                    @Html.HiddenFor(x => x.FixedAssetRegVM[i].TransferHistoryId)
+                                    @Html.HiddenFor(x => x.FixedAssetRegVM[i].ItemRegisterId)
+                                    @Html.HiddenFor(x => x.Status)
+                                    @*<input type="hidden" name="@Model.FixedAssetRegVM[i].TransferHistoryId" value="@Model.FixedAssetRegVM[i].TransferHistoryId" />
+                                        <input type="hidden" name="@Model.FixedAssetRegVM[i].ItemRegisterId" value="@Model.FixedAssetRegVM[i].ItemRegisterId" />*@
+                                </td>
+
+                                <td width="20px"> <span class="label label-default current-theme">@(++count)</span></td>
+                                <td>
+                                    @Html.CheckBoxFor(x => x.FixedAssetRegVM[i].check, new { @class = "voucherCheck", @onchange = "checkChange(this)" })
+                                    @*<input class="voucherCheck" onchange="checkChange(this)" type="checkbox" value="@Model.FixedAssetRegVM[i].check" />*@
+                                </td>
+                                <td>
+                                    @Model.FixedAssetRegVM[i].ItemCode
+                                    <br />
+                                    @{
+                                        var className = "";
+                                        var StatusName = "";
+                                        switch (Model.FixedAssetRegVM[i].Status)
+                                        {
+                                            case 1:// FAPP.AM.Models.ItemRegisterEnum.Available:
+                                                className = "green-span";
+                                                StatusName = "Available";
+                                                break;
+                                            case 2:// FAPP.AM.Models.ItemRegisterEnum.Issued:
+                                                className = "orange-span";
+                                                StatusName = "Issued";
+                                                break;
+                                            case 3:// FAPP.AM.Models.ItemRegisterEnum.Damaged:
+                                                className = "red-span";
+                                                StatusName = "Damaged";
+                                                break;
+
+
+
+                                        }
+                                    }
+                                    <span title="Status : @(StatusName)" class="label label-default colored-span @(className) Status-span">
+                                        @(StatusName)
+                                    </span>
+                                </td>
+                                <td>@Model.FixedAssetRegVM[i].ProductName</td>
+                                <td>@Convert.ToDateTime(Model.FixedAssetRegVM[i].IssueDate).ToString("dd MMM yyyy")</td>
+                                <td> @Html.EditorFor(x => x.FixedAssetRegVM[i].Quantity, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Qty", @readonly = "readonly" } })</td>
+
+                                <td>@(Model.FixedAssetRegVM[i].DepartmentName + "-" + Model.FixedAssetRegVM[i].EmployeeName)</td>
+                                <td>@(Model.FixedAssetRegVM[i].Description)</td>
+                                <td>@(Model.FixedAssetRegVM[i].LocationName)</td>
+                                @*<td>
+                                        @Html.EditorFor(x => x.FixedAssetRegVM[i].Description, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Description" } })
+                                    </td>*@
+                                @*<td>
+                                        @Html.DropDownListFor(model => model.FixedAssetRegVM[i].ConditionTypeId, new SelectList(ViewBag.ConditionTypes, "Value", "Text", Model.FixedAssetRegVM[i].ConditionTypeId), "--Select Condition--", htmlAttributes: new { @class = "form-control cloneable chosen-select", @style = "width:100%;" })
+                                    </td>*@
+                                @*<td>
+                                        @Html.DropDownListFor(model => model.FixedAssetRegVM[i].DepartmentId, new SelectList(ViewBag.Departments, "Value", "Text", Model.FixedAssetRegVM[i].DepartmentId), "--Select Department--", htmlAttributes: new { @class = "form-control cloneable DepartmentId chosen-select", @style = "width:100%;" })
+                                    </td>*@
+                                @*<td>
+                                        @Html.DropDownListFor(model => model.FixedAssetRegVM[i].EmployeeId, new SelectList(ViewBag.Employees, "Value", "Text", Model.FixedAssetRegVM[i].EmployeeId), "--Select Employee--", htmlAttributes: new { @class = "form-control cloneable EmployeeId chosen-select", @style = "width:100%;" })
+                                    </td>*@
+                                @*<td>
+                                        @Html.DropDownListFor(model => model.FixedAssetRegVM[i].LocationId, new SelectList(ViewBag.Locations, "Value", "Text", Model.FixedAssetRegVM[i].LocationId), "--Select Location--", htmlAttributes: new { @class = "form-control cloneable LocationId chosen-select", @style = "width:100%" })
+                                    </td>*@
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+
+
+        @if (Model.FixedAssetRegVM == null || Model.FixedAssetRegVM.Count == 0)
+        {
+            <div style="text-align: center">
+                No data found
+            </div>
+        }
+        <div id="targetContainer">
+            <div class="col-md-1 hidden stickyButtonsIssue" style="margin-top:5px">
+                <button class="btn btn-green" type="button" onclick="popupModal('Issuance');" data-toggle="modal" data-target="#IssuedModal">
+                    <i class="fa fa-clone" aria-hidden="true"></i>   Issue
+                </button>
+            </div>
+            <div class="col-md-1 hidden stickyButtonsReturn" style="margin-top:5px">
+                <button class="btn btn-orange" type="button" onclick="popupModal('Return');" data-toggle="modal" data-target="#IssuedModal">
+                    <i class="fa fa-clone" aria-hidden="true"></i>   Return
+                </button>
+            </div>
+            <div class="col-md-1 hidden stickyButtonsDamage" style="margin-top:5px;margin-left: -25px;margin-right: 47px;">
+                <button class="btn btn-red" type="button" onclick="popupModal('Damage');" data-toggle="modal" data-target="#IssuedModal">
+                    <i class="fa fa-clone" aria-hidden="true"></i>   Mark as Damaged
+                </button>
+            </div>
+            <div class="col-md-1 hidden stickyButtonsTransfer" style="margin-top:5px">
+                <button class="btn btn-blue" type="button" onclick="popupModal('Transfer');" data-toggle="modal" data-target="#IssuedModal">
+                    <i class="fa fa-arrow-right" aria-hidden="true"></i>   Transfer
+                </button>
+            </div>
+            <div id='Paging' style="text-align: center;margin-left:25px">
+                Page @(Model.FixedAssetRegPager.PageCount < Model.FixedAssetRegPager.PageNumber ? 0 : Model.FixedAssetRegPager.PageNumber)
+                of @Model.FixedAssetRegPager.PageCount
+                @Html.PagedListPager(Model.FixedAssetRegPager, page => Url.Action("IssueItems", new
+                {
+               pageNo = page,
+               CategoryId = Model.CategoryId
+                ,
+                    DepartmentId = Model.DepartmentId
+                ,
+                    ConditionTypeId = Model.ConditionTypeId
+                ,
+                    EmployeeId = Model.EmployeeId
+                ,
+                    LocationId = Model.LocationId
+                ,
+                    Search = Model.Search
+                ,
+                    Status = Model.Status
+           }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+           {
+               HttpMethod = "POST",
+               InsertionMode = InsertionMode.Replace,
+               UpdateTargetId = "divStudents"
+           }))
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="CloneModal" tabindex="-1" role="dialog" aria-labelledby="ServiceModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header HeaderColor">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                <h4 class="modal-title" id="serviceModalTitle">Register Items   (<label id="noOfSelectedVouchersId"></label>) </h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Date</label>
+                        <div class="col-md-8">
+                            <input type="text" id="cloneDate" name="cloneDate" class="datepicker form-control" required="required" placeholder="Date" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer background-login">
+                <button type="button" class="btn btn-success " onclick="PostVouchers()" id="btnCloneVouchers">Register</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="IssuedModal" role="dialog" aria-labelledby="IssuedModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header HeaderColor">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                <h4 class="modal-title" id="IssuedModalTitle"></h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+
+                    <div class="form-group" id="ModalDepartment">
+                        <label class="control-label col-md-4">Department</label>
+                        <div class="col-md-8">
+                            @Html.HiddenFor(m => m.PostingData.DepartmentId, new { @class = "DepartmentId" })
+                            <select class="js-data-example-ajax remoteSearch" style="width:100%" id="ModalDepartmentId"> </select>
+                            @*@Html.DropDownListFor(model => model.PostingData.DepartmentId, new SelectList(ViewBag.Departments, "Value", "Text", Model.PostingData.DepartmentId), "--Select Department--", htmlAttributes: new { @id = "ModalDepartmentId", @class = "form-control chosen-select", @style = "width:100%;" })*@
+                        </div>
+                    </div>
+                    <div class="form-group " id="ModalEmployee">
+                        <label class="control-label col-md-4">Employee</label>
+                        <div class="col-md-8">
+                            @Html.HiddenFor(m => m.PostingData.EmployeeId, new { @class = "" })
+                            <select class="js-data-example-ajax remoteSearch1" style="width:100%" id="ModalEmployeeId"> </select>
+                            @*@Html.DropDownListFor(model => model.PostingData.EmployeeId, new SelectList(ViewBag.Employees, "Value", "Text", Model.PostingData.EmployeeId), "--Select Employee--", htmlAttributes: new { @id = "ModalEmployeeId", @class = "form-control chosen-select", @style = "width:100%;" })*@
+                        </div>
+                    </div>
+                    <div class="form-group " id="ModalLocation">
+                        <label class="control-label col-md-4">Location</label>
+                        <div class="col-md-8">
+                            @Html.HiddenFor(m => m.PostingData.LocationId, new { @class = "" })
+                            <select class="js-data-example-ajax remoteSearch2" style="width:100%" id="ModalLocationId"> </select>
+                            @*@Html.DropDownListFor(model => model.PostingData.LocationId, new SelectList(ViewBag.Locations, "Value", "Text", Model.PostingData.LocationId), "--Select Location--", htmlAttributes: new { @id = "ModalLocationId", @class = "form-control chosen-select", @style = "width:100%" })*@
+                        </div>
+                    </div>
+                    <div class="form-group " id="ModalDescription">
+                        <label class="control-label col-md-4">Description</label>
+                        <div class="col-md-8">
+                            @Html.EditorFor(x => x.PostingData.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "Description" } })
+                        </div>
+                    </div>
+                    <div class="form-group  " id="ModalIssueDate">
+                        <label class="control-label col-md-4">Issue Date</label>
+                        <div class="col-md-8">
+                            @Html.EditorFor(x => x.PostingData.IssueDate, new { htmlAttributes = new { @class = "datepicker form-control", @placeholder = "Issue Date" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group " id="ModalConditionTypeId">
+                        <label class="control-label col-md-4">Condition Type</label>
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(model => model.PostingData.ConditionTypeId, new SelectList(ViewBag.ConditionTypes, "Value", "Text", Model.PostingData.ConditionTypeId), "--Select Condition--", htmlAttributes: new { @class = "form-control chosen-select", @style = "width:100%;" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer background-login">
+                <button class="btn btn-green MstickyButtonsIssue hidden" type="submit" onclick="return IsValid('Issue');" name="Command" value="Issue">
+                    <i class="fa fa-clone" aria-hidden="true"></i>   Issue
+                </button>
+                <button class="btn btn-orange hidden MstickyButtonsReturn" type="submit" onclick="return IsValid('Return');" name="Command" value="Return">
+                    <i class="fa fa-clone" aria-hidden="true"></i>   Return
+                </button>
+                <button class="btn btn-red hidden MstickyButtonsDamage" type="submit" onclick="return IsValid('Damage');" name="Command" value="Damage">
+                    <i class="fa fa-clone" aria-hidden="true"></i> Mark as Damaged
+                </button>
+                <button class="btn btn-blue hidden MstickyButtonsTransfer" type="submit" onclick="IsValid('Transfer');" name="Command" value="Transfer">
+                    <i class="fa fa-arrow-right" aria-hidden="true"></i>   Transfer
+                </button>
+
+                @*<button type="submit" class="btn btn-success " onclick="return IsValid('Damage');">Issued</button>*@
+                @*<button type="button" class="btn btn-warning"  data-dismiss="modal">Close</button>*@
+                <button class="btn btn-orange" data-dismiss="modal" type="button">
+                    <i class="fa fa-times" aria-hidden="true"></i>   Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/AM/Scripts/Issue.js"></script>
+
+
+<script>
+         $(document).ready(function () {
+             $('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px"><label class="label label-green">@SessionHelper.FiscalYearName</label>
+                <label class="label label-blue">Total: @(Model.FixedAssetRegVM.Count) </label></p>`);
+         })
+</script>
+
+@if (ViewBag.Error != null)
+{
+<script>
+
+        var error = @Html.Raw(Json.Encode(ViewBag.Error));
+   
+        toastr.error(error, 'Failed');
+
+</script>
+}
+
+

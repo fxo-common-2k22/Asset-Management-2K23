@@ -1,0 +1,18 @@
+﻿<div class="box box-color grey box-bordered">
+    <div class="box-title">
+        <h3>
+            <i class="fa fa-check-square-o"></i>
+            All Sent Messages
+        </h3>
+        <div class="actions">
+            <a  href="/Academics/StudentReports/SMSReport" target="_blank">Details</a>
+            <a href="#" class="btn btn-mini content-slideUp">
+                <i class="fa fa-angle-down"></i>
+            </a>
+        </div>
+    </div>
+    <div class="box-content">
+        <div id="allSentMessagesPieChart"></div>
+        @*@Html.Action("GetDashboardMessaging", "Forms", new { area = "", mid = 1, ttid = 1 })*@
+    </div>
+</div>

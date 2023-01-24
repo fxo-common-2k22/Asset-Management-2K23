@@ -1,0 +1,38 @@
+﻿@model List<FAPP.Model.Certificate>
+ 
+
+<div id="table">
+    <table class="table table-hover table-condensed table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Ref. No Prefix</th>
+                <th>Created On</th> 
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int count = 1;}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><span class="label label-default current-theme">@(count++)</span></td>
+                    <td>@Html.DisplayFor(m => item.Title)</td>
+                    <td>@Html.DisplayFor(m => item.TemplateType.TemplateTypeName)</td>
+                    <td>@Html.DisplayFor(m => item.RefNoFormat)</td>
+                    <td>@Html.DisplayFor(m => item.CreatedOn)</td> 
+                    <td>
+                       
+                        @*<a class="btn btn-success btn-sm darkblue" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-method="GET" data-ajax-success="onEditSuccess" href="/Academics/CustomReportings/AddUpdateTemplate/@item.ReportTemplateId">Edit</a>*@
+                        <a class="btn btn-success btn-sm darkblue" href="/Certificates/AddEdit/@item.CertificateId">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+

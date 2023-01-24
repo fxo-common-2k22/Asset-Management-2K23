@@ -1,0 +1,158 @@
+﻿@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    if (Model == "NA")
+    {
+        @Html.TextBoxFor(model => model, new
+   {
+       @checked = true,
+       @Value = "NA",
+       id = "NA",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" for="NA" style="padding-left: 2px; float: left;margin-right: 10px;; float: left;margin-right: 20px;">NA</label>
+        @Html.TextBoxFor(model => model, new
+   {
+       @Value = "Father",
+       id = "father",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" for="father" style="padding-left: 2px; float: left;margin-right: 10px;">Father</label>
+        @Html.TextBoxFor(model => model, new
+   {
+       @Value = "Mother",
+       id = "mother",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" for="mother" style="padding-left: 2px; float: left;margin-right: 10px;">Mother</label>
+    }
+    else if (Model == "Father")
+    {
+        @Html.TextBoxFor(model => model, new
+   {
+
+       @Value = "NA",
+       id = "NA",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" for="NA" style="padding-left: 2px; float: left;margin-right: 10px;">NA</label>
+        @Html.TextBoxFor(model => model, new
+   {
+       @checked = true,
+       @Value = "Father",
+       id = "father",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" for="father" style="padding-left: 2px; float: left;margin-right: 10px;">Father</label>
+        @Html.TextBoxFor(model => model, new
+   {
+       @Value = "Mother",
+       id = "mother",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" for="mother" style="padding-left: 2px; float: left;margin-right: 10px;">Mother</label>
+    }
+    else
+    {
+        @Html.TextBoxFor(model => model, new
+   {
+
+       @Value = "NA",
+       id = "NA",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" for="NA" style="padding-left: 2px; float: left;margin-right: 10px;">NA</label>
+        @Html.TextBoxFor(model => model, new
+   {
+
+       @Value = "Father",
+       id = "father",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" for="father" style="padding-left: 2px; float: left;margin-right: 10px;">Father</label>
+        @Html.TextBoxFor(model => model, new
+   {
+       @checked = true,
+       @Value = "Mother",
+       id = "mother",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" for="mother" style="padding-left: 2px; float: left;margin-right: 10px;">Mother</label>
+    }
+}
+else
+{
+    @Html.TextBoxFor(model => model, new
+{
+
+    @Value = "NA",
+    id = "NA",
+    type = "radio",
+    @class = "icheck-me",
+    @data_skin = "square",
+    @data_color = "blue",
+    @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+})
+    <label class="inline" for="NA" style="padding-left: 2px; float: left;margin-right: 10px;">NA</label>
+    @Html.TextBoxFor(model => model, new
+   {
+
+       @Value = "Father",
+       id = "father",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+    <label class="inline" for="father" style="padding-left: 2px; float: left;margin-right: 10px;">Father</label>
+        @Html.TextBoxFor(model => model, new
+   {
+      
+       @Value = "Mother",
+       id = "mother",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" for="mother" style="padding-left: 2px; float: left;margin-right: 10px;">Mother</label>
+}

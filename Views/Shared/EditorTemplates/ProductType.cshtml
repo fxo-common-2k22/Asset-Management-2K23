@@ -1,0 +1,39 @@
+﻿@*<style>
+    .vd_radio label:before {
+        top: 13px;
+    }
+
+    .vd_radio label:after {
+        top: 13px;
+    }
+</style>*@
+@model FAPP.Model.OneDbContext.ProductType
+@{
+    var o = ViewData.ModelMetadata;
+    var radioId = ViewData.TemplateInfo.GetFullHtmlFieldId("");
+    bool r0 = false, r1 = false, r2 = false;
+    if (Model == FAPP.Model.OneDbContext.ProductType.None)
+    {
+        r0 = true;
+        r1 = r2 = false;
+    }
+    if (Model == FAPP.Model.OneDbContext.ProductType.RawMaterial)
+    {
+        r1 = true;
+        r0 = r2 = false;
+    }
+    if (Model == FAPP.Model.OneDbContext.ProductType.FinishedGood)
+    {
+        r2 = true;
+        r0 = r1 = false;
+    }
+}
+
+<div class="vd_radio radio-success">
+    @Html.RadioButton("", "0", r0, new { id = @radioId + "_0", @class = "none" })
+    <label for="@(radioId)_0"> None </label>
+    @Html.RadioButton("", "1", r1, new { id = @radioId + "_1", @class = "rawMaterial" })
+    <label for="@(radioId)_1"> Raw Material </label>
+    @Html.RadioButton("", "2", r2, new { id = @radioId + "_2", @class = "finishedGood" })
+    <label for="@(radioId)_2"> Finished Good </label>
+</div>

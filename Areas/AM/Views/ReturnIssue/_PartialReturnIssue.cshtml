@@ -1,0 +1,135 @@
+﻿@model FAPP.Areas.AM.ViewModels.ReturnIssueModel
+@using System.Linq;
+
+<script>
+    if (@Json.Encode(Request.IsAjaxRequest()))
+        changeHref(@Model.ReturnIssue.ReturnIssueId);
+</script>
+<div class="vbox row">
+    <div class="row" style="padding:5px">
+        <div class="col-md-1" style="padding-right:0px !important">
+            Date
+        </div>
+        <div class="col-md-3">
+            @Html.EditorFor(x => x.ReturnIssue.ReturnIssueDate, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "Return Issue Date" } })
+        </div>
+    </div>
+    <div class="row" style="padding:5px">
+        <div class="col-md-1">
+            Description
+        </div>
+        <div class="col-md-11">
+            @Html.EditorFor(x => x.ReturnIssue.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "Description" } })
+        </div>
+    </div>
+</div>
+<div style="display:none">
+    <input type="submit" name="name" value="" onclick="return IsValid();" id="IssueItemSubmitBtn" />
+    @Html.HiddenFor(s => s.ReturnIssue.ReturnIssueId)
+</div>
+<table class="table table-hover" id="trans_details">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Item Code</th>
+            <th>Qty</th>
+            <th>Description</th>
+            <th>Condition</th>
+            <th>Warehouse</th>
+            <th></th>
+        </tr>
+
+    </thead>
+    <tr id="tr_clone" style="display: none;">
+        <td class="move">
+            @Html.DropDownList("ReturnIssueDetail[-1].ItemId", new SelectList(ViewBag.ItemsDD, "Value", "Text"), "--Select Item--", new { @class = "form-control getItemCodes cloneable nochosen chosenafterclone", @style = "width:250px" })
+        </td>
+        <td class="move">
+            @Html.DropDownList("ReturnIssueDetail[-1].PIPDetailId", new SelectList(string.Empty, "DetailId", "ItemCode"), "--Select Item Code--", new { @class = "getSelectedValue form-control cloneable nochosen chosenafterclone", @style = "width:150px", @disabled = "disabled" })
+        </td>
+        <td class="move">
+            @Html.TextBox("ReturnIssueDetail[-1].Quantity", null, new { @value = "1", @class = "form-control cloneable ", @placeholder = "Qty", @style = "width:50px;" })
+        </td>
+        <td class="move">
+            @Html.TextBox("ReturnIssueDetail[-1].Description", null, new { @class = "form-control cloneable ", @placeholder = "Description" })
+        </td>
+        <td class="move">
+            @Html.DropDownList("ReturnIssueDetail[-1].ConditionTypeId", new SelectList(ViewBag.ConditionTypesDD, "Value", "Text"), "--Select Condition--", new { @class = "form-control cloneable nochosen chosenafterclone", @style = "width:150px" })
+        </td>
+        <td class="move">
+            @Html.DropDownList("ReturnIssueDetail[-1].WarehouseId", new SelectList(ViewBag.WarehousesDD, "Value", "Text"), "--Select Warehouse--", new { @class = "form-control cloneable nochosen chosenafterclone", @style = "width:150px" })
+        </td>
+        <td>
+            <a href="#" class="btn btn-danger" data-action="DeleteAccount" data-id="0">Delete</a>
+        </td>
+    </tr>
+
+    @if (Model != null)
+    {
+        if (Model.ReturnIssueDetail != null)
+        {
+            var ItemCode = (List<FAPP.Areas.AM.ViewModels.v_mnl_AMIssueItemCode_Result>)ViewBag.ItemCodes;
+            var selectedItemCode = new List<FAPP.Areas.AM.ViewModels.v_mnl_AMIssueItemCode_Result>();
+            var IsConsumable = true;
+            for (int i = 0; i < Model.ReturnIssueDetail.Count(); i++)
+            {
+                selectedItemCode = ItemCode.Where(u => u.DetailId == Model.ReturnIssueDetail[i].PIPDetailId).ToList();
+                IsConsumable = ItemCode.Where(u => u.ItemId == Model.ReturnIssueDetail[i].ItemId).Select(u => u.IsConsumable).FirstOrDefault();
+                <tr>
+                    <td  class="move">
+                        <div class="displayNone">
+                            <input type="hidden" name="ReturnIssueDetail[@i].ReturnIssueDetailId" value="@Model.ReturnIssueDetail[i].ReturnIssueDetailId" />
+                        </div>
+                        @Html.DropDownListFor(model => model.ReturnIssueDetail[i].ItemId, new SelectList(ViewBag.ItemsDD, "Value", "Text", Model.ReturnIssueDetail[i].ItemId), "--Select Item--", htmlAttributes: new { @class = "form-control getItemCodes cloneable chosen-select", @style = "width:250px;-webkit-appearance: textfield;" })
+                    </td>
+                    <td  class="move">
+                        
+                        @Html.DropDownListFor(m => m.ReturnIssueDetail[i].PIPDetailId, new SelectList(selectedItemCode, "DetailId", "ItemCode", Model.ReturnIssueDetail[i].PIPDetailId), "--Select Item Code--", new { @class = "form-control chosen-select getSelectedValue", @style = "width:150px;" })
+                    </td>
+                    <td  class="move">
+                        @if (!IsConsumable)
+                        {
+                            @Html.EditorFor(x => x.ReturnIssueDetail[i].Quantity, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Qty", @readonly = "readonly", @style = "width:50px;" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(x => x.ReturnIssueDetail[i].Quantity, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Qty", @style = "width:50px;" } })
+                        }
+                    </td>
+                    <td  class="move">
+                        @Html.EditorFor(x => x.ReturnIssueDetail[i].Description, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Description" } })
+                    </td>
+
+                    <td  class="move">
+                        @Html.DropDownListFor(model => model.ReturnIssueDetail[i].ConditionTypeId, new SelectList(ViewBag.ConditionTypesDD, "Value", "Text", Model.ReturnIssueDetail[i].ConditionTypeId), "--Select Condition--", htmlAttributes: new { @class = "form-control cloneable chosen-select", @style = "width:150px;" })
+                    </td>
+                    <td  class="move">
+                        @Html.DropDownListFor(model => model.ReturnIssueDetail[i].WarehouseId, new SelectList(ViewBag.WarehousesDD, "Value", "Text", Model.ReturnIssueDetail[i].WarehouseId), "--Select Warehouse--", htmlAttributes: new { @class = "form-control cloneable chosen-select", @style = "width:150px;" })
+                    </td>
+                    <td>
+                        @if (Model?.ReturnIssue?.IsPosted == false)
+                        {
+                            <a href="#" data-url="@Url.Action("DeleteReturnDetail")" class="btn btn-danger" data-action="DeleteAccount" data-id="@Model.ReturnIssueDetail[i].ReturnIssueDetailId">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    }
+
+</table>
+<script>
+    RefreshAllScripts();
+    jQuery(document).ready(function () {
+        $(".datepicker").each(function () {
+            $(this).val(RemoveTimeFromDate($(this).val()));
+        });
+        var IssuedItemId = @Html.Raw(Json.Encode(Model.ReturnIssue.ReturnIssueId));
+        if(StringToFloat(IssuedItemId) > 0){
+            $('#pageHeading').text('Return Voucher');
+            $('#lblNewReturnVoucherId').text(IssuedItemId)
+            $('#tabtitle').text($('#pageHeading').text());
+            HideTopControls(false);
+        }
+    });
+</script>

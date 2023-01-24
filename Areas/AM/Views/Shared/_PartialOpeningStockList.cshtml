@@ -1,0 +1,75 @@
+﻿@model FAPP.Areas.AM.ViewModels.SetupModelViewModel
+@using PagedList.Mvc;
+
+<div class="row">
+    <div class="col-sm-12 downpadding">
+        <table class="table table-hover no-head-border table-responsive table-striped">
+            <thead class="vd_bg-green vd_white">
+                <tr>
+                    <th width="20px">Sr.</th>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Opening Stock</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null)
+                {
+                    if (Model.p_mnl__OpeningStockList != null)
+                    {
+                        var count = 0;
+                        for (int i = 0; i < Model.p_mnl__OpeningStockList.Count; i++)
+                        {
+                            var item = Model.p_mnl__OpeningStockList[i];
+                            <tr>
+                                <td><span class="label label-default current-theme">@(++count)</span></td>
+                                <td>
+                                    @Model.p_mnl__OpeningStockList[i].ItemName
+                                    @Html.HiddenFor(model => model.p_mnl__OpeningStockList[i].OpeningStockId)
+                                </td>
+                                <td>@Model.p_mnl__OpeningStockList[i].ShortName</td>
+                                <td id="td_@item.OpeningStockId">
+                                    @Html.TextBoxFor(model => model.p_mnl__OpeningStockList[i].Stock, new { @class = "numeric stock form-control valid", @onkeypress = "return isNumber(event)" })
+                                    <div class="help-block" id="p_mnl__OpeningStockList_0__item_no_lbl"></div>
+                                </td>
+                                <td>
+                                    @Ajax.ActionLink("View", "FetchFAItems", "Setup", new { id = item.OpeningStockId},
+                                    new AjaxOptions
+                                    {
+
+                                        OnSuccess = "OnFetchFAItemsSuccess",
+                                        OnFailure = "OnFailure",
+                                        UpdateTargetId = "UpdatePIPD",
+                                        InsertionMode = InsertionMode.Replace,
+                                        HttpMethod = "GET"
+                                    }, new {@class="btn btn-grey" })
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+
+        </table>
+        @if (Model.p_mnl__OpeningStockPagedList == null || Model.p_mnl__OpeningStockPagedList.Count == 0)
+        {
+            <div style="text-align: center">
+                No data found
+            </div>
+        }
+        <div id="targetContainer">
+            <div id='Paging' style="text-align: center">
+                Page @(Model.p_mnl__OpeningStockPagedList.PageCount < Model.p_mnl__OpeningStockPagedList.PageNumber ? 0 : Model.p_mnl__OpeningStockPagedList.PageNumber)
+                of @Model.p_mnl__OpeningStockPagedList.PageCount
+                @Html.PagedListPager(Model.p_mnl__OpeningStockPagedList, page => Url.Action("OpeningStock", new { page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+           {
+               HttpMethod = "POST",
+               InsertionMode = InsertionMode.Replace,
+               UpdateTargetId = "divStudents"
+           }))
+            </div>
+        </div>
+    </div>
+</div>

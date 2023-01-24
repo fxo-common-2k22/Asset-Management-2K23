@@ -1,0 +1,58 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html class="errorPage">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Error</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link href="~/css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/form-elements.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="shortcut icon" type="image/x-png" href="~/Images/ez-favicon.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+</head>
+<body>
+    <div class="wrapper inner-bg" style="font-family: 'Open Sans', sans-serif;background: #368ee0;color: #fff; font-size: 20px;text-align: center;">
+        <div class="code" style="background: #368ee0;color: #fff; font-size: 90px;text-align: center;">
+            @*<span>404</span>*@
+            <i class="fa fa-1x fa-warning"></i>
+        </div>
+        <div class="desc">Oops! Sorry, There was an error.</div>
+        <button onclick="goBack()" class="btn btn-success">Go Home</button>
+        @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+        {
+            <div>
+                <p>
+                    <b>Exception:</b> @Model.Exception.Message<br />
+                    <b>Controller:</b> @Model.ControllerName<br />
+                    <b>Action:</b> @Model.ActionName
+                </p>
+                <div style="overflow:scroll">
+                    <pre>
+                    @Model.Exception.StackTrace
+                </pre>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>
+<script src="/Scripts/bootstrap.min.js"></script>
+<script>
+    function goBack() {
+        //window.history.go(-1);
+        window.location = '/Home/Index';
+    }
+</script>

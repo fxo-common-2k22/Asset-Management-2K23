@@ -1,0 +1,572 @@
+﻿@model  FAPP.ViewModel.Common.GraphsModel
+<div class="row" style="margin-top: -15px;">
+    <div class="col-md-8" style="margin-top: -15px;">
+        <div class="alert alert-info alert-dismissable cannotAutoClose h4" style="margin-bottom: 0.5%; margin-top:1.2%">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>[<i class="fa fa-info"></i>] Employee app available</strong>
+            <p style="padding-top:5px !important;">
+
+                <a class="btn btn-success btn-xs" style="color:white" href="https://play.google.com/store/apps/details?id=com.cloudcampus.staff" target="_blank">click here</a> to download it from playstore.
+                <br />
+                Your Campus Id is @FAPP.DAL.SessionHelper.CompanyCode.
+            </p>
+        </div>
+        <div class="alert alert-success alert-dismissable cannotAutoClose h4" style="margin-bottom: 0.5%; margin-top:1.2%">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>[<i class="fa fa-info"></i>] Parent app available</strong>
+            <p style="padding-top:5px !important;">
+
+                <a class="btn btn-primary btn-xs" style="color:white" href="https://play.google.com/store/apps/details?id=com.cloudcampus.parent" target="_blank">click here</a> to download it from playstore.
+                <br />
+                Your Campus Id is @FAPP.DAL.SessionHelper.CompanyCode.
+            </p>
+        </div>
+        <div class="alert alert-info alert-dismissable cannotAutoClose h4" style="margin-bottom: 0.5%; margin-top:1.2%">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>[<i class="fa fa-info"></i>] Owner app available</strong>
+            <p style="padding-top:5px !important;">
+
+                <a class="btn btn-success btn-xs" style="color:white" href="https://play.google.com/store/apps/details?id=com.cloudcampus.owner" target="_blank">click here</a> to download it from playstore.
+                <br />
+                Your Campus Id is @FAPP.DAL.SessionHelper.CompanyCode.
+            </p>
+        </div>
+        <div class="" id="AcademicAttendanceStats">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialAcademicAttendanceStats").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialAcademicAttendanceStats.cshtml", Model)
+            }
+        </div>
+        <div class="" id="StudentStrengthGraph">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialStudentStrengthGraph").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialAcademicStudentStrengthGraph.cshtml", Model)
+            }
+        </div>
+
+        <div class="" id="StudentAdmissionWithDrawl">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialStudentAdmissionWithdrawl").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialAcademicStudentAdmissionWithdrawl.cshtml", Model)
+            }
+        </div>
+        <div class="" id="ContactsStatsId">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialShowStats").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialAcademicStats.cshtml", Model)
+            }
+        </div>
+        <div class="" id="AllSentMessages">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialAllSentMessages").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialAllSentMessages.cshtml", Model)
+            }
+        </div>
+        <div class="" id="EmployeesTodaysAttendanceStats">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialEmployeesTodaysAttendanceStats").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialEmployeesTodaysAttendanceStats.cshtml", Model)
+            }
+        </div>
+        <div class="" id="StudentsTodaysAttendanceStats">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialStudentsTodaysAttendanceStats").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialStudentsTodaysAttendanceStats.cshtml", Model)
+            }
+        </div>
+        <div class="" id="CurrentMonthFeeStats">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialCurrentMonthFeeStats").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialCurrentMonthFeeStats.cshtml", Model)
+            }
+        </div>
+
+        @*<div class="" id="AttendanceStatsGraph">
+                @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialAcademicAttendanceStatsGraph").Any())
+                {
+                    @Html.Partial("~/Views/Dashboard/_PartialAcademicAttendanceStatsGraph.cshtml", Model)
+                }
+            </div>*@
+
+    </div>
+    <div class="col-md-4" style="margin-top: -6px;">
+        <div class="vbox">
+            <span style="font-size:13px"><strong>Go to Student</strong></span><br />
+            <div style="display:inline-flex; width:100%;">
+                <div style="width:90%;">
+                    <select class="remoteSearch" id="ddlRemoteStudent" style="width:100%;"> </select>
+                    @*@Html.DropDownListFor(model => model.StudentId, new List<SelectListItem>(), "-----  Search Student  ----", new { @class = "form-control", @style = "width:100%" })
+                        @Html.ValidationMessageFor(model => model.StudentId, "", new { @class = "text-danger" })*@
+                </div>
+                <div style="width:10%; text-align:right">
+                    <div class="dropdown" style="font-size: 15px !important;">
+                        <button style="background: #fff" class="btn  btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <i class="fa fa-arrow-right" data-toggle="tooltip" title="" style="cursor: pointer"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
+                            <li><a onclick="GoToStudentOverview()">Overview</a></li>
+                            <li><a onclick="GoToStudentProfile()">Profile</a></li>
+                            <li><a onclick="GoToStudentFeeProfile()">Fee Profile</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vbox" style="margin-top: 2%;border-color:#a5ffa5; background-color:#a5ffa5">
+            <span style="font-size:13px"><strong>Go to Employee</strong></span><br />
+            <div style="display:inline-flex; width:100%;">
+                <div style="width:90%;">
+                    @Html.DropDownListFor(model => model.EmployeeId, new List<SelectListItem>(), "-----  Search Employee  ----", new { @class = "form-control", @style = "width:100%" })
+                    @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
+                </div>
+                <div style="width:10%; text-align:right">
+                    <div class="dropdown" style="font-size: 15px !important;">
+                        <button style="background: #fff" class="btn  btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <i class="fa fa-arrow-right" data-toggle="tooltip" title="" style="cursor: pointer"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
+                            <li><a >Overview</a></li>
+                            <li><a >Profile</a></li>
+                            <li><a >Attendance</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vbox" style="margin-top: 2%; border-color:wheat; background-color:wheat">
+            <span style="font-size:13px"><strong>Go to Fee Voucher</strong></span><br />
+            <div style="display:inline-flex; width:100%;">
+                <div style="width:90%;">
+                    @Html.DropDownListFor(model => model.VoucherId, new List<SelectListItem>(), "-----  Search Fee Voucher  ----", new { @class = "form-control", @style = "width:100%" })
+                    @Html.ValidationMessageFor(model => model.VoucherId, "", new { @class = "text-danger" })
+                </div>
+                <div style="width:10%; text-align:right">
+                    <div class="dropdown" style="font-size: 15px !important;">
+                        <button style="background: #fff" class="btn  btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <i class="fa fa-arrow-right" data-toggle="tooltip" title="" style="cursor: pointer"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
+                            <li><a>Fee Voucher</a></li>
+                            <li><a>Student Profile</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="" id="GenderWiseStrength">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialAcademicGenderWiseStrength").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialAcademicGenderWiseStrength.cshtml", Model)
+            }
+        </div>
+        <div class="" id="AttendancePieChart">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialAcademicsAttendancePieChartGraph").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialAcademicsAttendancePieChartGraph.cshtml", Model)
+            }
+        </div>
+        <div class="" id="TopCheckIns">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialAcademicAttendanceTopCheckin").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialAcademicAttendanceTopCheckin.cshtml", Model)
+            }
+        </div>
+        <div class="" id="AcademicsAttendanceAvailableTeachers">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialAcademicsAttendanceAvailableTeachers").Any())
+            {
+                @Html.Partial("~/Views/Dashboard/_PartialAcademicsAttendanceAvailableTeachers.cshtml", Model)
+            }
+        </div>
+
+
+    </div>
+</div>
+<script src="~/Scripts/googleChart.js"></script>
+<script type="text/javascript">
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages':['corechart']});
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+    function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+            @if (Model.SmsChart != null) {
+                foreach (var item in Model.SmsChart)
+                {
+                <text>['@item.Key', @item.Value],</text>
+                }
+             }
+        ]);
+                // Set chart options
+                var options =
+                {
+            'title': 'Sent SMS',
+            'width':450,
+            'height': 300,
+            is3D: true,
+            sliceVisibilityThreshold: 0,
+            chartArea: { left: 20, top: 20, width: '100%', height: '100%' }
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('allSentMessagesPieChart'));
+            chart.draw(data, options);
+    }
+</script>
+<script>
+    $(function () {
+         
+        var d = JSON.parse('@Html.Raw(Json.Encode(@Model))')
+        DashboardGraphData(d);
+    });
+
+    function DashboardGraphData(d)
+    {
+        if (d.StudentGendersGraph != null) {
+            DrawStudentGenderGraph(d)
+        }
+        DrawStudentStrenthGraph(d)
+        DrawStudentAttendanceGraph(d)
+        DrawStudentAdmissionWithdrawlGraph(d)
+        if (d.StudentAttendancePieChart != null) {
+            DrawStudentAttendancePieGraph(d)
+        }
+    }
+
+    function DrawStudentGenderGraph(d) {
+        console.log(d.StudentGendersGraph.GenderSlices);
+        if ($('#container3').length) {
+            Highcharts.chart('container3', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: false
+                    }
+                },
+                series: [{
+                    name: 'Student Gender Weightage',
+                    colorByPoint: true,
+                    data: d.StudentGendersGraph.GenderSlices
+                }],
+            });
+        }
+
+        //$('.highcharts-credits').hide();
+    }
+    function DrawStudentStrenthGraph(d) {
+        if ($('#StudentStrengthContainer').length) {
+            Highcharts.chart('StudentStrengthContainer', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Student Strength'
+                },
+                subtitle: {
+                    text: 'Class and Section wise'
+                },
+                xAxis: {
+                    categories: d.StudentStrengthGraphDataList.Classes,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Number of Students'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: d.StudentStrengthGraphDataList.StudentStrengthSectionWiseList
+            });
+        }
+    }
+    function DrawStudentAttendanceGraph(d) {
+        if ($('#StudentAttendanceStatGraphs').length) {
+            Highcharts.chart('StudentAttendanceStatGraphs', {
+                colors: ['Green', '#e63a3a', 'cyan'],
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Student Attendance'
+                },
+                subtitle: {
+                    text: 'Group Wise'
+                },
+                xAxis: {
+                    categories: d.StudentAttendanceStatsGraphList.Classes,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Number of Students'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: d.StudentAttendanceStatsGraphList.StudentStrengthSectionWiseList
+            });
+        }
+    }
+    function DrawStudentAdmissionWithdrawlGraph(d) {
+        if ($('#StudentAdmissionWithDrawlContainer').length) {
+            Highcharts.chart('StudentAdmissionWithDrawlContainer', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Student Admission/Withdrawl'
+                },
+                subtitle: {
+                    text: 'Admission and WithDrawl'
+                },
+                xAxis: {
+                    categories: d.StudentAdmissionWithDrawlList.Days,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Number of Students'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td></tr>' +
+                        '<td style="padding:0"><b>{point.y:.1f} </b></td>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: d.StudentAdmissionWithDrawlList.studentAdmissionWithDrawl
+            });
+        }
+    }
+    function DrawStudentAttendancePieGraph(d) {
+        console.log(d.StudentAttendancePieChart.AttendanceSlices);
+        if ($('#AttendancePercentagePieChart').length) {
+            Highcharts.chart('AttendancePercentagePieChart', {
+                //colors: ['Green', 'Red', 'cyan','Brown'],
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: false
+                    }
+                },
+                series: [{
+                    name: 'Student Attendance Weightage',
+                    colorByPoint: true,
+                    data: d.StudentAttendancePieChart.AttendanceSlices
+                }],
+            });
+        }
+
+        //$('.highcharts-credits').hide();
+    }
+
+    function InsertFormInMemberShip(data) {
+         
+        if (data > 0) {
+            var ModuleId = data;
+            var ParentForm = 1; //int
+            var MenuItemPriority = 1; //short
+            var isActive = "Yes"; //string //"Yes" and "No"
+            var PageType = "";//string For Child page // "HaveChild"
+            var IsMenuItem = true;//bool
+            var IsDashboardPart = false;//bool only for Dashboard
+            var ShowOnDesktop = true;//bool for quick links
+            var IsMasterMenu = false;//bool for Main Menu
+            var IsQuickLink = true;//bool for quick links
+            var FormName = "Students"; //string
+            var MenuText = "Students"; //string
+            var FormURL = "/Students/Dashboard";//string
+            var FormId = 2011130550
+            InsertInMembershipFormsWithStaticFormId(FormName, ParentForm, FormURL, MenuText, MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, ModuleId);
+
+            var ParentForm = 2011130550; //int
+            var MenuItemPriority = 1; //short
+            var isActive = "Yes"; //string //"Yes" and "No"
+            var PageType = "";//string For Child page // "HaveChild"
+            var IsMenuItem = false;//bool
+            var IsDashboardPart = false;//bool only for Dashboard
+            var ShowOnDesktop = true;//bool for quick links
+            var IsMasterMenu = false;//bool for Main Menu
+            var IsQuickLink = true;//bool for quick links
+            var FormName = "Dashboard"; //string
+            var MenuText = "Dashboard"; //string
+            var FormURL = "/Academics/Students/Dashboard";//string
+            var FormId = 201113055001
+            InsertInMembershipFormsWithStaticFormId(FormName, ParentForm, FormURL, MenuText, MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, ModuleId);
+
+            var ParentForm = 2011130550; //int
+            var MenuItemPriority = 1; //short
+            var isActive = "Yes"; //string //"Yes" and "No"
+            var PageType = "";//string For Child page // "HaveChild"
+            var IsMenuItem = false;//bool
+            var IsDashboardPart = false;//bool only for Dashboard
+            var ShowOnDesktop = true;//bool for quick links
+            var IsMasterMenu = false;//bool for Main Menu
+            var IsQuickLink = true;//bool for quick links
+            var FormName = "Setup"; //string
+            var MenuText = "Setup"; //string
+            var FormURL = "/Academics/SessionManagement/Groups";//string
+            var FormId = 201113055002
+            InsertInMembershipFormsWithStaticFormId(FormName, ParentForm, FormURL, MenuText, MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, ModuleId);
+
+            var ModuleId = 1;
+            var ParentForm = 201001; //int
+            var MenuItemPriority = 2; //short
+            var isActive = "Yes"; //string //"Yes" and "No"
+            var PageType = "";//string For Child page // "HaveChild"
+            var IsMenuItem = false;//bool
+            var IsDashboardPart = false;//bool only for Dashboard
+            var ShowOnDesktop = true;//bool for quick links
+            var IsMasterMenu = false;//bool for Main Menu
+            var IsQuickLink = true;//bool for quick links
+            var FormName = "Setup"; //string
+            var MenuText = "Setup"; //string
+            var FormURL = "/Academics/SessionManagement/ResultRating";//string
+            var FormId = 201003
+            InsertInMembershipFormsWithStaticFormId(FormName, ParentForm, FormURL, MenuText, MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, ModuleId);
+            toastr.success('Updated Successfully.');
+
+        } else {
+            toastr.error('Some Error Occurred.');
+        }
+    }
+    function InsertInMembershipFormsWithStaticFormId(FormName, ParentForm, FormURL, MenuText, MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, IsAction, ModuleId, PageDescription) {
+        if (IsAction == undefined) {
+            IsAction = false;
+        }
+        if (ModuleId == undefined) {
+            ModuleId = 0;
+        }
+        if (ParentForm != "" && FormName != "" && FormURL != "" && FormURL != "") {
+            $.ajax({
+                url: '/Home/InsertMembershipFormsWithStaticFormId',
+                type: 'post',
+                data: {
+                    FormName: FormName, ParentForm: ParentForm, FormURL: FormURL, MenuText: MenuText, MenuItemPriority: MenuItemPriority, isActive: isActive, PageType: PageType,
+                    IsMenuItem: IsMenuItem, IsDashboardPart: IsDashboardPart, ShowOnDesktop: ShowOnDesktop,
+                    IsMasterMenu: IsMasterMenu, IsQuickLink: IsQuickLink, FormID: FormId, IsAction: IsAction, ModuleId: ModuleId, PageDescription: PageDescription
+                },
+                success: function (data) {
+                    if (data.Messages != null && data.Messages != "" && data.Messages != undefined) {
+                        toastr.success(data.Messages)
+                    }
+                }
+            });
+        }
+    }
+</script>
+<script>
+     var pageSize = 20;
+    $ajaxRemoteSearchUrl = '@Url.Action("SearchStudentsLive")';
+    $ajaxRemotePlaceHolder = "----- Seacrh Student -----";
+    $ajaxRemoteOnTemplateSelection = onFormSelection;
+
+        function onFormSelection(repo) {
+
+        if (repo.id) {
+           
+        }
+        return repo.title || repo.text;
+    }
+
+</script>
+<script src="~/Scripts/remoteSearch.js"></script>
+<script>
+    function GoToStudentOverview() {
+        window.location.href = "/Students/StudentOverView/Manage/" + $("#ddlRemoteStudent").val();
+    }
+    function GoToStudentProfile() {
+        window.location.href = "/Students/Students/Edit/" + $("#ddlRemoteStudent").val();
+    }
+    function GoToStudentFeeProfile() {
+        window.location.href = "/Fee/Students/Edit/" + $("#ddlRemoteStudent").val();
+    }
+
+</script>

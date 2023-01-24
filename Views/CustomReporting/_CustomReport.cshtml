@@ -1,0 +1,93 @@
+﻿@model FAPP.ViewModel.TemplatesViewModel
+
+@Html.HiddenFor(m => m.Branch.ReportHeader)
+@Html.HiddenFor(m => m.Branch.ReportFooter)
+
+<div class="row">
+    <div class="col-sm-12">
+        <table id="example" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    @foreach (var item in Model.CustomReport.Fields)
+                    {
+                        <th>@item</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.CustomReport.Values)
+                {
+                    <tr>
+                        @foreach (var item in row)
+                        {
+                            string[] format = new string[] { "dd-MM-yyyy HH:mm:ss" };
+                            DateTime datetime;
+                            <td class="text-left">
+                                @if (DateTime.TryParse(item, out datetime))
+                                {@FAPP.Helpers.Utilities.DateFormat(datetime) }
+                            else
+                            { @item}
+                            </td>
+                        }
+                    </tr>
+                }
+
+            </tbody>
+            <tfoot id="tfooter">
+
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<footer class="stickyFooter vbox row" style="">
+    <div class="footerContainer ">
+        <div class="row">
+            <div class="col-md-5 nopadding" id="stickyButtons">
+                <label for="IsPrintHeader" class="col-sm-3 nopadding control-label">Print Header</label>
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.IsPrintHeader, new { htmlAttributes = new { } })
+                </div>
+                <label for="IsPrintHeader" class="col-sm-2 nopadding control-label">Print Footer</label>
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.IsPrintFooter, new { htmlAttributes = new { } })
+                </div>
+                <div class="col-sm-1 nopadding">
+                    <input type="submit" id="" class="btn btn-primary " style="" value="Print">
+                </div>
+            </div>
+
+            <div class="col-md-3 pull-right" id="stickyPagination">
+            </div>
+
+            <div class="col-md-3 center-block text-center">
+                <strong id="noOfSelectedVouchersId"></strong>
+            </div>
+        </div>
+    </div>
+</footer>
+
+@*<div id="getPrintBtn" class="vbox">
+    <div class="row">
+        <div class="col-sm-4" style="padding-left: 0px">
+            <div class="form-group inline">
+                <label for="@Model.IsPrintHeader" class="col-sm-6 ">Print Header</label>
+                @Html.EditorFor(model => model.IsPrintHeader, new { htmlAttributes = new { @class = "col-sm-6" } })
+                <br />
+                <label for="@Model.IsPrintFooter" class="col-sm-6">Print Footer</label>
+                @Html.EditorFor(model => model.IsPrintFooter, new { htmlAttributes = new { @class = "col-sm-6" } })
+            </div>
+        </div>
+    </div>
+</div>*@
+<script type="text/javascript">
+    $('#IsPrintHeader').change(function () {
+        alert(this.value);
+        if (this.value == 'allot') {
+            alert("Alloted");
+        }
+        else if (this.value == 'transfer') {
+            alert("Transfered");
+        }
+    });
+</script>

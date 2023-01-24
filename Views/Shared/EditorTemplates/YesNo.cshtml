@@ -1,0 +1,6 @@
+﻿@model bool?
+    @{ 
+        var isChecked = Model.HasValue ? Model.Value : false;
+    }
+
+@Html.DropDownList("", new SelectListItem[] { new SelectListItem() { Text = "Yes", Value = "true", Selected = isChecked }, new SelectListItem() { Text = "No", Value = "false", Selected = !isChecked } },new { @style="width:100px"})

@@ -1,0 +1,24 @@
+﻿Added column in POSSupplierRefundInvoice
+VoucherDetailId
+PaymentDate
+
+
+Added column in POSSupplierRefund
+VoucherId
+
+
+
+Added column in POSClientRefundInvoice
+VoucherDetailId
+PaymentDate
+
+
+Added column in POSClientRefund
+VoucherId
+
+
+
+Added column in WarehouseProduct
+Row Guid
+
+

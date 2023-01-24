@@ -1,0 +1,11 @@
+﻿@using System.Collections
+@model FAPP.Model.TemplateFilter
+@{
+    var value = "";
+    if (TempData[Model.FilterName] != null)
+    {
+        value = TempData[Model.FilterName].ToString();
+    }
+}
+@Html.DropDownList(Model.FilterName, new SelectList((IEnumerable)TempData["GroupsDD"], "Value", "Text", value), "--Select " + Model.FilterTitle + "--", new { @data_val_required = "The " + Model.FilterName + " is required.", @data_val = "true", @class = "form-control", @style= "width:100% !important" })
+@Html.ValidationMessage(Model.FilterName, "", new { @class = "text-danger" })

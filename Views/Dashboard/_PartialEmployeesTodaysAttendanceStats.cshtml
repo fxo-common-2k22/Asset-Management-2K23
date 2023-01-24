@@ -1,0 +1,90 @@
+﻿<div class="box box-color box-bordered purple" id="EmployeesTodaysAttendanceGraphId">
+    <div class="box-title">
+        <h3>
+            <i class="fa fa-calendar"></i>
+            <span id="LabelTitle">Employees Today's Attendance Stats</span>
+        </h3>
+        <a href="/HRPayroll/AttendanceReports/DailyAttendance" style="margin-right: 2%;" target="_blank" class="btn btn-darkblue pull-right">Details</a>
+
+    </div>
+    <div class="box-content" style="min-height: 155px;">
+        <div id="EmployeesTodaysAttendanceContainer">
+        </div>
+    </div>
+</div>
+<script>
+    $(window).on('load', function () {
+         ;
+        var d;
+        $.ajax({
+            url: "/Dashboard/EmployeeTodaysAttendanceStatsChartData",
+            type: "GET",
+            global: false,
+            success: function (data) {
+                 ;
+                if (data != null) {
+                    DrawEmployeeAttendanceStatsGraph(data);
+                }
+            }, error: function (jqXHR, exception) {
+                console.log(jqXHR);
+                toastr.error("Some Error Occured while loading Employee Todays Attendance Stats");
+            }
+        }).fail(function (jqXHR, textStatus) {
+            toastr.error("Some Error Occured while loading Employee Todays Attendance Stats");
+        });
+        $(".highcharts-credits").hide();
+    });
+    function DrawEmployeeAttendanceStatsGraph(d) {
+         ;
+        console.log(d.FeeStatsSlices);
+        if ($('#EmployeesTodaysAttendanceContainer').length) {
+            Highcharts.chart('EmployeesTodaysAttendanceContainer', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Employee Attendance Stats'
+                },
+                subtitle: {
+                    text: "Employee Today's Attendance Stats for Current Month"
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Amount'
+                    }
+
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f}'
+                        }
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+                },
+                series: [
+                    {
+                        name: "Employee Attendance",
+                        colorByPoint: true,
+                        data: d.EmployeesTodaysAttendanceStatsColoumns
+                    }
+                ],
+                drilldown: {
+                    series: null
+                }
+            });
+        }
+    }
+</script>

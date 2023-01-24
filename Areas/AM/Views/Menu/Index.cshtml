@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Menu Created";
+}
+
+
+<script>
+    $(window).load(function () {
+
+        //Same-----------------****------------------
+
+        var ParentForm = 1; //int
+        var MenuItemPriority = 6; //short
+        var isActive = "Yes"; //string //"Yes" and "No"
+        var PageType = "";//string For Child page // "HaveChild"
+        var IsMenuItem = false;//bool
+        var IsDashboardPart = false;//bool only for Dashboard
+        var ShowOnDesktop = true;//bool for quick links
+        var IsMasterMenu = false;//bool for Main Menu
+        var IsQuickLink = true;//bool for quick links
+
+
+
+        // Assets / Depreciation
+        ParentForm = 13001;
+        FormId = 1300101;
+        InsertInMembershipFormsWithStaticFormId("Depreciation", ParentForm, "/AM/Depreciation/Manage", "Depreciation", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, 2);
+
+        // Assets / Reports
+        ParentForm = 13001;
+        FormId = 1300102;
+        InsertInMembershipFormsWithStaticFormId("Reports", ParentForm, "/AM/Reports", "Reports", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, 2);
+        // Assets / Reports/Issuance
+        ParentForm = 1300102;
+        FormId = 130010201;
+        InsertInMembershipFormsWithStaticFormId("Issuance", ParentForm, "/AM/Reports/Issuance", "Issuance", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, 2);
+
+        // Assets / Reports/Damages
+        ParentForm = 1300102;
+        FormId = 130010202;
+        InsertInMembershipFormsWithStaticFormId("Damages", ParentForm, "/AM/Reports/Damages", "Damages", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, 2);
+        // Assets / Reports/AssetLog
+        ParentForm = 1300102;
+        FormId = 130010204;
+        InsertInMembershipFormsWithStaticFormId("Assets Log", ParentForm, "/AM/Reports/AssetLog", "Assets Log", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, 2);
+        // Assets / Reports/Summarize
+        ParentForm = 1300102;
+        FormId = 130010205;
+        InsertInMembershipFormsWithStaticFormId("Summary", ParentForm, "/AM/Reports/Summary", "Summary", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, 2);
+        // Assets / Reports/Dashboard
+        ParentForm = 1300102;
+        FormId = 130010203;
+        MenuItemPriority = 1;
+        InsertInMembershipFormsWithStaticFormId("Dashboard", ParentForm, "/AM/Reports/Index", "Dashboard", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, 2);
+
+
+        var ModuleId = 3;
+        var ParentForm = 13001; //int
+        var MenuItemPriority = 6; //short
+        var isActive = "No"; //string //"Yes" and "No"
+        var PageType = "";//string For Child page // "HaveChild"
+        var IsMenuItem = false;//bool
+        var IsDashboardPart = false;//bool only for Dashboard
+        var ShowOnDesktop = true;//bool for quick links
+        var IsMasterMenu = false;//bool for Main Menu
+        var IsQuickLink = false;//bool for quick links
+        var FormName = "Depreciation Details"; //string
+        var MenuText = "Depreciation Details"; //string
+        var FormURL = "/AM/Depreciation/DepreciationDetails";//string
+        var FormId = 1300103;
+        InsertInMembershipFormsWithStaticFormId(FormName, ParentForm, FormURL, MenuText, MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId, null, ModuleId);
+
+    });
+</script>

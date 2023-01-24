@@ -1,0 +1,116 @@
+﻿@model FAPP.Areas.AM.ViewModels.DepreciationMainViewModel
+@using PagedList.Mvc;
+@using FAPP.Model;
+
+<div class="downpadding">
+    <table class="table table-hover table-condensed table-striped">
+        <thead>
+            <tr>
+                <th width="20p">Sr.</th>
+                <th>Date</th>
+                <th>Posted</th>
+                <th>Depreciation Method</th>
+                <th>Depreciation Type</th>
+                <th width="150px">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int count = 0;// (25 * (Model.Depreciations.PageNumber - 1)) + 1;
+                count = (Model.pagesize * Model.Depreciations.PageNumber) - (Model.pagesize);
+
+            }
+            @foreach (var item in Model.Depreciations)
+            {
+                <tr>
+                    <td width="20px"><span class="label label-default current-theme">@(++count)</span></td>
+                    <td>@item.Date.ToddMMMyyyyString()</td>
+                    <td>
+                        @if (item.IsPosted == true)
+                        {
+                            <span title="Posted" class="blue"><i class="fa fa-check"></i></span>
+                        }
+                        @if (item.IsPosted == false)
+                        {
+                            <span title="Not Posted" class="red"><strong>_</strong></span>
+                        }
+                    </td>
+                    <td>@(item.DepreciationType?.DepreciationTypeName)</td>
+                    <td>@(item.DepreciationMethod)</td>
+                    <td>
+                        @if (ViewBag.CanUpdate)
+                        {
+                            @Html.ActionLink("View", "DepreciationDetails", "Depreciation", new { id = item.DepreciationMainId }, new { @class = "btn btn-success btn-xs", @style = "color:#fff !important" })
+                        }
+                        @if (ViewBag.CanDelete)
+                        {
+                            <button type="button" class="btn btn-danger" onclick="DeleteRow(@item.DepreciationMainId)">Delete</button>
+                        }
+                        @*@Ajax.ActionLink("View", "DepreciationDetails", new { id = item.DepreciationMainId }, new AjaxOptions { HttpMethod = "GET" }, new { @class = "btn btn-darkblue btn-xs " })
+        <button class="btn btn-danger btn-sm" type="button" onclick="DeleteRow('@item.DepreciationMainId', '/AM/Issue/RemoveItemRegister', 'divStudents', 'Delete Item Register :   (@item.DepreciationMainId)?')">
+            Delete
+        </button>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="targetContainer">
+        <div class="col-md-12">
+            <div id='Paging' style="text-align: center">
+                Page @(Model.Depreciations.PageCount < Model.Depreciations.PageNumber ? 0 : Model.Depreciations.PageNumber)
+                of @Model.Depreciations.PageCount
+                @Html.PagedListPager(Model.Depreciations, page => Url.Action("Manage", new { page = page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+           {
+               HttpMethod = "GET",
+               InsertionMode = InsertionMode.Replace,
+               OnSuccess = "OnCreateUpdateSuccess",
+               UpdateTargetId = "divStudents"
+           }))
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<script>
+    var message = @Html.Raw(Json.Encode(ViewBag.message));
+    var ReturnIssueId = @Html.Raw(Json.Encode(ViewBag.ReturnIssueId));
+    var IssueItemId = @Html.Raw(Json.Encode(ViewBag.IssueItemId));
+
+    if (message) {
+        DisplayMessage('', message);
+    }
+    if (ReturnIssueId) {
+        window.location.href="/AM/ReturnIssue/AddEditReturnIssue/"+ReturnIssueId;
+    }
+    if (IssueItemId) {
+        window.location.href="/AM/Issue/AddEditIssuedItem/"+IssueItemId;
+    }
+
+    //$(document).on('keyup', '#RoomDoorNo', function () {
+    //    $('#RoomCode').val($('#RoomDoorNo').val());
+    //})
+    $('#ItemRegisterItem_ProductId').change(function () {
+        try {
+            var txt = $('#ItemRegisterItem_ProductId option:selected').text();
+            if (txt) {
+                if (txt.length > 2) {
+                    var splittedCode = txt.slice(0, 2);
+                    $('#ItemRegisterItem_ItemCode').val(splittedCode.toLocaleUpperCase()+"-");
+                }
+            }
+        } catch (e) {
+
+        }
+    });
+    var topTotal = @Html.Raw(Json.Encode(Model.Depreciations?.TotalItemCount));
+    $('#topTotal').text(topTotal);
+    setTimeout(function () {
+        var text = $('.pagingalign').text();
+        $('.pagingalign').html('');
+    }, 1000);
+</script>

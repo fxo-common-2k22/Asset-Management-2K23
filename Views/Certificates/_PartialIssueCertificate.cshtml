@@ -1,0 +1,131 @@
+﻿@model FAPP.ViewModel.MediaTemplatesViewModel
+
+
+@using (Ajax.BeginForm("Issue", "Certificates", new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnSuccess = "OnIssueCertificateSuccess", OnFailure = "OnFailure" }, new { @class = "new-task-form form-horizontal form-bordered", @id = "frmadd" }))
+{
+    @Html.HiddenFor(m => m.IssueCertificate.GroupId)
+    @Html.HiddenFor(m => m.IssueCertificate.IncludeInactive)
+    @Html.HiddenFor(m => m.ModuleId)
+    @Html.HiddenFor(m => m.IssueCertificate.CertificateId)
+    <table class="table table-hover table-condensed table-striped">
+        <thead>
+            <tr>
+                <th width="3%">Sr.No</th>
+                <th width="1%"><input name="checkall" id="checkall" value="" class="checkBoxes" type="checkbox"></th>
+                <th>Name</th>
+                <th>Reg No</th>
+                <th>Gr No</th>
+                <th>Father Name</th>
+                <th>Active</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int count = 0;
+                var rowNo = 1;
+                var checkedItem = "";
+                foreach (var group in Model.IssueCertificate.Students.OrderByDescending(s => s.Active).GroupBy(s => s.StudentId))
+                {
+                    var item = group.OrderByDescending(s => s.DateOfAssignment).FirstOrDefault();
+                    <tr id="checkboxes">
+                        <td><span class="label label-default current-theme">@(++count)</span></td>
+                        <td><input data-index="@rowNo" class="checkbox checkBoxes" @checkedItem name="IssueCertificate.SelectedStudentSessionIds" value="@item.StudentSessionId" type="checkbox"></td>
+                        <td><a href="/Academics/Students/Edit/@item.Student.StudentId" target="_blank" title="Go to Student Profile">@Html.DisplayFor(m => item.Student.FullName)</a></td>
+                        <td>@Html.DisplayFor(m => item.Student.RegistrationNumber)</td>
+                        <td>@Html.DisplayFor(m => item.Student.GRNo)</td>
+                        <td>@Html.DisplayFor(m => item.Student.FatherName)</td>
+                        <td>@Html.DisplayFor(m => item.Active, "YesNoIcons")</td>
+                        <td>
+                            @*<a class="btn btn-success btn-sm darkblue" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-method="GET" data-ajax-success="onEditSuccess" href="/Academics/Results/Details/@item.ExamId">Details</a>*@
+                            <a class="btn btn-success btn-sm darkblue" href="/Academics/Students/Edit/@item.Student.StudentId">View</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <footer class="stickyFooter vbox" style="">
+        <div class="footerContainer ">
+            <div class="row">
+                <div class="col-md-5 displayNone" id="stickyButtons">
+                    <div class="">
+                        <label for="" class="col-sm-3 control-label">Issue Date</label>
+                        <div class="col-sm-7">
+                            @Html.EditorFor(model => model.IssueDate, new { htmlAttributes = new { @class = "datePicker form-control", @placeholder = "Issue Date" } })
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="submit" class="btn  btn-primary" value="Issue">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 pull-right" id="stickyPagination">
+                </div>
+
+                <div class="col-md-3 center-block text-center">
+                    <strong id="noOfSelectedVouchersId"></strong>
+                </div>
+            </div>
+        </div>
+    </footer>
+    @*<div class="vbox" id="saveResultBtn" style="display: none">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="@Model.IssueDate" class="col-sm-12 pull-right">Issue Date</label>
+                    @Html.EditorFor(model => model.IssueDate, new { htmlAttributes = new { @class = "datePicker form-control", @placeholder = "Issue Date" } })
+                </div>
+                <div class="col-sm-2" style="padding-top: 25px;padding-left: 0px">
+                    <input type="submit" class="btn  btn-primary" value="Issue">
+                </div>
+            </div>
+        </div>*@
+}
+<script type="text/javascript">
+    $("#checkall").change(function () {  //"select all" change
+        var status = this.checked; // "select all" checked status
+        $('.checkbox').each(function () { //iterate all listed checkbox items
+            this.checked = status; //change ".checkbox" checked status
+        });
+        if (status) {
+            $("#saveResultBtn").show();
+        } else
+        {
+            $("#saveResultBtn").hide();
+        }
+    });
+    $(".checkbox").change(function () {
+        var status = false;
+        var selected = [];
+        $('#checkboxes  input:checked').each(function () {
+            selected.push($(this).attr('name'));
+        });
+
+        if (selected.length > 0) {
+            status = true;
+        } else
+        {
+            status = false;
+        }
+        if (status) {
+            $("#saveResultBtn").show();
+        } else {
+            $("#saveResultBtn").hide();
+        }
+    });
+    function OnIssueCertificateSuccess(data) {
+        $("#alrtIssuedCerticateSuccess").removeClass("displayNone");
+        OnCreateUpdateSuccess(data);
+    }
+
+    $('.checkBoxes').change(function () {
+        $('#stickyButtons').addClass('displayNone');
+        $('#noOfSelectedVouchersId').addClass('displayNone');
+        if ($('.checkBoxes:checked').length > 0) {
+            $('#stickyButtons').removeClass('displayNone');
+            $('#noOfSelectedVouchersId').removeClass('displayNone');
+            $('#noOfSelectedVouchersId').text($('.checkBoxes:checked').length + ' Record(s) Selected');
+        }
+    })
+</script>

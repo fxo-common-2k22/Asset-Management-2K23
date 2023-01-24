@@ -1,0 +1,40 @@
+﻿@model List<FAPP.Model.Form> 
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="desktop-icons clearfix" style="clear: both; margin: 1em;">
+
+            @{
+                var action = Request.RequestContext.RouteData.Values["action"].ToString();
+                var controller = Request.RequestContext.RouteData.Values["controller"].ToString();
+                var area = HttpContext.Current.Request.RequestContext.RouteData.DataTokens["area"] ?? "";
+                <ul class="">
+                    @if (Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (item.FormName == "Dashboard")
+                            {
+                                continue;
+                            }
+                            string url = item.FormURL;
+                            <li>
+                                <a id="HyperLink1" title="@item.FormName" href="@url" data-toggle="tooltip">
+                                    <span style="margin-left: 15px" class="@item.Icon">
+                                        @*<img src="@item.FontIcon">*@
+                                    </span>
+                                    <em style="padding-top: 10px">@item.FormName</em>
+                                </a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <text>No Certificates Found!</text>
+                    }
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>

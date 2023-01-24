@@ -1,0 +1,13 @@
+﻿
+@model List<string>
+@{
+    Layout = null;
+}
+@*<h4>SMS Body</h4>
+<h5>Template Fields</h5>*@
+<ul class="tags email header">
+    @foreach (var item in Model)
+    {
+        <li>{<a href="javascript:;" class="append">@item</a>}</li>
+    }
+</ul>

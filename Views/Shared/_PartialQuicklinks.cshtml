@@ -1,0 +1,40 @@
+﻿@model IEnumerable<FAPP.ViewModel.FormModels.FormsViewModel>
+<div class="subnav h-75 position-relative loaded">
+    
+    <ul class="subnav-menu">
+        @foreach (var item in Model.OrderBy(s => s.MenuItemPriority))
+        {
+            if (ViewBag.CurrentFormURL == item.FormURL)
+            {
+                <li class="active">
+                    <a class="wrap-text" title="" href="@item.FormURL" data-original-title="Dashboard"><span><img src="~/App_Themes/Flat/img/dashboard.png" width="15" height="15"></span> @item.MenuText </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a class="wrap-text" title="" href="@item.FormURL" data-original-title="Dashboard"><span><img src="~/App_Themes/Flat/img/dashboard.png" width="15" height="15"></span> @item.MenuText </a>
+                </li>
+            }
+
+        }
+
+
+    </ul>
+</div>
+@*<div class="subnav">
+    <div class="subnav-title"><a href="#" class="toggle-subnav"><i class="fa fa-angle-down"></i><span>Quick Links</span></a></div>
+    <ul class="subnav-menu">
+        @foreach (var item in Model.OrderBy(s => s.MenuItemPriority))
+        {
+            if (ViewBag.CurrentFormURL == item.FormURL)
+            {
+                <li class="active"><a class="wrap-text" title="" href="@item.FormURL" data-original-title="@item.MenuText"><span><i class="glyphicon glyphicon-circle-arrow-right"></i></span>&nbsp;@item.MenuText</a></li>
+            }
+            else
+            {
+                <li><a class="wrap-text" title="" href="@item.FormURL" data-original-title="@item.MenuText"><span><i class="glyphicon glyphicon-circle-arrow-right"></i></span>&nbsp;@item.MenuText</a></li>
+            }
+        }
+    </ul>
+</div>*@

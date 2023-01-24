@@ -1,0 +1,459 @@
+﻿@model FAPP.Areas.AM.ViewModels.RequestModel
+@{
+    //if (ViewBag.EditMode)
+    //{
+    //    ViewBag.Title = "Request";
+    //}
+    ViewBag.Title = "Request";
+}
+<style>
+    .Noline {
+        border-top: none !important;
+    }
+
+    .noborderRight {
+        border-right: none !important;
+    }
+
+    hr {
+        display: block;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        margin-left: auto;
+        margin-right: auto;
+        border-style: dashed;
+        border-width: 1px;
+    }
+
+    .AllBorder {
+        padding: inherit;
+        margin: auto;
+        border-top: solid !important;
+        border-bottom: solid !important;
+        border-left: solid !important;
+        border-right: solid !important;
+        border-style: solid !important;
+        border-width: medium;
+        /*text-align: center;
+        font-weight: bold;*/
+    }
+
+    .topbottomBorder {
+        padding: inherit;
+        margin: auto;
+        border-top: solid !important;
+        border-bottom: solid !important;
+        border-style: solid !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-width: medium;
+        /*text-align: center;*/
+        /*font-weight: bold;*/
+    }
+
+    .noLeftBottomBorder {
+        /*border-left: none !important;*/
+        border-bottom: none !important;
+    }
+
+    .rightborder {
+        border-right: solid !important;
+    }
+
+    .style5 {
+        text-align: right;
+        font-family: Vivaldi;
+        font-size: x-large;
+    }
+
+    .Dottedline {
+        border-bottom: dotted !important;
+        border-width: thick;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .modalTable {
+        padding: 0px 15px;
+    }
+
+    /*#main .page-header {
+        margin: 15px 0 11px 0 !important;
+    }*/
+</style>
+
+@section topRightMenu
+{
+    @if (Model.PurchaseOrder != null)
+    {
+        if (Model.PurchaseOrder?.PurchaseOrderId != 0)
+        {
+            <input type="hidden" id="hdnOrderId" value="@Model.PurchaseOrder.PurchaseOrderId" />
+        }
+    }
+    <ul class="minitiles">
+        <li hidden>
+            <input style="display:none" type="button" class="voucherLink btn btn-success" value="Go back to invoice" id="lbUnPrintVoucher" />
+        </li>
+        <li class="orange topLi nodisplay">
+            <a id="lbPrintVoucher" class="voucherLink" title="Print">
+                <i class="fa fa-print"></i>
+            </a>
+        </li>
+
+
+        @*<li class="grey hidden">
+                <a id="convertPurchaseOrder" class="voucherLink" title="Convert to Purchase Order">
+                    <i class="fa fa-exchange"></i>
+                </a>
+            </li>*@
+
+        @*<li class="grey convertToPurchaseInvoice @(Model.PurchaseOrder?.PurchaseOrderId !=0 ? "hidden" : " " )" style="cursor:pointer;">
+                <a data-toggle="modal" href="#ServiceModal" title="Convert to purchase invoice" data-target="#ServiceModal" id="">
+                    <i class="fa fa-exchange" data-toggle="tooltip"></i>
+                </a>
+            </li>*@
+        <li class="green">
+            <a id="submitButton" class="voucherLink" title="Save">
+                <i class="fa fa-floppy-o"></i>
+            </a>
+        </li>
+        <li class="blue" title="" data-original-title="Purchase Request List">
+            <a href="/AM/Requests/ManageRequests">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+
+}
+@using (Html.BeginForm())
+{
+    <div id="mainsection">
+        <div class="alert alert-success" id="messageDiv" style="display: none;">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+            <div class="help-block" id="messagelabel"></div>
+        </div>
+        <div id="head" class="vbox">
+            <table class="fv fw">
+                <tr>
+                    <td hidden>Request No</td>
+                    <td hidden>
+                        @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control headfirstchildforfocus", @placeholder = "Request No" })
+                    </td>
+                    <td width="12%">Date</td>
+                    <td width="38%">
+                        @Html.HiddenFor(m => m.Request.RequestId)
+                        @Html.TextBoxFor(model => model.Request.RequestDate, new { @class = "form-control datepicker" })
+                    </td>
+                    <td width="12%">Status</td>
+                    <td width="38%">
+                        @Html.DropDownListFor(model => model.Request.StatusId, new SelectList(ViewBag.Statuses, "Value", "Text", Model.Request.StatusId), htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+                    </td>
+                </tr>
+                <tr>
+                    <td width="12%">
+                        Departments
+                    </td>
+                    <td width="38%">
+                        @Html.DropDownListFor(model => model.Request.DepartmentId, new SelectList(ViewBag.Departments, "Value", "Text", Model.Request.DepartmentId), "--Select Department--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+                    </td>
+                    <td width="12%">
+                        Employees
+                    </td>
+                    <td width="38%">
+                        @Html.DropDownListFor(model => model.Request.EmployeeId, new SelectList(ViewBag.Employees, "Value", "Text", Model.Request.EmployeeId), "--Select Employee--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+                    </td>
+                <tr>
+                    <td width="12%">Description</td>
+                    <td colspan="5">
+                        @Html.TextBoxFor(model => model.Request.Description, new { @class = "form-control ", @placeholder = "Description" })
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="voucherdetails" class="">
+            <div id="detail">
+                @{
+                    int count = 1;
+                }
+                <table id="trans_details" class="table no-head-border table-responsive">
+                    <thead>
+                        <tr class="gvheader">
+                            <th>Sr.</th>
+                            <th>Item</th>
+                            <th width="80px" class="numeric">Qty</th>
+                            <th>Description</th>
+                            <th>Condition</th>
+                            <th>Location</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="tr_clone" class="tr_row" style="display:none;">
+                            <td width="20px" class="td-Padding-top"><span class="Sr label label-default current-theme numeric cloneable">@(count)</span></td>
+                            <td>
+                                @Html.Hidden("RequestDetail[-1].RequestDetailId")
+                                @Html.DropDownList("RequestDetail[-1].ProductId", new SelectList(ViewBag.Items, "Value", "Text"), "--Select Item--", new { @class = "ItemId form-control nochosen chosenafterclone cloneable", @style = "width:100%;" })
+                            </td>
+                            <td>
+                                @Html.TextBox("RequestDetail[-1].Quantity", null, new { @class = "numeric cloneable Quantity", @placeholder = "Qty", })
+                            </td>
+                            <td>
+                                @Html.TextBox("RequestDetail[-1].Description", null, new { @class = "cloneable", @placeholder = "Description" })
+                            </td>
+                            <td>
+                                @Html.DropDownList("RequestDetail[-1].ConditionTypeId", new SelectList(ViewBag.ConditionTypesDD, "Value", "Text"), "--Select Condition--", new { @class = "form-control cloneable nochosen chosenafterclone", @style = "width:100%" })
+                            </td>
+                            <td>
+                                @Html.DropDownList("RequestDetail[-1].RoomId", new SelectList(ViewBag.Rooms, "Value", "Text"), "--Select Location--", new { @class = "RoomId form-control nochosen chosenafterclone cloneable", @style = "width:100%" })
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-danger btn-xs" data-action="Delete" data-id="-1"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        @if (Model != null)
+                        {
+                            if (Model.RequestDetail != null)
+                            {
+                                for (int i = 0; i < Model.RequestDetail.Count(); i++)
+                                {
+                                    <tr class="tr_row">
+                                        <td width="20px" class="td-Padding-top"><span class="label label-default Sr cloneable current-theme">@(count++)</span></td>
+                                        <td>
+                                            @Html.HiddenFor(m => m.RequestDetail[i].RequestDetailId)
+                                            @Html.DropDownListFor(m => m.RequestDetail[i].ProductId, new SelectList(ViewBag.Items, "Value", "Text", Model.RequestDetail[i].ProductId), "--Select Item--", new { @class = "ItemId form-control cloneable", @style = "width:100%;" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.RequestDetail[i].Quantity, null, new { @class = "numeric cloneable Quantity", @placeholder = "Qty" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.RequestDetail[i].Description, null, new { @class = "cloneable", @placeholder = "Description" })
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(m => m.RequestDetail[i].ConditionTypeId, new SelectList(ViewBag.ConditionTypesDD, "Value", "Text", Model.RequestDetail[i].ConditionTypeId), "--Select Condition--", new { @class = "cloneable", @style = "width:100%" })
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(m => m.RequestDetail[i].RoomId, new SelectList(ViewBag.Rooms, "Value", "Text", Model.RequestDetail[i].RoomId), "--Select Location--", new { @class = "RoomId form-control cloneable", @style = "width:100%" })
+                                        </td>
+                                        <td>
+                                            <a href="#" class="btn btn-danger btn-xs" data-action="Delete" data-id="@Model.RequestDetail[i].RequestDetailId"><i class="fa fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                    <tfoot class="vbox">
+                        <tr>
+                            <td id="tdCreation" colspan="7">
+                                @(ViewBag.CreatedBy == null ? "" : "Created By: " + ViewBag.CreatedBy)
+                                @(ViewBag.ModifiedBy == null ? "" : "Modified By: " + ViewBag.ModifiedBy)
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="printsection" style="display:none">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="">
+                    <table class="table">
+                        <tr>
+                            <td class="Noline text-center" style="vertical-align: top;">
+                                @*<img src="~/uploads/Logos/BranchLogo@(FAPP.DAL.SessionHelper.BranchId).png" />*@
+                                <img src="~/uploads/Logos/BranchLogo@(FAPP.DAL.SessionHelper.BranchId).png" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="Noline text-center">@FAPP.DAL.SessionHelper.BranchAddress</td>
+                        </tr>
+                        <tr>
+                            <td class="Noline text-center">@FAPP.DAL.SessionHelper.BranchPhone</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="clearfix"></div>
+                <div class="invoice-info">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td class="Noline text-center" colspan="7" id="tInvoiceNo"><b>Request # @(Model.Request == null ? 0 : Model.Request.RequestId)</b></td>
+                        </tr>
+                        <tr class="">
+                            <td class="text-left"><b>Date: </b>&nbsp;&nbsp;@(Model.Request == null ? "" : Model.Request.RequestDate.ToString("dd MMM yyyy"))</td>
+                        </tr>
+                    </table>
+                    <table class="table table-bordered" id="maintable">
+                        <thead>
+                            <tr class="topbottomBorder">
+                                <td><b>Sr</b></td>
+                                <td><b>Item</b></td>
+                                <td><b>Qty</b></td>
+                                <td><b>Description</b></td>
+                                <td><b>Location</b></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="reAssignable"></tr>
+                            @if (Model.RequestDetail != null)
+                            {
+                                var countp = 0;
+                                foreach (var item in Model.RequestDetail)
+                                {
+                                    <tr class="reAssignable">
+                                        <td>@(++countp)</td>
+                                        <td>@(item.Item == null ? "" : item.Item.ProductName)</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Description</td>
+                                        <td>@(item?.Room?.RoomDoorNo ?? "")</td>
+                                    </tr>
+                                }
+                            }
+                            <tr class="" id="invoiceFooter">
+                                <td colspan="5" class="noLeftBottomBorder Noline" id="tDescription">@Model.Request.Description</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ServiceModal" tabindex="-1" role="dialog" aria-labelledby="ServiceModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header HeaderColor">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                    <h4 class="modal-title" id="serviceModalTitle">Convert to purchase order</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        @*<div class="form-group">
+                                <label class="control-label col-md-4">Service Title</label>
+                                <div class="col-md-8">
+                                    @Html.TextBox("ClientService.Title", null, new { @class = "form-control", @placeholder = "Title" })
+                                </div>
+                            </div>*@
+                        @*<div class="form-group">
+                                <label class="control-label col-md-4">Registration Date</label>
+                                <div class="col-md-8">
+                                    @Html.TextBox("ClientService.RegDate", null, new { @class = "form-control datepicker", @placeholder = "Reg Date", @disabled = "disabled" })
+                                </div>
+                            </div>*@
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Supplier</label>
+                            <div class="col-md-8">
+                                @Html.DropDownList("PurchaseOrder.SupplierId", new SelectList(ViewBag.Suppliers, "ClientId", "DisplayName"), "Select Supplier", new { @class = "form-control chosen-select", @style = "width:100%;" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Description</label>
+                            <div class="col-md-8">
+                                @Html.TextArea("PurchaseOrder.Description", null, new { @class = "form-control", @placeholder = "Description" })
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                                <label class="control-label col-md-4">Is Active</label>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(m=>m.ClientService.IsActive)
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+
+                <div class="modal-footer background-login">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success voucherLink inputenabledisable" id="btnPurchaseOrder">Convert</button>
+                    <div class="help-block" id="Service_item_no_lbl"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section scripts{
+    <script src="~/Areas/AM/Scripts/request.js"></script>
+    <script src="~/Areas/AM/Scripts/shortkeys.js"></script>
+    <script>
+
+        jQuery(document).ready(function () {
+            $(".datepicker").each(function () {
+                $(this).val(RemoveTimeFromDate($(this).val()));
+            });
+            var EditMode = @Html.Raw(Json.Encode(@ViewBag.EditMode));
+            var IsPosted = @Html.Raw(Json.Encode(@ViewBag.IsPosted));
+            var IsCancelled = @Html.Raw(Json.Encode(@ViewBag.IsCancelled));
+            var success = @Html.Raw(Json.Encode(@ViewBag.success));
+            var Cancelled = @Html.Raw(Json.Encode(@ViewBag.Cancelled));
+            if (success) {
+                DisplayMessage('', success);
+            }
+            if (Cancelled) {
+                DisplayMessage('error', Cancelled);
+            }
+
+            if (!EditMode) {
+                HideTopControls(true);
+            } else {
+                changeHref(@Model.Request.RequestId);
+                HideTopControls(false);
+
+                var status = '@Model.Request.StatusId';
+               // console.log('statusID', status);
+                if (status == 3) {
+                    $('#convertPurchaseOrder').closest('li').removeClass('hidden');
+                }
+
+                //if ($('#hdnOrderId').val() == undefined) {
+
+                //} else {
+                //    $('#convertPurchaseOrder').closest('li').addClass('hidden');
+                //}
+
+               // if (purchaseOrderId > 0) {
+                   // $('#convertPurchaseOrder').closest('li').addClass('hidden');
+              //  }
+
+
+            }
+            if (IsPosted || IsCancelled ){
+                HideButtons(true);
+            }
+        });
+
+
+$('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+@{
+<label id="lblRequestid" class="label label-darkblue" title="Request Number"> @(Model?.Request?.RequestId==0?"New": "Request No:"+ Model.Request.RequestId.ToString())</label>
+
+    if (Model?.PurchaseOrder!=null)
+    {
+        if (Model?.PurchaseOrder.PurchaseOrderId!=0)
+        {
+
+            <label class="label label-blue " style="cursor: pointer;  onclick="changeRef(@(Model.PurchaseOrder.PurchaseOrderId))" title="Go to Order">@("Order No:"+ Model.PurchaseOrder.PurchaseOrderId)</label>
+
+
+        }
+
+    }
+
+} </p>`);
+        function changeRef(OrderInvoiceId) {
+            if (StringToFloat(OrderInvoiceId)>0)
+            window.location.href = "/AM/PurchaseOrder/AddEditPurchaseOrder/" + OrderInvoiceId;
+        }
+        //$("#convertPurchaseOrder").click(function () {
+
+        //    $('#ClientService_Description').focus();
+        //    $("#ServiceModal").modal();
+        //});
+    </script>
+}

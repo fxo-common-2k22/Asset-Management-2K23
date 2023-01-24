@@ -1,0 +1,99 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+@using PagedList.Mvc;
+
+<div class="row">
+    <div class="col-sm-12 downpadding">
+        <table cellspacing="0" class="gv nm table table-hover no-head-border table-responsive table-striped">
+            <thead class="vd_bg-green vd_white">
+                <tr>
+                    <th>Id</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Total Amount</th>
+                    <th>Is Posted</th>
+                    <th>Posted By</th>
+                    <th>Discount</th>
+                    <th>Modified By</th>
+                    <th>Modified On</th>
+                    <th>Balance</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null)
+                {
+                    foreach (var item in Model.v_mnl_PurchaseInvoicesPagedList)
+                    {
+                        <tr class="tr_row">
+                            <td>@item.PurchaseInvoiceId</td>
+                            <td>@(item.ClientName)</td>
+                            <td>@(item.PurchaseInvoiceDate.ToString("dd MMM yyyy"))</td>
+                            <td>@(item.Description)</td>
+                            <td>@(item.NetTotal)</td>
+                            <td>@(item.IsPosted == true ? "Yes" : "No")</td>
+                            <td>@(item.PostedName)</td>
+                            <td>@(item.Discount)</td>
+                            <td>@(item.ModifiedName)</td>
+                            <td>@(item.ModifiedOn == null ? "" : item.ModifiedOn.Value.ToString("dd MMM yyyy"))</td>
+                            <td>@(item.NetTotal - item.ReceivedAmount)</td>
+                            <td>
+                                @if (ViewBag.CanUpdate)
+                                {
+                                    @Html.ActionLink("View", "AddEditOpenningStock", new { id = item.PurchaseInvoiceId }, new { @class = "btn btn-primary btn-xs" })
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+        @if (Model.v_mnl_PurchaseInvoicesPagedList == null || Model.v_mnl_PurchaseInvoicesPagedList.Count == 0)
+        {
+            <div style="text-align: center">
+                No data found
+            </div>
+        }
+        <div id="targetContainer">
+            <div class="col-md-6 pull-right" id="stickyPagination">
+                <div class="pull-right">
+
+                    @Html.PagedListPager(Model.v_mnl_PurchaseInvoicesPagedList, page => Url.Action("ManageAssetOpenningStockPageWise", new {Model.FromDate,Model.ToDate,Model.Search, page }),
+                    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions
+                    {
+                        DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded,
+                        DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+                        DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded,
+                        DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded,
+                        MaximumPageNumbersToDisplay = 10,
+
+                    }, new AjaxOptions()
+                    {
+                        HttpMethod = "POST",
+                        OnSuccess = "onSearchSuccess",
+                        OnFailure = "OnSearchFailure"
+                    }))
+                </div>
+            </div>
+            @*<div id='Paging' style="text-align: center">
+                     Page @(Model.v_mnl_PurchaseInvoicesPagedList.PageCount < Model.v_mnl_PurchaseInvoicesPagedList.PageNumber ? 0 : Model.v_mnl_PurchaseInvoicesPagedList.PageNumber)
+                     of @Model.v_mnl_PurchaseInvoicesPagedList.PageCount
+                     @Html.PagedListPager(Model.v_mnl_PurchaseInvoicesPagedList, page => Url.Action("ManagePurchaseInvoices", new { page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+                {
+                    HttpMethod = "POST",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "divStudents"
+                }))
+                 </div>*@
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+@{
+<label class="label label-darkblue" title="Total OpeningStock">Total: @(Model?.v_mnl_PurchaseInvoicesPagedList?.TotalItemCount??0)</label>
+} </p>`);
+</script>

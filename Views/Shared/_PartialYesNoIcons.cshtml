@@ -1,0 +1,18 @@
+﻿@model bool?
+@{
+    var o = ViewData.ModelMetadata;
+    var isChecked = Model.HasValue ? Model.Value : false;
+    var radioId = ViewData.TemplateInfo.GetFullHtmlFieldId("");
+}
+
+@if (Model.HasValue)
+{
+    if (Model.Value)
+    {
+        <i class="fa fa-check" style="color: #56af45;cursor:pointer"></i>
+    }
+    else
+    {
+        <i class="fa fa-times" style="cursor:pointer; color:red"></i>
+    }
+}

@@ -1,0 +1,56 @@
+﻿@model FAPP.Areas.AM.ViewModels.AddIssuedItemViewModel
+
+<ul class="minitiles link">
+    @*<li class="blue">
+            <label style="width: 150px;cursor: default;" id="statuslbl">Draft</label>
+        </li>*@
+    @*@if (Model?.IssuedItems?.IsPosted == false)
+        {
+        }*@
+    @*<li class="blue">
+            <label style="width: 150px;cursor: default;" id="statuslbl">Posted</label>
+        </li>*@
+    @*@if (Model?.IssuedItems?.IsPosted == true)
+        {
+        }*@
+    <li>
+        <input style="display:none" type="button" class="voucherLink btn btn-success" value="Go back to invoice" id="lbUnPrintVoucher" />
+    </li>
+    <li class="orange topLi nodisplay">
+        <a id="lbPrintVoucher" class="voucherLink" title="Print (Ctrl+P)">
+            <i class="fa fa-print"></i>
+        </a>
+    </li>
+    <li class="green">
+        <label for="IssueItemSubmitBtn" id="">
+            <i class="fa fa-save">
+            </i>
+        </label>
+    </li>
+    <li class="blue">
+        <label  id="" title="go">
+            <i class="fa fa-list">
+            </i>
+        </label>
+    </li>
+    @*<li class="blue">
+            <a title="Post Voucher" style="cursor:pointer;" data-action="ConfirmPopup" data-href="@Url.Action("PostIssuanceVoucher")" data-id="@(Model?.IssuedItems?.TransferHistoryId)" data-message="Are you sure you want to post voucher?" data-title="Warning!">
+                <i class="fa fa-check">
+                </i>
+            </a>
+        </li>*@
+    @*<li class="blue">
+            <a title="Unpost Voucher" style="cursor:pointer;" data-action="ConfirmPopup" data-href="@Url.Action("UnPostIssuanceVoucher")" data-id="@(Model?.IssuedItems?.TransferHistoryId)" data-message="Are you sure you want to unpost voucher?" data-title="Warning!">
+                <i class="fa fa-share">
+                </i>
+            </a>
+        </li>*@
+    @*@if (Model?.IssuedItems?.IsPosted == false)
+        {
+        }
+        @if (Model?.IssuedItems?.IsPosted == true)
+        {
+        }*@
+</ul>
+
+

@@ -1,0 +1,24 @@
+﻿@*@{
+        FAPP.Areas.AM.ViewModels.GraphsModel _model = new FAPP.Areas.AM.ViewModels.GraphsModel();
+        _model.Action = ViewContext.RouteData.Values["action"].ToString();
+        _model.Contoller = ViewContext.RouteData.Values["Controller"].ToString();
+        _model.Area = ViewContext.RouteData.DataTokens["area"].ToString();
+        _model.Module = ViewContext.RouteData.DataTokens["area"].ToString(); FAPP.Areas.AM.ViewModels.GraphsModel}
+    @Html.Partial("~/Views/Shared/_PartialDashboard.cshtml", _model)*@
+
+
+
+@{
+    ViewBag.Title = "Purchase Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model  FAPP.Areas.AM.ViewModels.GraphsModel
+
+<div id="feeDashboardGrid">
+    @if (Model != null)
+    {
+        @Html.Partial("~/Areas/AM/Views/Purchase/_PartialPurchaseDashboard.cshtml", Model)
+
+    }
+</div>

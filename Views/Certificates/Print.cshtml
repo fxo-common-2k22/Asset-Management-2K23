@@ -1,0 +1,176 @@
+﻿@using FAPP.Helpers
+@model FAPP.ViewModel.MediaTemplatesViewModel
+@{
+    ViewBag.Title = "Print Certificates";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section TopRightMenu{
+    <div id="topRightBtns">
+        <ul class="minitiles">
+            <li class="red">
+                <a href="@FAPP.DAL.SessionHelper.ReturnUrl" data-toggle="tooltip" title="Back to Dashboard">
+                    <i class="fa fa-mail-reply"></i>
+                </a>
+            </li>
+            <li class="grey" id="editbtn">
+                <a href="/Certificates/Issued/@Model.TemplateType.Module.ModuleName/@Model.TemplateType.TemplateTypeName/@Model.Certificate.CertificateId" data-toggle="tooltip" title="Issued @Model.Certificate.Title">
+                    <i class="fa fa-check"></i>
+                </a>
+            </li>
+            <li class="blue">
+                <a href="javascript:" id="printCertificatesBtn" onclick="$('#printa').printThis();">
+                    <i class="fa fa-print"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+}
+<script src="~/Scripts/printThis.js"></script>
+<link href="~/Content/print.css" rel="stylesheet" />
+<div id="printa">
+    <style>
+        body {
+            font-family: 'Open Sans', Tahoma;
+            font-size: 14px;
+            line-height: 24px;
+        }
+
+        #bodycontent {
+            width: auto;
+            background: rgb(142, 142, 142);
+            border-bottom: 2px solid #F0F0F0;
+            border-right: 2px solid #F0F0F0;
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            padding: 10px;
+        }
+
+        h2, h3, h4, h5 {
+            text-align: center;
+        }
+
+        img#logo {
+            margin: auto;
+            /*display: block;*/
+        }
+
+        .reportborder {
+            background: #FFF;
+            border: 1px solid #000;
+            box-shadow: 3px 4px 0 #000;
+            padding: 10px;
+            height: 1074px;
+        }
+
+        .table-fixed {
+            table-layout: fixed;
+        }
+
+        #page {
+            width: 750px;
+            margin: auto;
+            box-shadow: 0px 0px 2px #666;
+        }
+
+        @@media all {
+            .page-break {
+                display: none;
+            }
+        }
+
+        @@media print {
+            .page-break {
+                display: block;
+                page-break-before: always;
+            }
+        }
+    </style>
+    @if (Model.ModuleId == 9)
+    {
+        foreach (var item in Model.IssuedEmployeeCertificatesList)
+        {
+            <div id="page">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12" id="logodiv">
+                            @if (Model.IsPrintHeader)
+                            {
+                                @Html.Raw(Model.Branch.ReportHeader)
+                                @*<img src="~/img/WebLogoFull.png" id="logo"/>*@
+                            }
+                        </div>
+                        <div class="col-sm-12 main">
+                            <h1 class="text-center">
+                                <span id="LabelPageHeading">@item.CertificateType</span>
+                            </h1>
+                            <h3 class="text-center">
+                                @item.IssueNo
+                            </h3>
+                            <h3 class="text-center">
+                                Issue Date : @Utilities.DateFormat(item.IssuedOn)
+                            </h3>
+                            <div id="content">
+                                <div id="divcert">
+                                    @Html.Raw(item.CertificateContent)
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            @if (Model.IsPrintFooter)
+                            {
+                                @Html.Raw(Model.Branch.ReportFooter)
+                                @*<img src="~/img/WebLogoFull.png" id="logo"/>*@
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-break"></div>
+        }
+    }
+    else
+    {
+        foreach (var item in Model.IssuedCertificatesList)
+        {
+            <div id="page">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12" id="logodiv">
+                            @if (Model.IsPrintHeader)
+                            {
+                                @Html.Raw(Model.Branch.ReportHeader)
+                                @*<img src="~/img/WebLogoFull.png" id="logo"/>*@
+                            }
+                        </div>
+                        <div class="col-sm-12 main">
+                            <h1 class="text-center">
+                                <span id="LabelPageHeading">@item.CertificateType</span>
+                            </h1>
+                            <h3 class="text-center">
+                                @item.IssueNo
+                            </h3>
+                            <h3 class="text-center">
+                                Issue Date : @Utilities.DateFormat(item.IssuedOn)
+                            </h3>
+                            <div id="content">
+                                <div id="divcert">
+                                    @Html.Raw(item.Certificate)
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            @if (Model.IsPrintFooter)
+                            {
+                                @Html.Raw(Model.Branch.ReportFooter)
+                                @*<img src="~/img/WebLogoFull.png" id="logo"/>*@
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-break"></div>
+        }
+    }
+
+</div>

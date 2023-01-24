@@ -1,0 +1,183 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+@{
+    if (ViewBag.EditMode)
+    {
+        ViewBag.Title = "Asset Openning Stock";
+    }
+}
+<style>
+    .Noline {
+        border-top: none !important;
+    }
+
+    hr {
+        display: block;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        margin-left: auto;
+        margin-right: auto;
+        border-style: dashed;
+        border-width: 1px;
+    }
+
+    .AllBorder {
+        padding: inherit;
+        margin: auto;
+        border-top: solid !important;
+        border-bottom: solid !important;
+        border-left: solid !important;
+        border-right: solid !important;
+        border-style: solid !important;
+        border-width: medium;
+        /*text-align: center;
+        font-weight: bold;*/
+    }
+
+    .topbottomBorder {
+        padding: inherit;
+        margin: auto;
+        border-top: solid !important;
+        border-bottom: solid !important;
+        border-style: solid !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-width: medium;
+        /*text-align: center;*/
+        /*font-weight: bold;*/
+    }
+
+    .noLeftBottomBorder {
+        /*border-left: none !important;*/
+        border-bottom: none !important;
+    }
+
+    .rightborder {
+        border-right: solid !important;
+    }
+
+    .style5 {
+        text-align: right;
+        font-family: Vivaldi;
+        font-size: x-large;
+    }
+
+    .Dottedline {
+        border-bottom: dotted !important;
+        border-width: thick;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+    /*#main .page-header {
+        margin: 15px 0 1px 0 !important;
+    }*/
+</style>
+@section topRightMenu{
+<ul class="minitiles link">
+    <li hidden>
+        <input style="display:none" type="button" class="voucherLink btn btn-success" value="Go back to invoice" id="lbUnPrintVoucher" />
+    </li>
+    <li class="blue topLi nodisplay @(ViewBag.IsPosted == true ? " " : "hidden")">
+        <a id="lbUnPostVoucher" class="voucherLink" title="UnPost Voucher">
+            <i class="fa fa-share"></i>
+        </a>
+    </li>
+    <li class="blue topLi nodisplay @(ViewBag.IsPosted == false ? " " : "hidden")">
+        <a id="lbPostVoucher" class="voucherLink" title="Post Voucher">
+            <i class="fa fa-check"></i>
+        </a>
+    </li>
+    <li class="orange topLi nodisplay">
+        <a id="lbPrintVoucher" class="voucherLink" title="Print (Ctrl+P)">
+            <i class="fa fa-print"></i>
+        </a>
+    </li>
+    <li class="green">
+        <a id="submitButton" class="voucherLink" title="Save (Ctrl+S)">
+            <i class="fa fa-floppy-o"></i>
+        </a>
+    </li>
+</ul>
+    <ul class="stats">
+        <li class='satgreen topLi nodisplay'>
+            <i class="fa fa-money"></i>
+            <div class="details ">
+                <span class="big largeFont" id="topTotal">
+                </span>
+            </div>
+        </li>
+    </ul>
+}
+<script src="~/Areas/AM/Scripts/shortkeys.js"></script>
+<script src="~/Areas/AM/Scripts/AddEditOpenningStock.js"></script>
+
+@using (Html.BeginForm("AddEditOpenningStock", "Asset", FormMethod.Post, new { id = "invoiceform" }))
+{
+    Html.EnableClientValidation(false);
+
+    <div id="UpdatePartial">
+        @Html.Partial("_PartialAddEditOpenningStock", Model)
+    </div>
+
+    <div class="modal fade" id="PIPDModal" role="dialog" style="">
+        <div class="modal-dialog" id="UpdatePIPD">
+        </div>
+    </div>
+}
+@section scripts{
+    <script>
+        function OnFetchSuccess(response) {
+            $("#PIPDModal").modal("show");
+        }
+        function DeleteRowLocal(id, PurchaseInvoiceId, url, targetId, boxTitle, boxMessage) {
+            boxTitle = (typeof boxTitle !== 'undefined') ? boxTitle : 'Delete Record?';
+            boxMessage = (typeof boxMessage !== 'undefined') ? boxMessage : 'Are you sure you want to delete this record?';
+            bootbox.confirm({
+                title: boxTitle,
+                message: boxMessage,
+                buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Cancel'
+                    },
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> Confirm'
+                    }
+                },
+                callback: function (response) {
+                    if (response) {
+                        $.ajax({
+                            url: "/AM/Asset/DeletePurchaseInvoice",
+                            method: "POST",
+                            data: { id: id, PurchaseInvoiceId: PurchaseInvoiceId },
+                        }).success(function (data) {
+                            //$.getScript("/scripts/eakroko.min.js");
+                            $("#" + targetId).html(data.PartialView);
+                            toastr.options = {
+                                "closeButton": true,
+                                "debug": false,
+                                "newestOnTop": true,
+                                "progressBar": true,
+                                "positionClass": "toast-bottom-right",
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            }
+                            ErrorSuccess(data);
+                        }).fail(function (jqXHR, textStatus) {
+                            toastr.clear();
+                            toastr.error(textStatus, 'Failed')
+                        });
+                    }
+                }
+            });
+        }
+    </script>
+}

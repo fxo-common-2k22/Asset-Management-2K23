@@ -1,0 +1,39 @@
+﻿<div class="modal fade" id="AdminNotesModal" tabindex="-1" role="dialog" aria-labelledby="AdminNotesModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header HeaderColor">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                <h4 class="modal-title" id="AdminNotesModallabel">Notes History</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal" id="form_account">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.Hidden("InvoiceNoteId")
+                            @Html.TextArea("Notes", null, new { @class = "form-control", @placeholder = "Add Note" })
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-success voucherLink" id="btnSaveNote">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="modalTable">
+                    <table class="table table-striped">
+                        <thead class="HeaderColor">
+                            <tr class="bold">
+                                <td>Sr</td>
+                                <td style="width:16%">Date</td>
+                                <td>User</td>
+                                <td>Note</td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

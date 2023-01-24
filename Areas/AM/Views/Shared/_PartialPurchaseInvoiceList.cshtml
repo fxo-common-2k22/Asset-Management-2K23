@@ -1,0 +1,163 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+@using PagedList.Mvc;
+
+<div class="row">
+    <div class="col-sm-12 downpadding">
+        <table cellspacing="0" class="gv nm table table-hover no-head-border table-responsive table-striped">
+            <thead class="vd_bg-green vd_white">
+                <tr>
+                    <th width="20px">Sr.</th>
+                    <th>Id</th>
+                    <th>Supplier</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Total Amount</th>
+                    <th>Balance</th>
+                    <th>Discount</th>
+                    <th>Paid</th>
+                    <th>Posted</th>
+                    @*<th>Is Posted</th>*@
+                    @*<th>Posted By</th>*@
+                    <th>Modified </th>
+
+                    @*<th>Modified On</th>*@
+                    <th></th>
+                    <th></th>
+
+                    @*<th>Id</th>
+                        <th>Client</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Total Amount</th>
+                        <th>Is Posted</th>
+                        <th>Posted By</th>
+                        <th>Discount</th>
+                        <th>Modified By</th>
+                        <th>Modified On</th>
+                        <th>Balance</th>
+                        <th></th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int count = (25 * (Model.v_mnl_PurchaseInvoicesPagedList.PageNumber - 1)) + 1;
+                }
+
+                @if (Model != null)
+                {
+                    foreach (var item in Model.v_mnl_PurchaseInvoicesPagedList)
+                    {
+                        <tr class="tr_row">
+                            <td width="20px"><span class="label label-default current-theme ">@(count++)</span></td>
+                            <td>@item.PurchaseInvoiceId</td>
+                            <td>@(item.ClientName)</td>
+                            <td>@(item.PurchaseInvoiceDate.ToString("dd MMM yyyy"))</td>
+                            <td>@(item.Description)</td>
+                            <td>@(item.NetTotal)</td>
+                            <td>@(item.NetTotal - item.ReceivedAmount)</td>
+                            <td>@(item.Discount)</td>
+
+
+
+                            <td>
+                                @if (item.Paid > 0)
+                                {
+                                    <span style="color:#1bce32;" title="Paid"><i class="fa fa-check"></i></span>
+                                }
+                                else
+                                {
+                                    <span style="color:#ff2b2b;" title="Not Paid"><i class="fa fa-close"></i></span>
+                                }
+
+                            </td>
+
+                            @*<td>@(item.IsPosted == true ? "Yes" : "No")</td>
+                                <td>@(item.PostedName)</td>*@
+
+
+                            <td>
+                                @if (item.IsPosted == true)
+                                {
+                                    <span style="color:#1bce32;" title="Posted By @item.PostedName on @(item.PostedOn.Value.Date.ToString("dd MMM yyyy"))"><i class="fa fa-check"></i></span>
+                                }
+                                else
+                                {
+                                    <span style="color:#ff2b2b;" title="Not Posted"><i class="fa fa-close"></i></span>
+                                }
+
+                            </td>
+
+
+                            @*<td>@(item.ModifiedName)</td>
+                                <td>@(item.ModifiedOn == null ? "" : item.ModifiedOn.Value.ToString("dd MMM yyyy"))</td>*@
+
+                            <td>
+                                @{
+                                    if (item.ModifiedName != null)
+                                    {
+                                        <span class="label label-default colored-span Status-span user-span" title="Modified by @item.ModifiedName On @(item.ModifiedOn == null ? "" : item.ModifiedOn.Value.ToString("dd MMM yyyy"))">
+                                            @(item.ModifiedName)
+                                        </span>
+                                    }
+
+                                    else
+                                    {
+
+
+                                    }
+
+                                }
+                            </td>
+
+
+                            <td>
+                                @if (ViewBag.CanUpdate)
+                                {
+                                    @Html.ActionLink("View", "AddEditPurchaseInvoice", new { id = item.PurchaseInvoiceId }, new { @class = "btn btn-primary btn-xs" })
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+        @if (Model.v_mnl_PurchaseInvoicesPagedList == null || Model.v_mnl_PurchaseInvoicesPagedList.Count == 0)
+        {
+            <div style="text-align: center">
+                No data found
+            </div>
+        }
+        <div  id="targetContainer">
+            <div  id='Paging' style="text-align: center">
+                Page @(Model.v_mnl_PurchaseInvoicesPagedList.PageCount < Model.v_mnl_PurchaseInvoicesPagedList.PageNumber ? 0 : Model.v_mnl_PurchaseInvoicesPagedList.PageNumber)
+                of @Model.v_mnl_PurchaseInvoicesPagedList.PageCount
+                @Html.PagedListPager(Model.v_mnl_PurchaseInvoicesPagedList, page => Url.Action("ManagePurchaseInvoices", new { page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+                {
+                    HttpMethod = "POST",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "divStudents"
+                }))
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+     $("#topTotal").html(@Model.v_mnl_PurchaseInvoicesPagedList.TotalItemCount);
+    setTimeout(function () {
+        $('#unpostedAlert').hide();
+    }, 5000)
+</script>
+
+<script>
+         @*$(document).ready(function () {
+             $('#extendedPageHeader').html(`<p style="margin:10px 0px">
+                  @if (Model.v_mnl_PurchaseInvoicesPagedList != null && Model.v_mnl_PurchaseInvoicesPagedList.TotalItemCount > 0 ) {
+
+                          <label class="label label-satgreen ">Total Invoices : @Model.v_mnl_PurchaseInvoicesPagedList.TotalItemCount</label>
+
+                }
+                 </p> `);
+             $("#pageTitle").css('margin', "3px 0px");
+        })*@
+</script>

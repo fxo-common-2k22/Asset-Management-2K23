@@ -1,0 +1,29 @@
+﻿
+@model string
+@{
+    var o = ViewData.ModelMetadata;
+    bool? isChecked = null;
+    if (!string.IsNullOrEmpty(Model))
+    {
+        isChecked = Model == "Male" ? true : false;
+    }
+    var radioId = ViewData.TemplateInfo.GetFullHtmlFieldId("");
+}
+@if (!string.IsNullOrEmpty(Model))
+{
+    <div class="vd_radio radio-success">
+        @Html.RadioButton("", "Male", isChecked.Value, new { id = @radioId + "_1", @class = "yes" })
+        <label for="@(radioId)_1"> Male </label>
+        @Html.RadioButton("", "Female", !isChecked.Value, new { id = @radioId + "_2", @class = "no" })
+        <label for="@(radioId)_2"> Female </label>
+    </div>
+}
+else
+{
+    <div class="vd_radio radio-success">
+        @Html.RadioButton("", "Male", new { id = @radioId + "_1", @class = "yes" })
+        <label for="@(radioId)_1"> Male </label>
+        @Html.RadioButton("", "Female", new { id = @radioId + "_2", @class = "no" })
+        <label for="@(radioId)_2"> Female </label>
+    </div>
+}

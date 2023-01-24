@@ -1,0 +1,18 @@
+﻿@model  FAPP.Areas.AM.ViewModels.GraphsModel
+
+@if (Model != null && Model.v_mnl_FormRights != null)
+{
+    foreach (var item in Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialShowTopIcons" || u.FormURL == null || u.FormURL == ""))
+    {
+        <ul class="minitiles">
+            @if (item.FormName == "Setup Button" && item.Allowed == true)
+            {
+                <li class="blue" title="Setup"><a href="/Finance/Setup"><span> <i class="fa fa-cogs"></i></span></a></li>
+            }
+            @if (item.IsAction == true && item.Allowed == true)
+            {
+                <li class="green" title="Reports"><a href="/Finance/AccountReports"><span> <i class="fa fa-clipboard"></i></span></a></li>
+            }
+        </ul>
+    }
+}

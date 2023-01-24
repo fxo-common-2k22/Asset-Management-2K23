@@ -1,0 +1,32 @@
+﻿@model IEnumerable<FAPP.Model.Session>
+@using FAPP.DAL
+@{
+
+    var urls = Request.RawUrl.Split('/');
+    var urlArea = "";
+    var urlController = "";
+    if (urls.Length >= 3)
+    {
+        urlArea = urls[1];
+        urlController = urls[2];
+    }
+}
+
+<ul class="dropdown-menu pull-right" style="max-height:600px; overflow-y:auto;">
+    <li>
+        <a href="@Url.Action("Index","Sessions", new { area = "Academics"})">
+            <i class="fa fa-wrench"></i>
+            <strong data-id="">Manage Sessions</strong>
+        </a>
+    </li>
+    <li class="divider"></li>
+    @foreach (var item in Model)
+    {
+        <li>
+            <a href="@Url.Action("ChangeSession","Sessions", new { area = "Academics", id = item.SessionId, UrlArea =  urlArea, UrlController= urlController})">
+                <i class="fa @(item.SessionName  == SessionHelper.CurrentSession ? "fa-check-square-o" : "fa-square-o" ) "></i>
+                <span data-id="">@item.SessionName</span>
+            </a>
+        </li>
+    }
+</ul>

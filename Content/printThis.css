@@ -1,0 +1,15 @@
+﻿td, th {
+    border: 1px solid black ;
+}
+
+tr {
+    border: 1px solid black ;
+}
+
+table {
+    border: 1px solid black ;
+}
+
+.borderLessTable {
+    border: 0px  !important;
+}

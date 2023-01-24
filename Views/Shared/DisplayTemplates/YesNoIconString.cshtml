@@ -1,0 +1,17 @@
+﻿@model string
+@{
+    var o = ViewData.ModelMetadata;
+    var radioId = ViewData.TemplateInfo.GetFullHtmlFieldId("");
+}
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    if (Model.ToLower() == "yes")
+    {
+        <i data-toggle="tooltip" title="Yes" class="fa fa-check" style="color: #56af45;cursor:pointer"></i>
+    }
+    else
+    {
+        <i data-toggle="tooltip" title="No" class="fa fa-times" style="cursor:pointer; color:red"></i>
+    }
+}

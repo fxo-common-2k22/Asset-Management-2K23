@@ -1,0 +1,153 @@
+﻿@using FAPP.Helpers
+@model FAPP.ViewModel.MediaTemplatesViewModel
+
+@using (@Html.BeginForm("Print", "Certificates", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.ModuleId)
+    <div id="table">
+        <table class="table table-hover table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th width="2%"><input name="checkall" id="checkall" class="checkBoxes" value="" type="checkbox"></th>
+                    <th width="3%">Sr.#</th>
+                    <th width="10%">Issue No</th>
+                    <th width="20%">Student Name</th>
+                    <th width="20%">Certificate Type</th>
+                    <th width="15%">Group</th>
+                    <th width="10%">Issued On</th>
+                    <th width="10%">Issued By</th>
+                    <th width="10">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int count = 1;}
+                @foreach (var item in Model.IssuedCertificatesList)
+                {
+                    <tr>
+                        <td id="checkboxes"><input class="checkbox checkBoxes" value="@item.CertificateId" type="checkbox" name="SelectedCertificates" /></td>
+                        <td><span class="label label-default current-theme">@(count++)</span></td>
+                        <td>@Html.DisplayFor(m => item.IssueNo)</td>
+                        <td>@Html.DisplayFor(m => item.Student.FullName)</td>
+                        <td>@Html.DisplayFor(m => item.CertificateType)</td>
+                        <td>@Html.DisplayFor(m => item.Group.GroupName)</td>
+                        <td>@Utilities.DateFormat(item.IssuedOn)</td>
+                        <td>@Html.DisplayFor(m => item.IssuedByUser.Username)</td>
+                        <td>
+                            <button class="btn btn-danger" type="button" onclick="DeleteRow('@item.CertificateId', '/Certificates/DeleteCertificate', 'certGrid', 'Delete Certificate?')">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+    <footer class="stickyFooter vbox" style="">
+        <div class="footerContainer ">
+            <div class="row">
+                <div class="col-md-5 nopadding displayNone" id="stickyButtons">
+                    <label for="IsPrintHeader" class="col-sm-2 nopadding control-label">Print Header</label>
+                    <div class="col-sm-4" style="display:inline-flex;">
+                        <div style="width:90%">
+                            @Html.EditorFor(model => model.IsPrintHeader, new { htmlAttributes = new { } })
+                        </div>
+                        <div style="width:10%; padding: 3%;">
+                            <a href="/CustomReporting/Setting/Academics/Student" target="_blank"><i class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <label for="IsPrintHeader" class="col-sm-2 nopadding control-label">Print Footer</label>
+                    <div class="col-sm-3" style="display:inline-flex;">
+                        <div style="width:90%">
+                            @Html.EditorFor(model => model.IsPrintFooter, new { htmlAttributes = new { } })
+                        </div>
+                        <div style="width:10%; padding: 3%;">
+                            <a href="/CustomReporting/Setting/Academics/Student" target="_blank"><i class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-sm-1 nopadding">
+                        <input type="submit" id="" class="btn btn-primary" style="" value="Print">
+                    </div>
+                </div>
+
+                <div class="col-md-3 pull-right" id="stickyPagination">
+                </div>
+
+                <div class="col-md-3 center-block text-center">
+                    <strong id="noOfSelectedVouchersId"></strong>
+                </div>
+            </div>
+        </div>
+    </footer>
+    @*<div id="getPrintBtn" class="vbox" style="display: none">
+            <div class="row">
+                <div class="col-sm-4" style="padding-left: 0px">
+                    <div class="form-group inline">
+                        <label for="@Model.IsPrintHeader" class="col-sm-6 ">Print Header</label>
+                        @Html.EditorFor(model => model.IsPrintHeader, new { htmlAttributes = new { @class = "col-sm-6" } })
+                        <br />
+                        <label for="@Model.IsPrintFooter" class="col-sm-6">Print Footer</label>
+                        @Html.EditorFor(model => model.IsPrintFooter, new { htmlAttributes = new { @class = "col-sm-6" } })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <input type="submit" id="" class="btn btn-primary " style="margin-left:  20px" value="Print Selected">
+                </div>
+            </div>
+        </div>*@
+
+}
+
+
+<script type="text/javascript">
+
+    $("#checkall").change(function () {  //"select all" change
+        var status = this.checked; // "select all" checked status
+        $('.checkbox').each(function () { //iterate all listed checkbox items
+            this.checked = status; //change ".checkbox" checked status
+        });
+        var selected = [];
+        $('#checkboxes  input:checked').each(function () {
+            selected.push($(this).attr('name'));
+        });
+        if (selected.length > 0) {
+            status = true;
+        } else {
+            status = false;
+        }
+        if (status) {
+            $("#getPrintBtn").show();
+        } else {
+            $("#getPrintBtn").hide();
+        }
+    });
+    $(".checkbox").change(function () {
+        var status = false;
+        var selected = [];
+        $('#checkboxes  input:checked').each(function () {
+            selected.push($(this).attr('name'));
+        });
+        if (selected.length > 0) {
+            status = true;
+        } else {
+            status = false;
+        }
+        if (status) {
+            $("#getPrintBtn").show();
+        } else {
+            $("#getPrintBtn").hide();
+        }
+    });
+
+    $('.checkBoxes').change(function () {
+        $('#stickyButtons').addClass('displayNone');
+        $('#noOfSelectedVouchersId').addClass('displayNone');
+        if ($('.checkBoxes:checked').length > 0) {
+            $('#stickyButtons').removeClass('displayNone');
+            $('#noOfSelectedVouchersId').removeClass('displayNone');
+            $('#noOfSelectedVouchersId').text($('.checkBoxes:checked').length + ' Record(s) Selected');
+        }
+    })
+</script>
+
+

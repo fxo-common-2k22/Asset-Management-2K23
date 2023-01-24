@@ -1,0 +1,366 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+@using FAPP.DAL
+@section topRightMenu
+{
+    <ul class="minitiles">
+
+        <li class='blue' title="Post/Unpost Purchase invoices">
+            <a href="/AM/Purchase/PostUnPostPurchaseInvoices">
+                <i class="fa fa-clipboard"></i>
+            </a>
+        </li>
+        <li class='orange' title="Manage Invoices">
+            <a href="/AM/Purchase/ManagePurchaseInvoices">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+
+
+        <li hidden class='satgreen' title="Total Products">
+            <i class="fa fa-slack"></i>
+            <div class="details">
+                <span class="big largeFont" id="topTotal">
+                    @(Model.v_mnl_PurchaseInvoiceList.Count)
+                </span>
+            </div>
+        </li>
+    </ul>
+
+}
+<style>
+    .red-span {
+        background: #e51400 !important;
+        color: #fff;
+        border: 1px solid #e51400;
+    }
+
+    .satgreen-span {
+        background: #56af45;
+        color: #fff;
+        border: 1px solid #56af45;
+    }
+
+    .darkblue-span {
+        background: #3F729B;
+        color: #fff;
+        border: 1px solid #3F729B;
+    }
+
+    .user-span {
+        background: #9e9e9e;
+        color: #fff;
+        border: 1px solid #9e9e9e;
+    }
+
+    .Status-span {
+        width: 60px;
+        padding: 2px;
+        border-radius: 2px;
+    }
+
+    #targetContainer {
+        background: white;
+        text-align: left;
+        border: none;
+        padding-left: 5px;
+    }
+
+
+    .hide {
+        display: none;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div id="Vouchers">
+        <div class="vbox">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label class="sr-only" for="TextBoxFromDate">From Date</label>
+                    @Html.TextBoxFor(model => model.FromDate, new { @class = "datepicker form-control", @placeholder = "From Date", @style = "width:90px;" })
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="TextBoxToDate">To Date</label>
+                    @Html.TextBoxFor(model => model.ToDate, new { @class = "datepicker form-control", @placeholder = "To Date", @style = "width:90px;" })
+                </div>
+                <div class="form-group">
+                    @Html.CheckBoxFor(model => model.PostedToAccount, new { @data_name = "postunpost" }) Posted
+                </div>
+                <div class="form-group">
+                    @Html.CheckBoxFor(model => model.UnPostedToAccount, new { @data_name = "postunpost" }) UnPosted
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="TextBoxParticulars">Particulars</label>
+                    @Html.TextBoxFor(model => model.Search, new { @class = "form-control", @placeholder = "Search" })
+                </div>
+                <input type="submit" class="btn" value="Search" title="Search" />
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <div class="alert alert-success" style="display: block;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+                @ViewBag.Message
+            </div>
+        }
+
+        <div class="row">
+            <div class="col-sm-12 downpadding">
+                <table class="table table-hover no-head-border table-responsive table-striped">
+                    <thead class="vd_bg-green vd_white">
+                        <tr>
+
+                            @*<th></th>
+                                <th>Status</th>
+                                <th>Id</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Net Total</th>
+                                <th>Is Posted</th>
+                                <th>Posted By</th>
+                                <th>Is Cancelled</th>
+                                <th>Cancelled By</th>
+                                <th>Discount</th>
+                                <th>Modified By</th>
+                                <th>Modified On</th>
+                                <th>Balance</th>
+                                <th>Voucher</th>*@
+                            <th width="10px"><input type="checkbox" data-action="checkUncheck" /></th>
+                            <th width="20px">Sr.</th>
+                            <th>Status</th>
+                            <th>Id</th>
+                            <th>Date</th>
+                            @*<th>Description</th>*@
+                            <th>Net Total</th>
+                            <th>Discount</th>
+                            <th>Balance</th>
+                            <th>Posted</th>
+                            @*<th>Posted By</th>*@
+                            <th>Cancelled</th>
+                            @*<th>Cancelled By</th>*@
+                            <th>Modified</th>
+                            @*<th>Modified On</th>*@
+                            <th>Voucher</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            if (Model.v_mnl_PurchaseInvoiceList != null)
+                            {
+                                int count = 0;
+                                for (int i = 0; i < Model.v_mnl_PurchaseInvoiceList.Count; i++)
+                                {
+                                    <tr class="tr_row">
+                                        <td width="10px">
+                                            @Html.HiddenFor(model => model.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceId)
+                                            @Html.CheckBox("v_mnl_PurchaseInvoiceList[" + i + "].IsCheked", Convert.ToBoolean(Model.v_mnl_PurchaseInvoiceList[i].IsCheked), new { @data_name = "checkbox" })
+                                        </td>
+                                        <td width="20px"> <span class="label label-default current-theme">@(++count)</span></td>
+
+                                        @*<td class="@(Model.v_mnl_PurchaseInvoiceList[i].IsAccountPosted == true ? "highlightPostedtd" :  "highlightDrafttd")">
+                                                    @(Model.v_mnl_PurchaseInvoiceList[i].IsAccountPosted == true ? "Posted" : "Draft"
+                                                )
+                                            </td>*@
+
+
+                                        <td>
+
+                                            @{
+                                                string clas = "";
+                                            }
+
+                                            @if ((Model.v_mnl_PurchaseInvoiceList[i].IsAccountPosted == true))
+                                            {
+                                                clas = "satgreen";
+                                                <span class="label label-default colored-span Status-span  @(clas)-span"> Posted </span>
+                                            }
+                                            else
+                                            {
+                                                if ((Model.v_mnl_PurchaseInvoiceList[i].IsCancelled == true))
+                                                {
+                                                    clas = "red";
+                                                    <span class="label label-default colored-span Status-span  @(clas)-span"> Cancelled</span>
+                                                }
+                                                else
+                                                {
+                                                    clas = "orange";
+                                                    <span class="label label-default colored-span Status-span  @(clas)-span"> Draft</span>
+                                                }
+                                            }
+
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink(Model.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceId.ToString(), "AddEditPurchaseInvoice", new { id = Model.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceId }, new { @class = "" })
+                                        </td>
+                                        <td>@(Model.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceDate.ToString("dd MMM yyyy"))</td>
+                                        @*<td>@(Model.v_mnl_PurchaseInvoiceList[i].Description)</td>*@
+                                        <td>@(Model.v_mnl_PurchaseInvoiceList[i].NetTotal)</td>
+                                        <td>@(Model.v_mnl_PurchaseInvoiceList[i].NetTotal - Model.v_mnl_PurchaseInvoiceList[i].ReceivedAmount)</td>
+                                        <td>@(Model.v_mnl_PurchaseInvoiceList[i].Discount)</td>
+
+                                        @*<td>@(Model.v_mnl_PurchaseInvoiceList[i].IsAccountPosted == true ? "Yes" : "No")</td>
+                                            <td>@(Model.v_mnl_PurchaseInvoiceList[i].AccountPostedName)</td>*@
+
+
+                                        <td>
+                                            @if ((Model.v_mnl_PurchaseInvoiceList[i].IsAccountPosted == true))
+                                            {
+                                                <span style="color:#1bce32;" title="Posted To @(Model.v_mnl_PurchaseInvoiceList[i].AccountPostedName)"><i class="fa fa-check"></i></span>
+                                            }
+                                            else
+                                            {
+                                                <span style="color:#ff2b2b;" title="Not Posted To Account"><i class="fa fa-close"></i></span>
+                                            }
+
+                                        </td>
+
+
+                                        @*<td>@(Model.v_mnl_PurchaseInvoiceList[i].IsCancelled == true ? "Yes" : "No")</td>
+                                            <td>@(Model.v_mnl_PurchaseInvoiceList[i].CancelledName)</td>*@
+
+                                        <td>
+                                            @if ((Model.v_mnl_PurchaseInvoiceList[i].IsCancelled == true))
+                                            {
+                                                <span style="color:#1bce32;" title="Cancelled By @Model.v_mnl_PurchaseInvoiceList[i].CancelledName"><i class="fa fa-check"></i></span>
+                                            }
+                                            else
+                                            {
+                                                <span style="color:#ff2b2b;" title="Not Cancelled"><i class="fa fa-close"></i></span>
+                                            }
+
+                                        </td>
+
+
+                                        @*<td>@(Model.v_mnl_PurchaseInvoiceList[i].ModifiedName)</td>
+                                            <td>@(Model.v_mnl_PurchaseInvoiceList[i].ModifiedOn == null ? "" : Model.v_mnl_PurchaseInvoiceList[i].ModifiedOn.Value.ToString("dd MMM yyyy"))</td>*@
+
+                                        <td>
+                                            @{
+                                                if (Model.v_mnl_PurchaseInvoiceList[i].ModifiedName != null)
+                                                {
+                                                    <span class="label label-default colored-span Status-span user-span" title="Modified by @Model.v_mnl_PurchaseInvoiceList[i].ModifiedName On @(Model.v_mnl_PurchaseInvoiceList[i].ModifiedOn == null ? "" : Model.v_mnl_PurchaseInvoiceList[i].ModifiedOn.Value.ToString("dd MMM yyyy"))">
+                                                        @(Model.v_mnl_PurchaseInvoiceList[i].ModifiedName)
+                                                    </span>
+                                                }
+
+                                                else
+                                                {
+
+
+                                                }
+
+                                            }
+
+                                        </td>
+
+                                        <td>
+                                            <a href="/Finance/VoucherAndReceipt/ViewVoucher/@Model.v_mnl_PurchaseInvoiceList[i].VoucherId">@Model.v_mnl_PurchaseInvoiceList[i].VoucherId.ToString()</a>
+                                            @*@Html.ActionLink(Model.v_mnl_PurchaseInvoiceList[i].VoucherId.ToString(), "ViewVoucher", "VoucherAndReceipt", new { Area = "Finance", id = Model.v_mnl_PurchaseInvoiceList[i].VoucherId })*@
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+
+                </table>
+                <div id="targetContainer">
+                    @* <a href="#" data-action="checkAll">Check All</a> / <a href="#" data-action="uncheckAll">Uncheck All</a>*@
+                    <div id="footeractions" class="current-theme">
+                        <span>with checked</span>
+                        <button type="submit" class="small blue Unpost @(Model.UnPostedToAccount == true ? "hide" :"")" name="command" value="Unpost" title="Unpost Voucher(s)">Unpost Invoice(s)</button>
+                        <button type="submit" class="small green Post @(Model.PostedToAccount == true ? "hide" :"") " name="command" value="Post" title="Post Voucher(s)">Post Invoice(s)</button>
+                        @*<button type="submit" class="small white Approve" name="command" value="Approve" title="Approve Voucher(s)">Approve Voucher(s)</button>*@
+                        @*<button type="submit" class="small red Cancel" name="command" value="Cancel" title="Cancel Voucher(s)">Cancel Invoice(s)</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+}
+
+@section scripts{
+    <script>
+        showOrHide();
+        function showOrHide() {
+            if ($('[data-name="checkbox"]:checked').length) {
+                $('#targetContainer').show();
+                $('#footeractions').show();
+            }
+            else {
+                $('#targetContainer').hide();
+                $('#footeractions').hide();
+            }
+            showOrHidePostButton();
+        }
+
+        $('[data-action="checkUncheck"]').change(function () {
+            console.log("parent checker clicked");
+            if ($(this).prop('checked') == true) {
+                $('[data-name="checkbox"]').prop("checked", true);
+                $('#targetContainer').css('display', '');
+            }
+
+            else {
+                $('[data-name="checkbox"]').prop("checked", false);
+                $('#targetContainer').css('display', 'none');
+            }
+
+            showOrHide();
+            return false;
+        });
+
+        $('[data-name="checkbox"]').change(function () {
+            showOrHide();
+        })
+        $('[data-action="checkAll"]').click(function () {
+            $('[data-name="checkbox"]').prop("checked", true);
+            showOrHide();
+            return false;
+        });
+
+        $('[data-name="postunpost"]').change(function () {
+            showOrHidePostButton();
+        })
+
+
+        $('[data-action="uncheckAll"]').click(function () {
+            $('[data-name="checkbox"]').prop("checked", false);
+            showOrHide();
+            return false;
+        });
+        $('#PostedToAccount').click(function () {
+            $('#UnPostedToAccount').prop("checked", false);
+        });
+        $('#UnPostedToAccount').click(function () {
+            $('#PostedToAccount').prop("checked", false);
+        });
+        function showOrHidePostButton() {
+            if ($('#UnPostedToAccount:checked').length) {
+                $('.Post').show();
+                $('.Unpost').hide();
+            }
+            else if ($('#PostedToAccount:checked').length) {
+                $('.Unpost').show();
+                $('.Post').hide();
+            }
+            else {
+                $('.Unpost').hide();
+                $('.Post').hide();
+            }
+        }
+    </script>
+    <script>
+         $(document).ready(function () {
+             $('#extendedPageHeader').html('<p style="margin:11px 0px 0px 0px"><label class="label label-green">@SessionHelper.FiscalYearName</label> </p>');
+              $("#pageTitle").css('margin', "4px 0px");
+         })
+    </script>
+}

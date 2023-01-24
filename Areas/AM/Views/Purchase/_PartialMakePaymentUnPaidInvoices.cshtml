@@ -1,0 +1,109 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+
+
+@if (Model.SupplierPayment.Amount - Model.SupplierInvoicePaymentList.Sum(m => m.Amount) > 0)
+{
+    if (Model.v_mnl_PurchaseInvoiceList != null && Model.v_mnl_PurchaseInvoiceList.Count() > 0)
+    {
+        <table id="trans" class="gv nm table table-hover table-condensed no-head-border table-responsive table-striped">
+            <thead class="vd_bg-green vd_white">
+                @*<tr>
+                        <th colspan="5"><span> <i class="fa fa-check"></i>Matched Invoices</span></th>
+                    </tr>*@
+                <tr>
+                    <th width="20px">Sr</th>
+                    <th>Invoice</th>
+                    @*<th>Client</th>*@
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
+                    <th></th>
+                    @*<th style="width:10%;">Paid</th>*@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    var count = 0;
+
+                    if (Model.v_mnl_PurchaseInvoiceList != null && Model.v_mnl_PurchaseInvoiceList.Count() > 0)
+                    {
+                        for (int i = 0; i < Model.v_mnl_PurchaseInvoiceList.Count(); i++)
+                        {
+                            <tr class="tr_row">
+                                <td>@(++count)</td>
+                                <td>
+                                    @Html.HiddenFor(u => u.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceId)
+                                    @Html.ActionLink(Model.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceId.ToString(), "AddEditPurchaseInvoice", new { id = Model.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceId }, new { })
+
+
+                                </td>
+                                @*<td>@(Model.v_mnl_PurchaseInvoiceList[i].ClientName)</td>*@
+                                <td>@(Model.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceDate != null ? Model.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceDate.ToString("dd MMM yyyy") : "")</td>
+                                <td>@(Model.v_mnl_PurchaseInvoiceList[i].NetTotal)</td>
+                                <td class="balance bold">@(Model.v_mnl_PurchaseInvoiceList[i].NetTotal - Model.v_mnl_PurchaseInvoiceList[i].ReceivedAmount)</td>
+                                <td>
+                                    <span>@Html.DisplayFor(m => Model.v_mnl_PurchaseInvoiceList[i].ClientName)</span>
+
+                                </td>
+                                @*<td>
+                                        @Html.CheckBox("v_mnl_PurchaseInvoiceList[" + i + "].IsCheked", Convert.ToBoolean(Model.v_mnl_PurchaseInvoiceList[i].IsCheked), new { @data_name = "checkbox" })
+                                    </td>*@
+                                @*<td>
+                                        @Html.TextBoxFor(m => m.v_mnl_PurchaseInvoiceList[i].Paid, new { @class = "Paid", @onkeypress = "return isNumber(event)" })
+                                        <div class="help-block" style="display:none;" id="v_mnl_PurchaseInvoiceList_0__item_no_lbl"></div>
+                                    </td>*@
+                                <td>
+                                    @*@Ajax.ActionLink("Save Payment", "SaveMatchedInvoice","Sale",
+                                        new { area ="POS", SupplierPaymentId = Model.ClientPayment.ClientPaymentId , Paid = Model.v_mnl_PurchaseInvoiceList[i].Paid},
+                                        new AjaxOptions() { OnBegin ="OnBegin" , OnSuccess = "OnResponceBackFromServer" ,OnFailure ="OnFailure"}, new {@class="btn btn-success" })*@
+
+                                    <a class="btn btn-success btn-xs" data-ajax="true" data-ajax-begin="OnBegin" data-ajax-failure="OnFailure" data-ajax-success="OnResponceBackFromServer" href="/AM/Purchase/SaveMatchedInvoice?SupplierPaymentId=@Model.SupplierPayment.SupplierPaymentId&PurchaseInvoiceId=@Model.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceId">Pay</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                }
+            </tbody>
+            <tfoot class="vbox">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="bold">
+                        @*@Html.TextBox("ftPaidTotal", null, new { @class = "bold cloneable", @readonly = "readonly", @placeholder = "0" })*@
+                        @(Model.v_mnl_PurchaseInvoiceList != null ? Model.v_mnl_PurchaseInvoiceList.Sum(s => s.NetTotal) : 0)
+
+                    </td>
+                    <td></td>
+                    <td>
+                        @*@if (ViewBag.InvoiceDetailExists)
+                            {
+                                <button type="submit" class="btn btn-success" onclick="return IsValidForSaveDetail();" name="Command" value="SavePaymentInvoice" title="Save">Save matched invoices</button>
+                            }*@
+                    </td>
+                </tr>
+            </tfoot>
+
+        </table>
+
+    }
+
+    else
+    {
+        <div>
+            <p style="background:#f4f4f4;padding:1em"> No Remainig Invoices </p>
+        </div>
+    }
+
+}
+else
+{
+    <div>
+        <p style="background:#f4f4f4;padding:1em"> Payment Limit has been reached </p>
+    </div>
+
+}

@@ -1,0 +1,88 @@
+﻿@model FAPP.Areas.AM.ViewModels.AddIssuedItemViewModel
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="">
+                <table class="gv nm table">
+                    <tr>
+                        <td class="Noline text-center" style="vertical-align: top;">
+                            <img src="~/uploads/Logos/BranchLogo@(FAPP.DAL.SessionHelper.BranchId).png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Noline text-center">@FAPP.DAL.SessionHelper.BranchAddress</td>
+                    </tr>
+                    <tr>
+                        <td class="Noline text-center">@FAPP.DAL.SessionHelper.BranchPhone</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="clearfix"></div>
+            <div class="invoice-info">
+                <table class="gv nm table">
+                    <tr>
+                        <td class="Noline text-center" colspan="7" id="tInvoiceNo"><b>Issue Id # @(Model.IssuedItems?.TransferHistoryId)</b></td>
+                    </tr>
+                    <tr>
+                        <td class="text-left" id="tSupplierName"><b>Department :</b>&nbsp;&nbsp;@(Model.IssuedItems?.Department?.DepartmentName)</td>
+                        <td class="text-right"><b>Date</b>&nbsp;&nbsp;@(Model.IssuedItems?.Date.ToString("dd MMM yyyy"))</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="" id="tDescription"><b>Description : </b>@(Model.IssuedItems?.Description)</td>
+                    </tr>
+                </table>
+                <table class="gv nm table table-bordered" id="maintable">
+                    <tr class="topbottomBorder">
+                        <td><b>Sr</b></td>
+                        <td><b>Item</b></td>
+                        <td><b>Item Code</b></td>
+                        <td><b>Quantity</b></td>
+                        <td><b>Description</b></td>
+                        <td><b>Employee</b></td>
+                        <td><b>Room</b></td>
+                    </tr>
+                    <tr class="reAssignable"></tr>
+                    @if (Model?.IssuedItemDetails != null)
+                    {
+                        var count = 0;
+                        foreach (var item in Model.IssuedItemDetails)
+                        {
+                            <tr class="reAssignable">
+                                <td>@(++count)</td>
+                                <td>@(item.Item?.ItemName)</td>
+                                <td>@(item.PurchaseInvoiceProductDetail?.ItemCode)</td>                                
+                                <td>@item.Quantity</td>
+                                <td>@item.Description</td>
+                                <td>@(item.Employee?.EmpName)</td>
+                                <td>@(item.Room?.RoomDoorNo)</td>
+                            </tr>
+                        }
+                    }
+                    @*<tr class="" id="invoiceFooter">
+                        <td colspan="2" class="noLeftBottomBorder Noline"></td>
+                        <td id="tSqFeet">@(Model.BillProduct == null ? 0 : Model.BillProduct.Sum(u => u.Quantity))</td>
+                        <td><b>Grand Total</b></td>
+                        <td id="tGrandTotal">@(Model.BillProduct == null ? 0 : Model.BillProduct.Sum(u => u.LineTotal))</td>
+                    </tr>
+                    <tr class="">
+                        <td colspan="3" rowspan="4" class="noLeftBottomBorder Noline"></td>
+                        <td>Discount</td>
+                        <td id="tDiscount">@Model.Bill.Discount</td>
+                    </tr>
+                    <tr class="">
+                        <td><b>Bill Total</b></td>
+                        <td id="tNetTotal">@(Model.Bill.NetTotal ?? 0)</td>
+                    </tr>
+                    <tr class="">
+                        <td>Paid</td>
+                        <td id="tReceived">@(Model.Bill.Received ?? 0)</td>
+                    </tr>
+                    <tr class="">
+                        <td>Net Balance</td>
+                        <td id="tNetBalance">@(Convert.ToDecimal(Model.Bill.NetTotal) - Convert.ToDecimal(Model.Bill.Received))</td>
+                    </tr>*@
+
+                </table>
+            </div>
+        </div>
+    </div>

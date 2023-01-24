@@ -1,0 +1,100 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+
+
+<table id="trans" class="gv nm table table-hover no-head-border table-condensed table-responsive table-striped">
+    <thead class="vd_bg-green vd_white">
+        <tr>
+            <th width="20px">Sr</th>
+            <th>Invoice</th>
+            @*<th>Client</th>*@
+            <th>Date</th>
+            <th>Amount</th>
+            @*<th>Balance</th>*@
+            <th>Description</th>
+            @*<th style="width:10%;">Paid</th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            var count = 0;
+            if (Model.SupplierInvoicePaymentList != null)
+            {
+                for (int i = 0; i < Model.SupplierInvoicePaymentList.Count(); i++)
+                {
+                    <tr class="tr_row">
+                        <td>@(++count)</td>
+                        <td>
+                            @Html.HiddenFor(u => u.SupplierInvoicePaymentList[i].PurchaseInvoiceId)
+                            @*@Model.SupplierInvoicePaymentList[i].SaleInvoiceId*@
+                            @Html.ActionLink(Model.SupplierInvoicePaymentList[i].PurchaseInvoiceId.ToString(), "AddEditPurchaseInvoice", new { id = Model.SupplierInvoicePaymentList[i].PurchaseInvoiceId }, new { })
+                        </td>
+                        @*<td>@(Model.SupplierInvoicePaymentList[i].SupplierPayment.Supplier.Name)</td>*@
+                        <td>@(Model.SupplierInvoicePaymentList[i].PaymentDate == null ? "" : Model.SupplierInvoicePaymentList[i].PaymentDate.Value.Date.ToString("dd MMM yyyy"))</td>
+                        <td>
+                            @*@(Model.SupplierInvoicePaymentList[i].SaleInvoice == null ? 0 : Model.SupplierInvoicePaymentList[i].SaleInvoice.NetTotal)*@
+                            @(Model.SupplierInvoicePaymentList[i].Amount == null ? 0 : Model.SupplierInvoicePaymentList[i].Amount)
+
+                        </td>
+                        @*<td class="balance bold">
+
+                                @(Model.SupplierInvoicePaymentList[i].SaleInvoice == null ? 0 : Model.SupplierInvoicePaymentList[i].SaleInvoice.NetTotal - (Model.SupplierInvoicePaymentList[i].Amount))
+
+                                @(
+                                                Model.SupplierInvoicePaymentList[i].SaleInvoice == null ? 0 : Model.SupplierInvoicePaymentList[i].SaleInvoice.NetTotal - (Model.SupplierInvoicePaymentList[i].Amount + /**/Model.SupplierInvoicePaymentList.Where(m => m.SaleInvoiceId == Model.SupplierInvoicePaymentList[i].SaleInvoice.SaleInvoiceId).Sum(m => m.Amount))
+                                    )
+                            </td>*@
+                        <td>@(Model.SupplierInvoicePaymentList[i].Description)</td>
+
+                        @*<td class="balance bold">
+
+                                @(Model.SupplierInvoicePaymentList[i].SaleInvoice == null ? 0 : Model.SupplierInvoicePaymentList[i].SaleInvoice.NetTotal - (Model.SupplierInvoicePaymentList[i].Amount))
+
+                                @(
+                                                Model.SupplierInvoicePaymentList[i].SaleInvoice == null ? 0 : Model.SupplierInvoicePaymentList[i].SaleInvoice.NetTotal - (/*Model.SupplierInvoicePaymentList[i].Amount*/ + /**/Model.SupplierInvoicePaymentList.Where(m => m.SaleInvoiceId == Model.SupplierInvoicePaymentList[i].SaleInvoice.SaleInvoiceId).Sum(m => m.Amount))
+                                    )
+                            </td>*@
+                        @*<td>
+                                @Html.TextBoxFor(m => m.SupplierInvoicePaymentList[i].Amount, new { @class = "Paid", @onkeypress = "return isNumber(event)" })
+                            </td>*@
+                        <td>
+
+                            <button class="btn btn-danger btn-sm" type="button" onclick="DeleteRowPaged('@Model.SupplierInvoicePaymentList[i].SupplierInvoicePaymentId', '/AM/Purchase/DeleteSupplierInvoicePayment', this, 'Delete Invoice Payment : (@Model.SupplierInvoicePaymentList[i].SupplierInvoicePaymentId)?')">
+                                Delete
+                            </button>
+
+                        </td>
+                    </tr>
+                }
+
+            }
+
+
+        }
+    </tbody>
+    <tfoot class="vbox">
+        <tr>
+
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="bold">
+                @*@Html.TextBox("ftPaidTotal", null, new { @class = "bold cloneable", @readonly = "readonly", @placeholder = "0" })*@
+                @(Model.SupplierInvoicePaymentList != null ? Model.SupplierInvoicePaymentList.Sum(s => s.Amount) : 0)
+            </td>
+            <td></td>
+            <td>
+                @*@if (ViewBag.InvoiceDetailExists)
+                    {
+                        <button type="submit" class="btn btn-success" onclick="return IsValidForSaveDetail();" name="Command" value="SavePaymentInvoice" title="Save">Save matched invoices</button>
+                    }*@
+            </td>
+        </tr>
+    </tfoot>
+
+</table>
+
+
+

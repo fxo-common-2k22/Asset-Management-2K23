@@ -1,0 +1,50 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageAMUnitsViewModel
+@{
+    ViewContext.FormContext = new FormContext();
+}
+@using (Ajax.BeginForm("SaveEditedUnit", "Setup",
+    new AjaxOptions
+    {
+        OnBegin = "OnEditedBegin",
+        OnSuccess = "OnEditedSuccess",
+        OnFailure = "OnFailure",
+        UpdateTargetId = "UpdateTarget"
+        //LoadingElementId = "progress"
+    }))
+{
+    Html.EnableClientValidation(true);
+    @Html.HiddenFor(m=> m.UnitId)
+<div class="modal-content">
+    <div class="modal-header" style="background-color: #368ee0; color:white;">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit Unit</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box-content nopadding">
+                    <div class="form-horizontal form-bordered">
+                        <div class="form-group">
+                            <label for="textfield" class="control-label col-sm-3">Unit Name</label>
+                            <div class="col-sm-9">
+                                @Html.EditorFor(model => model.UnitName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Unit Name" } })
+                                @Html.ValidationMessageFor(model => model.UnitName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" value="Update Unit" class="btn btn-primary load" />
+    </div>
+</div>
+
+}
+
+    <script>
+         $.validator.unobtrusive.parse($("form"))
+    </script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

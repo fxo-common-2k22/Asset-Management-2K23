@@ -1,0 +1,34 @@
+﻿<div class="modal fade" id="CounterSessionModal" tabindex="-1" role="dialog" aria-labelledby="CounterSessionModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header HeaderColor">
+                @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>*@
+                <h4 class="modal-title" id="CounterSessionLabel">Create Session</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal" id="form_CounterSession">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Counter</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("SaleCounterId", new SelectList(ViewBag.SaleCounters, "SaleCounterId", "Title"), "=Select Counter=", new { @class = "form-control chosen-select", @style = "width:100%;" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Start Cash</label>
+                        <div class="col-md-8">
+                            @Html.TextBox("StartCash", null, new { @class = "form-control", @placeholder = "Start Cash" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer background-login">
+                <input type="button" class="btn btn-orange" data-dismiss="modal" value="Cancel">
+
+                <button type="button" class="btn btn-success voucherLink" id="btnCreateSession">Save</button>
+                <a id="addCounterLink" class="btn btn-blue" style="display:none;" href="/POS/Setup/ManageCounters" title="Add Counter">Add Counter</a>
+                <div class="help-block" id="ServicesList_0__item_no_lbl"></div>
+            </div>
+        </div>
+    </div>
+</div>

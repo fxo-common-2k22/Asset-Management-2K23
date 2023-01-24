@@ -1,0 +1,172 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+@using PagedList.Mvc;
+
+<div class="row">
+    <div class="col-sm-12 downpadding">
+        <table cellspacing="0" class="gv nm table table-hover no-head-border table-responsive table-striped">
+            <thead class="vd_bg-green vd_white">
+                <tr>
+                    <th width="20px">Sr.</th>
+                    <th>Id</th>
+                    <th>Supplier</th>
+                    <th>Date</th>
+                    @*<th>Description</th>*@
+                    <th>Amount</th>
+                    <th>Invoice(s)</th>
+                    <th></th>
+                    <th></th>
+                    <th>vouhcer</th>
+                    @*<th></th>*@
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null)
+                {
+                    if (Model.SupplierPaymentPagedList != null)
+                    {
+                        int count = (Model.SupplierPaymentPagedList.PageSize * (Model.SupplierPaymentPagedList.PageNumber - 1)) + 1;
+
+                        foreach (var item in Model.SupplierPaymentPagedList)
+                        {
+                            <tr class="tr_row">
+                                <td><span class="label label-default current-theme ">@(count++)</span></td>
+                                <td>
+                                    @*@item.SupplierPaymentId*@
+                                    @Html.ActionLink(item.SupplierPaymentId.ToString(), "MakePayment", new { id = item.SupplierPaymentId }, new { @title = item.Description })
+                                </td>
+                                <td>@(item.Client == null ? "" : item.Client.Name)</td>
+                                <td>@(item.CreatedOn == null ? "" : item.CreatedOn.Value.ToString("dd MMM yyyy"))</td>
+                                @*<td>@(item.Description)</td>*@
+                                <td>@(item.Amount)</td>
+                                <td>
+                                    @if (Model.RelatedSupplierInvoicePayments != null)
+                                    {
+                                        foreach (var invoice in Model.RelatedSupplierInvoicePayments.Where(m => m.SupplierPaymentId == item.SupplierPaymentId))
+                                        {
+                                            @Html.ActionLink(invoice.PurchaseInvoiceId.ToString(), "AddEditPurchaseInvoice", new { id = invoice.PurchaseInvoiceId }, new { })
+                                            <span>,</span>
+                                        }
+                                    }
+                                </td>
+                                @*<td>@(item.IsPosted == true ? "Yes" : "No")</td>
+                                    <td>@(item.User3 == null ? "" : item.User3.Username)</td>*@
+
+                                <td>
+                                    @if (item.IsPosted == true)
+                                    {
+                                        <span style="color:#1bce32;" title="Posted On  @( item.PostedOn.Value.Date.ToShortDateString() )"><i class="fa fa-check"></i></span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color:#ff2b2b;" title="Not Posted"><i class="fa fa-close"></i></span>
+                                    }
+
+
+                                </td>
+
+                                @*<td>@(item.UserModified == null ? "" : item.UserModified.Username)</td>
+                                    <td>@(item.ModifiedOn == null ? "" : item.ModifiedOn.Value.ToString("dd MMM yyyy"))</td>*@
+
+                                <td>
+                                    @{
+                                        if (item.UserModified != null)
+                                        {
+                                            <span class="label label-default colored-span Status-span user-span" title="Modified by @item.UserModified.Username On @(item.ModifiedOn == null ? "" : item.ModifiedOn.Value.ToString("dd MMM yyyy"))">
+                                                @(item.UserModified.Username)
+                                            </span>
+                                        }
+
+                                        else
+                                        {
+
+
+                                        }
+
+                                    }
+                                </td>
+
+                                <td>
+                                    @*@if (ViewBag.CanUpdate)
+                                        {
+                                            @Html.ActionLink("View", "MakePayment", new { id = item.SupplierPaymentId }, new { @class = "btn btn-primary" })
+                                        }*@
+
+                                    @if (item.VoucherId.HasValue)
+                                    {
+                                        @Html.ActionLink(item.VoucherId.ToString(), "ViewVoucher", "VoucherAndReceipt", new { area = "Finance", id = item.VoucherId }, new { })
+
+                                        @*@if (ViewBag.CanUpdate)
+                                            {
+                                                @Html.ActionLink("View", "MakePayment", new { id = item.SupplierPaymentId }, new { @class = "btn btn-primary" })
+                                            }*@
+
+
+
+                                    }
+                                    else
+                                    {
+
+                                        @Ajax.ActionLink("Create/Update", "CreateModifySupplierPaymentVoucher", "Purchase",
+                                               new { area = "AM", SupplierPaymentId = item.SupplierPaymentId, isPosted = false }
+                                               , new AjaxOptions() { OnBegin = "OnBegin", OnSuccess = "success", OnFailure = "OnFailure" }
+                                               , new { @class = "btn btn-darkblue btn-xs", @target = "_blank" })
+                                    }
+
+
+
+                                </td>
+                                @*<td>
+                                        <a href="/POS/Purchase/InvoicePaymentDeletion" class="btn btn-danger btn-xs">Delete</a>
+                                    </td>*@
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+
+        </table>
+        @if (Model.SupplierPaymentPagedList == null || Model.SupplierPaymentPagedList.Count == 0)
+        {
+            <div style="text-align: center">
+                No data found
+            </div>
+        }
+        <div id="targetContainer">
+            <div id='Paging' style="text-align: center">
+                Page @(Model.SupplierPaymentPagedList.PageCount < Model.SupplierPaymentPagedList.PageNumber ? 0 : Model.SupplierPaymentPagedList.PageNumber)
+                of @Model.SupplierPaymentPagedList.PageCount
+                @Html.PagedListPager(Model.SupplierPaymentPagedList, page => Url.Action("ManageInvoicePayments", new { page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+           {
+               HttpMethod = "POST",
+               InsertionMode = InsertionMode.Replace,
+               UpdateTargetId = "divStudents"
+           }))
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+         $(document).ready(function () {
+             $('#extendedPageHeader').html(`<p style="margin:8px 0px">
+                  @if (Model.SupplierPaymentPagedList != null && Model.SupplierPaymentPagedList.Count > 0 ) {
+
+                          <label class="label label-satgreen ">Total Invoice payments : @Model.SupplierPaymentPagedList.TotalItemCount</label>
+
+                }
+                 </p> `);
+             $("#pageTitle").css('margin', "3px 0px");
+        })
+</script>
+<script>
+    function success(response) {
+        if (response.status == true) {
+            toastr.success("Voucher Created.. ", 'Success')
+        }
+        else {
+            toastr.error("Something went wrong", 'Failed')
+        }
+    }
+
+</script>
+

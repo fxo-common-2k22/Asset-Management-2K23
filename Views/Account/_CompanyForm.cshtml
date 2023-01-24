@@ -1,0 +1,71 @@
+﻿@model FAPP.ViewModel.PrimaryDataViewModel
+
+<form action="@Url.Action("ImportCompany")" method="POST" class="form-horizontal form-bordered">
+    @Html.HiddenFor(m=> m.Info.ApplyGST)
+    @Html.HiddenFor(m=> m.Info.Facebook)
+    @Html.HiddenFor(m=> m.Info.Fax)
+    @Html.HiddenFor(m=> m.Info.IP)
+    @Html.HiddenFor(m=> m.Info.Logo)
+    @Html.HiddenFor(m=> m.Info.LogoFull)
+    @Html.HiddenFor(m=> m.Info.WebLogoFull)
+    @Html.HiddenFor(m=> m.Info.WebLogoMini)
+    @Html.HiddenFor(m=> m.Info.Website)
+    @Html.HiddenFor(m=> m.Info.ShowExceptionToUser)
+    @Html.HiddenFor(m=> m.Info.ShortName) 
+    @Html.HiddenFor(m=> m.Info.RegPrefix)
+    @Html.HiddenFor(m=> m.Info.Organization)
+    @Html.HiddenFor(m=> m.Info.ProductKey)
+    @Html.HiddenFor(m=> m.Info.ProfileFormat) 
+    <div class="form-group">
+        @Html.LabelFor(m => m.Info.CompanyName, "Company Name", new { @class = "control-label col-sm-3" })
+        <div class="col-sm-9">
+            @Html.EditorFor(model => model.Info.CompanyName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Company Name" } })
+            @Html.ValidationMessageFor(m => m.Info.CompanyName, null, new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Info.Phone, "Phone", new { @class = "control-label col-sm-3" })
+        <div class="col-sm-9">
+            @Html.EditorFor(model => model.Info.Phone, new { htmlAttributes = new { @class = "form-control mobile", @placeholder = "Phone" } })
+            @Html.ValidationMessageFor(m => m.Info.Phone, null, new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Info.CompanyAddress, "Address", new { @class = "control-label col-sm-3" })
+        <div class="col-sm-9">
+            @Html.EditorFor(model => model.Info.CompanyAddress, new { htmlAttributes = new { @class = "form-control", @placeholder = "Company Address" } })
+            @Html.ValidationMessageFor(m => m.Info.CompanyAddress, null, new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Info.NoOfBranchesAllowed, "No. Of Branches", new { @class = "control-label col-sm-3" })
+        <div class="col-sm-9">
+            @Html.EditorFor(model => model.Info.NoOfBranchesAllowed, new { htmlAttributes = new { @class = "form-control", @placeholder = "No. Of Branches" } })
+            @Html.ValidationMessageFor(m => m.Info.NoOfBranchesAllowed, null, new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Info.SoftwareType, "Software Type", new { @class = "control-label col-sm-3" })
+        <div class="col-sm-9">
+            @*@Html.DropDownListFor(model => model.Info.CompanyType, new SelectList(ViewBag.UserGroups != null ? ViewBag.UserGroups : string.Empty, "Value", "Text"), new { @class = "form-control", @style = "width:100%;" })*@
+            @Html.EnumDropDownListFor(x => x.Info.SoftwareType, "--Select Software Type--", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Info.SoftwareType, null, new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-3" for=" ">Select Module</label>
+        <div class="col-sm-9">
+            @for (int i = 0; i < Model.Forms.Count(); i++)
+            {
+                <label>
+                    @Html.HiddenFor(m => m.Forms[i].FormId)
+                    @Html.CheckBoxFor(m => m.Forms[i].IsChecked)
+                    @Html.DisplayFor(m => m.Forms[i].FormName)
+                </label>
+            }
+        </div>
+    </div>
+    <div class="form-actions col-sm-offset-0 col-sm-8">
+        <button type="submit" class="btn btn-primary" onclick="showBlockUI()">Save changes</button>
+    </div>
+</form>

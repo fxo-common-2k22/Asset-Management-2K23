@@ -1,0 +1,52 @@
+﻿@model FAPP.ViewModel.MessagingVM
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title" id="myModalLabel">Add Admin Users</h4>
+</div>
+
+@using (Ajax.BeginForm("AddEditNotificatinAdminUsers", "Messaging", new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnComplete = "OnComplete('frmModal')", OnSuccess = "OnCreateUpdateSuccess", OnFailure = "OnFailure" }, new { @class = "new-task-form form-horizontal form-bordered", @id="frmAddNotificationSettingAdminUsers" }))
+{
+    Html.EnableClientValidation(true);
+    @Html.HiddenFor(m => m.NotificationSettingId)
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="tasktitel" class="col-sm-3 control-label">User Group</label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(m => m.UserGroupId, new SelectList(Model.UserGroupsDD, "Value", "Text"), "--Select User Group--", new { @class = "form-control", @style = "width:100%" })
+                @Html.ValidationMessageFor(m => m.UserGroupId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div>
+           <h4>Admin Users</h4>
+            
+            <div id="notificationAdminUsersGrid" style="height:400px !important; overflow-y:auto;">
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="button" data-dismiss="modal" class="btn btn-warning" value="Cancel">
+        <input type="button" id="btnSaveNotificationSettingAdminUser" class="btn btn-primary" value="Save">
+    </div>
+}
+<script>
+    $("#UserGroupId").change(function () {
+        if ($("#UserGroupId").val() != '' && $("#UserGroupId").val() != undefined) {
+            $.ajax({
+                url: '@Url.Action("GetAdminUsersByUserGroupId")',
+                method: "GET",
+                data: { NotificationSettingId:@Model.NotificationSettingId, UserGroupId: $("#UserGroupId").val() },
+                success: OnCreateUpdateSuccess,
+                error: OnFailure
+            });
+        }
+    });
+    $("#btnSaveNotificationSettingAdminUser").click(function () {
+        if ($("#UserGroupId").val() != '' && $("#UserGroupId").val() != undefined) {
+            $("#frmAddNotificationSettingAdminUsers").submit();
+        } else {
+            toastr.warning('Please Select User Group!');
+        }
+    })
+</script>

@@ -1,0 +1,29 @@
+﻿@model  FAPP.ViewModel.Common.GraphsModel
+<div class="box box-color box-bordered brown" id="ShowTopAttendanceCheckIns">
+    <div class="box-title">
+        <h3>
+            <i class="fa fa-bars"></i>
+            <span id="LabelTitle">Available Teachers</span>
+        </h3>
+    </div>
+    <div class="box-content" style="min-height: 155px;">
+        @if (Model != null)
+        {
+            <div class='subnav'>
+                <div class='subnav-title'>
+                </div>
+                <ul class='subnav-menu'>
+                    @if (Model.Teachers != null)
+                    {
+                        foreach (var i in Model.Teachers)
+                        {
+                            <li>
+                                <a class='wrap-text' href="/HRPayroll/Employees/Edit/@i.EmployeeId" target="_blank" title="Go to Profile">@i.EmpName</a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</div>

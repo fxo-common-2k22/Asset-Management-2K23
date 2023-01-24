@@ -1,0 +1,231 @@
+﻿@model FAPP.Areas.AM.ViewModels.AddOrderPurchaseViewModel
+@if (Model.EditMode)
+{
+    ViewBag.Title = "Purchase Order";
+}
+
+@section topRightMenu{
+    <ul class="minitiles link">
+        @if (ViewBag.CanCreate)
+        {
+            <li class="green">
+                <label for="SubmitPOBtn" id="" style="cursor:pointer" data-toggle="tooltip" title="Save (ctrl + s)">
+                    <i class="fa fa-save">
+                    </i>
+                </label>
+            </li>
+            if (Model.EditMode)
+            {
+                <li class="orange">
+                    <a id="ReqPrintLbl" onclick="printGV()" style="cursor:pointer" data-toggle="tooltip" title="Print (ctrl + p)">
+                        <i class="fa fa-print"></i>
+                    </a>
+                </li>
+            }
+
+        }
+
+
+        <li class="grey hidden goToPurchaseInvoice @(Model.EditMode == false ? "hidden" : Model.PICreated == true ? " " : "hidden")" style="cursor:pointer;">
+            <a title="Go to PI-@Model.PurchaseInvoiceId" onclick="GoToPurchaseInvoice(@Model.PurchaseInvoiceId)">
+                <i class="fa fa-exchange" data-toggle="tooltip"></i>
+            </a>
+        </li>
+        <li class="grey convertToPurchaseInvoice hidden" style="cursor:pointer;">
+            <a data-toggle="modal" href="#ConvertToPIModal" title="Convert to purchase invoice" data-target="#ConvertToPIModal" id="">
+                <i class="fa fa-exchange" data-toggle="tooltip"></i>
+            </a>
+        </li>
+    </ul>
+}
+
+<style>
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        padding: 3px !important;
+    }
+
+    .displayNone {
+        display: none;
+    }
+</style>
+@using (Ajax.BeginForm("SavePurchaseOrder", "PurchaseOrder",
+        new AjaxOptions
+        {
+            OnSuccess = "OnSavePOSuccess",
+            OnFailure = "OnSavePOFailure",
+            UpdateTargetId = "UpdateTarget"
+        }))
+{
+    Html.EnableClientValidation(false);
+    <div id="UpdateTarget">
+        @Html.Partial("_PartialAddPurchaseOrder", Model)
+    </div>
+}
+<div class="modal fade" id="ConvertToPIModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color : #368ee0; color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <strong>
+                        Convert To Purchase Invoice
+                    </strong>
+                </h5>
+            </div>
+            @using (Ajax.BeginForm("SavePurchaseInvoice", "PurchaseOrder", new AjaxOptions { OnFailure = "OnSavePIFailed", OnBegin = "OnSavePIBegin", OnSuccess = "OnSavePISuccess" }))
+            {
+                @Html.HiddenFor(m => m.PurchaseOrderId);
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="box-content nopadding">
+                                <div class="form-horizontal form-bordered">
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-4">Purchase Invoice Date</label>
+                                        <div class="col-sm-8">
+                                            @Html.EditorFor(model => model.PurchaseInvoiceDate, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "Date" } })
+                                            @Html.ValidationMessageFor(model => model.PurchaseInvoiceDate, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-4">Supplier</label>
+                                        <div class="col-sm-8">
+                                            @Html.DropDownListFor(model => model.PISupplierId, new SelectList(Model.SuppliersDD, "Value", "Text", Model.PISupplierId), "--Select Supplier--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+                                            @Html.ValidationMessageFor(model => model.PISupplierId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-4">Description</label>
+                                        <div class="col-sm-8">
+                                            @Html.TextAreaFor(model => model.PIDescription, new { htmlAttributes = new { @class = "form-control", @placeholder = "Description" } })
+                                            @Html.ValidationMessageFor(model => model.PIDescription, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/printThis.js"></script>
+    <script src="~/Areas/AM/Scripts/AddEditPurchaseOrder.js"></script>
+    <script>
+    $(document).ready(function () {
+        $("#PurchaseOrderDate").val('@String.Format("{0:dd/MM/yyyy}", Model.PurchaseOrderDate)')
+        $("#PurchaseInvoiceDate").val('@String.Format("{0:dd/MM/yyyy}", Model.PurchaseInvoiceDate)')
+        $("#PurchaseOrderId").val('@(Model.PurchaseOrderId == 0 ? "" : Model.PurchaseOrderId.ToString())')
+
+
+        })
+
+        var EditMode = @Html.Raw(Json.Encode(@ViewBag.EditMode));
+         var status = '@Model.StatusId';
+               // console.log('statusID', status);
+        if (EditMode) {
+            if (status == 3) {
+                $('#convertToPurchaseInvoice').closest('li').removeClass('hidden');
+                }
+            }
+        function GoToPurchaseInvoice(id) {
+            window.location.href ='/AM/Purchase/AddEditPurchaseInvoice/'+id;
+        }
+        function OnSavePIBegin(request) {
+            $("#ConvertToPIModal").modal('hide');
+
+        }
+        function OnSavePISuccess(response) {
+            if (parseInt(response) != 0) {
+                var html =   "  <li class=\"grey goToPurchaseInvoice\" style=\"padding-bottom:12px !important; cursor:pointer;\"  onclick=\"GoToPurchaseInvoice(" + response + ")\">" +
+                             "      <i class=\"fa fa-exchange\" data-toggle=\"tooltip\"></i>" +
+                             "      <div class=\"details\" data-toggle=\"tooltip\" title=\"Go to PI-" + response + "\">" +
+                             "          <span class=\"big\">Go to </span>" +
+                             "          <span>Purchase Invoice</span>" +
+                             "      </div>" +
+                             "  </li>";
+
+                $("#states").html(html);
+
+                $('#extendedPageHeader p').append("<label class=\"label label-blue \" style=\"cursor: pointer;\"  onclick=\"GoToPurchaseInvoice(" + response + ")\" title=\"Go to Invoice\">Invoice No: " + response + " </label>");
+
+                //$('.goToPurchaseInvoice').removeClass('hidden');
+
+
+
+
+                $('.convertToPurchaseInvoice').addClass('hidden');
+                DisplayMessage('', '<strong>Created </strong> Purchase Invoice has been created...');
+            }
+            else {
+                OnSavePIFailed(request)
+            }
+        }
+        function OnSavePIFailed(response) {
+            DisplayMessage('error', '<strong>Failed</strong> Something went wrong while Processing your request ...!');
+        }
+        function OnBegin(request) {
+        }
+        function OnSavePOSuccess(response) {
+            // check for status if approved then it can be convert
+            var resStatus = $('#StatusId').val();
+
+            console.log('statusId', resStatus);
+            if (resStatus == 3) {
+                $('.convertToPurchaseInvoice').removeClass('hidden');
+
+            } else {
+                $('.convertToPurchaseInvoice').addClass('hidden');
+
+            }
+
+            if (response != "") {
+                DisplayMessage('', '<strong>Saved</strong> Purchase Order has been saved...');
+            }
+            else {
+                OnIssueItemFailure(response)
+            }
+            $.getScript('@Url.Content("~/Areas/AM/Scripts/AddEditPurchaseOrder.js")');
+        $.getScript('@Url.Content("~/Scripts/select2.min.js")');
+        $.getScript('@Url.Content("~/Scripts/printThis.js")');
+        $.getScript('@Url.Content("~/Scripts/Custom/trans_header.js")');
+        }
+        function OnSavePOBegin(response){
+            if(IsValid()){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    function OnSavePOFailure(response) {
+        DisplayMessage('error', '<strong>Failed</strong> Something went wrong while Processing your request ...!');
+        }
+
+        $('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+@{
+<label class="label label-darkblue" title="Purchase Order Number" id="purchaseOrderNo">@(Model.PurchaseOrderId==0?"New": "Order No:"+ Model.PurchaseOrderId.ToString())</label>
+
+
+        if (Model?.PurchaseInvoiceId!=null)
+        {
+
+            <label class="label label-blue " style="cursor: pointer;"  onclick="GoToPurchaseInvoice(@Model.PurchaseInvoiceId)" title="Go to Invoice">@("Invoice No:"+ Model.PurchaseInvoiceId)</label>
+
+        }
+
+
+} </p>`);
+    </script>
+}

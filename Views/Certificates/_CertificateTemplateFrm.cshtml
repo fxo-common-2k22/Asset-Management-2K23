@@ -1,0 +1,332 @@
+﻿@model FAPP.ViewModel.MediaTemplatesViewModel
+<style>
+    .form-group {
+        background: none !important;
+    }
+
+    .col-sm-8 {
+        background: none !important;
+        border-left: none !important;
+    }
+
+    .col-sm-12 {
+        background: none !important;
+    }
+</style>
+<link href="~/Scripts/iconPicker/bootstrap-iconpicker.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Content/plugins/multiselect/multi-select.css" rel="stylesheet" />
+<link href="~/Scripts/summernote/summernote.css" rel="stylesheet" />
+<div class="searchbox" style="margin-top:10px">
+    @using (Ajax.BeginForm("AddEdit", "Certificates", new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnSuccess = "onFormSuccess", OnFailure = "OnFailure" },
+        new { @class = "new-task-form form-horizontal form-bordered", @id = "frmadd", autocomplete = "off" }))
+
+    {
+        if (Model.Certificate.CertificateId != 0)
+        {
+            @Html.HiddenFor(m => m.Certificate.CertificateId)
+            @Html.HiddenFor(m => m.Certificate.Title)
+        }
+        @Html.Hidden("ckinput", Model.Certificate.CertificateContent)
+        @Html.HiddenFor(m => m.TemplateType.TemplateTypeName)
+        if (Model.Certificate.CertificateId == 0)
+        {
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group ">
+                        <label for="@Model.Certificate.Title" class="col-sm-4 control-label">Title</label>
+                        <div class="col-sm-8">
+                            @Html.EditorFor(model => model.Certificate.Title, new { htmlAttributes = new { @class = " form-control", @required = "required", @data_val_required = "This field is required.", @placeholder = "Title" } })
+                            @Html.ValidationMessageFor(model => model.Certificate.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="@Model.Certificate.FaIcon" class="control-label col-sm-4">Select Icon</label>
+                        <div class="col-sm-8">
+                            @{ var icon = "fa-th";
+                                if (Model.Certificate.CertificateId > 0)
+                                {
+                                    icon = Model.Certificate.FaIcon;
+                                }
+                            }
+                            <button class="btn btn-default" name="Certificate.FaIcon" id="Certificate_FaIcon" data-iconset="fontawesome" data-icon="@icon" role="iconpicker"></button>
+                            @*<div data-label-header="{0} - {1} pages" name="Template.FaIcon" id="Template_FaIcon" data-label-footer="{0} - {1} of {2} icons" role="iconpicker"></div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group ">
+                        <label for="@Model.Certificate.RefNoFormat" class="col-sm-4 control-label">Ref No Format</label>
+                        <div class="col-sm-8">
+                            @Html.EditorFor(model => model.Certificate.RefNoFormat, new { htmlAttributes = new { @class = " form-control required", @required = "required", @data_val_required = "This field is required.", @placeholder = "[PRE]/CODE/[YY][MM]/[0000]" } })
+                            <span id="exampleNo" class="text-info"></span>
+                            <span id="valMsg" class="text-danger"></span>
+                            @Html.ValidationMessageFor(model => model.Certificate.RefNoFormat, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group ">
+                        <label for="" class="col-sm-3 control-label"></label>
+                        <div class="col-sm-8">
+                            <span id="genNo">[PRE]/CODE/[YY][MM]/[0000]</span>
+
+                            <div class="help-block">
+                                <ul>
+                                    <li>[PRE] means prefix, [YY] means 2 digit year, [MM] means 2 digit year, [0000] is a number placeholder</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*if (Model.Certificate.TemplateTypeId == 0)
+                {
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="@Model.Certificate.TemplateTypeId" class="col-sm-4 control-label">Type</label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.Certificate.TemplateTypeId, new SelectList(Model.TemplateTypeList, "TemplateTypeId", "TemplateTypeName"), "-Select Type-", new { @style = "width:100%", @class = "", @data_val_required = "This field is required." })
+                                    @Html.ValidationMessageFor(model => model.Certificate.TemplateTypeId, "", new { @class = "text-danger", @data_val_required = "This field is required." })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {*@
+            @Html.HiddenFor(m => m.Certificate.TemplateTypeId)
+            //}
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div class="col-sm-12" id="fieldsGrid">
+                            @if (Model.ViewFields != null)
+                            {
+                                if (Model.ViewFields.Count > 0)
+                                {
+                                    @Html.Partial("_PartialFields", Model.ViewFields)
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        if (Model.Certificate.CertificateId != 0)
+        {
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group ">
+                        <label for="@Model.Certificate.Title" class="col-sm-4 control-label">Title</label>
+                        <div class="col-sm-8">
+                            @Html.EditorFor(model => model.Certificate.Title, new { htmlAttributes = new { @class = " form-control", @required = "required", @data_val_required = "This field is required.", @placeholder = "Title" } })
+                            @Html.ValidationMessageFor(model => model.Certificate.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="@Model.Certificate.FaIcon" class="control-label col-sm-4">Select Icon</label>
+                        <div class="col-sm-8">
+                            @{ var icon = "fa-th";
+                                if (Model.Certificate.CertificateId > 0)
+                                {
+                                    icon = Model.Certificate.FaIcon;
+                                }
+                            }
+                            <button class="btn btn-default" name="Certificate.FaIcon" id="Certificate_FaIcon" data-iconset="fontawesome" data-icon="@icon" role="iconpicker"></button>
+                            @*<div data-label-header="{0} - {1} pages" name="Template.FaIcon" id="Template_FaIcon" data-label-footer="{0} - {1} of {2} icons" role="iconpicker"></div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group ">
+                        <label for="@Model.Certificate.RefNoFormat" class="col-sm-4 control-label">Ref No Format</label>
+                        <div class="col-sm-8">
+                            @Html.EditorFor(model => model.Certificate.RefNoFormat, new { htmlAttributes = new { @class = " form-control required", @required = "required", @data_val_required = "This field is required.", @placeholder = "[PRE]/CODE/[YY][MM]/[0000]" } })
+                            <span id="exampleNo" class="text-info"></span>
+                            <span id="valMsg" class="text-danger"></span>
+                            @Html.ValidationMessageFor(model => model.Certificate.RefNoFormat, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group ">
+                        <label for="" class="col-sm-3 control-label"></label>
+                        <div class="col-sm-8">
+                            <span id="genNo">[PRE]/CODE/[YY][MM]/[0000]</span>
+
+                            <div class="help-block">
+                                <ul>
+                                    <li>[PRE] means prefix, [YY] means 2 digit year, [MM] means 2 digit year, [0000] is a number placeholder</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div class="col-sm-12" id="fieldsGrid">
+                            @if (Model.ViewFields != null)
+                            {
+                                if (Model.ViewFields.Count > 0)
+                                {
+                                    @Html.Partial("_PartialFields", Model.ViewFields)
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.TextAreaFor(model => model.Certificate.CertificateContent, new { @class = "summernote" })
+                    @*<textarea name="Certificate.CertificateContent" rows="2" cols="30" id="Certificate_CertificateContent" style="height: 500px !important; visibility: hidden; display: none;" class="form-control">
+                            @Model.Certificate.CertificateContent
+                        </textarea>*@
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-primary" id="saveBtn" style="display:none" value="ss">
+            </div>
+        </div>
+    }
+</div>
+<script src="~/Scripts/plugins/multiselect/jquery.multi-select.js"></script>
+<script src="~/Scripts/iconPicker/bootstrap-iconpicker-iconset-all.min.js"></script>
+<script src="~/Scripts/iconPicker/bootstrap-iconpicker.min.js"></script>
+<script src="~/Scripts/summernote/summernote.min.js"></script>
+<script src="~/Scripts/summernote/summernote-data.js"></script>
+@*<script src="~/Scripts/ckeditor/ckeditor.js"></script>*@
+<script>
+    function onFormSuccess(response) {
+        OnCreateUpdateSuccess(response);
+        $(".summernote").summernote();
+    }
+    $(function () {
+        $('.append').click(function () {
+            $(".summernote").summernote('editor.insertText', '{' + $(this).text() + '}');
+            //CKEDITOR.instances['Certificate_CertificateContent'].insertText('{' + $(this).text() + '}');
+            return false;
+        });
+    });
+    function validateform() {
+        var isEmpty = $('.summernote').summernote('isEmpty');
+        if (isEmpty && $("#Certificate_CertificateId").val()!=undefined) {
+            DisplayMessage('error', 'Certificate body cannot be empty');
+        } else {
+            $('#saveBtn').click();
+        }
+    }
+    //var code = $('.summernote').code(),
+    //    filteredContent = $(code).text().replace(/\s+/g, '');
+
+    //if(filteredContent.length > 0) {
+    //    // content is not empty
+    //    alert("not empty");
+    //} else {
+    //    // content is empty
+    //    alert(" empty");
+    //}
+    //[PRE]/CODE/[YY][MM]/[0000]
+    //$("#Certificate_RefNoFormat").on('input', function(){
+    //    $("#genNo").text($(this).val()+"/[YY][MM]/[0000]");
+    //});
+    $('#Certificate_Title').on('input',function(e){
+        var str = $(this).val().toUpperCase();
+        var matches = str.match(/\b(\w)/g);
+        if (matches != null) {
+            var acronym = matches.join('');
+            $("#exampleNo").html("Try Ref No : "+acronym +"/[YY][MM]/[0000]");
+        }// ['J','S','O','N']
+    });
+
+    $('#Certificate_RefNoFormat').blur(function () {
+        var pUrl = "/Certificates/VerifyCertificateRefNo" ;
+        if ($(this).val()!=="") {
+            $.ajax({
+                url: pUrl,
+                method: "POST",
+                data: { no: $(this).val() }
+            }).success(function (data) {
+                $.getScript("/scripts/eakroko.min.js");
+                if (Number(data.IssSuccess) !== 1) {
+                    $("#valMsg").html(data.Error);
+                    $("#addBtn").hide();
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": true,
+                        "progressBar": true,
+                        "positionClass": "toast-bottom-right",
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    ErrorSuccess(data);
+                } else {
+                    $("#addBtn").show();
+                    $("#valMsg").html("");
+                }
+
+            }).fail(function (jqXHR, textStatus) {
+                toastr.clear();
+                toastr.error(textStatus, 'Failed');
+            });
+        }
+    });
+    if ($("#Certificate_CertificateId").val() != undefined) {
+        $("#pageHeading").html("Edit " + $("#Certificate_Title").val());
+        $("#topDetBtn").show();
+        //$("#editbtn1").hide();
+    }
+    if ($("#Certificate_CertificateId").val() !== undefined) {
+        $("#genNo").text($("#Certificate_RefNoFormat").val() + "/[YY][MM]/[0000]");
+    }
+    $("select#Certificate_TemplateTypeId").change(function () {
+        var selected = this.value;
+        if (selected !== '')
+        {
+            $("#fieldsGrid").load('@Url.Action("GetMediaTypeFields", "Certificates")/', { id: selected }, function (responseTxt, statusTxt, xhr) {
+                //alert(responseTxt.length);
+                if (responseTxt.length === 306) {
+                    $("#fieldsGrid").html("This type has No Fields!");
+                }
+                if (responseTxt.Messages !== '' && responseTxt.Messages !== undefined) {
+                    toastr.error(responseTxt.Messages, 'Failed');
+                }
+            });
+        }
+    });
+
+    //if (CKEDITOR.instances['Certificate_CertificateContent'])
+    //    delete CKEDITOR.instances['Certificate_CertificateContent'];
+
+    //CKEDITOR.replace('Certificate_CertificateContent');
+    //CKEDITOR.instances['Certificate_CertificateContent'].setData($("#ckinput").val());
+</script>

@@ -1,0 +1,12 @@
+﻿@if (TempData["success"] != null)
+{
+    <div class="alert alert-success">
+        <i class="fa fa-check"></i>@TempData["success"]
+    </div>
+}
+@if (TempData["error"] != null && !string.IsNullOrEmpty(TempData["error"].ToString()))
+{
+    <div class="alert alert-danger">
+        <i class="fa fa-check"></i>@TempData["error"]
+    </div>
+}

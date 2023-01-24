@@ -1,0 +1,52 @@
+﻿@model FAPP.ViewModel.MediaTemplatesViewModel
+
+<div class="modal-header" style="">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title" id="myModalLabel"> @Model.Certificate.Title</h4>
+</div>
+
+<div class="modal-body nopadding">
+    <div class="searchbox  " style="margin-top:10px">
+        <style>
+            .borderless tr td {
+                border: none !important;
+            }
+        </style>
+        <div class="form-horizontal">
+            <div class="">
+                <table class="table borderless">
+                    <tbody>
+                    <tr class="borderless">
+                        <td width="40%">Template Type</td>
+                        <td width="60%">@Model.Certificate.TemplateType.TemplateTypeName </td>
+                    </tr>
+                    <tr class="borderless">
+                        <td width="40%">Ref No Format</td>
+                        <td width="60%">@Model.Certificate.RefNoFormat </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="" style="margin: 30px;">
+                @if (Model.ViewFields != null)
+                {
+                    if (Model.ViewFields.Count > 0)
+                    {
+                        @Html.Partial("~/Views/Certificates/_PartialFields.cshtml", Model.ViewFields)
+                    }
+                }
+            </div>
+           
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <a class="btn btn-success btn-sm darkblue" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-method="GET" data-ajax-success="onEditSuccess" onclick="" href="/Certificates/AddUpdateCertificateModal/@Model.Certificate.CertificateId">Edit</a> 
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,99 @@
+﻿
+ GO
+use ezBIZ_PRO_SCHEMAONLY
+Alter TABLE Academics.userSessions
+	ADD BranchId bit  NULL 
+GO
+
+
+alter table tblName drop column columnName
+
+ALTER TABLE Transport.Vehicles DROP CONSTRAINT [FK_Transport.Vehicles_Transport.Drivers_DriverId];
+
+ALTER TABLE Transport.Vehicles
+DROP COLUMN DriverId 
+
+ALTER TABLE Transport.Vehicles
+DROP COLUMN DriverId 
+
+ALTER TABLE Transport.VehicleDrivers
+ADD FromDate datetime NULL
+    ,ToDate  datetime NULL
+
+
+ALTER TABLE Transport.VehicleDrivers
+ADD FromDate datetime NULL
+    ,ToDate  datetime NULL
+
+
+ALTER TABLE Finance.BillItems
+ADD VehicleId  int NULL
+
+
+Identity seed removed from following columns
+Nationality
+DocumentTypes
+Cities
+Countries
+State
+Area
+District
+Proffession
+Religion
+Educational Level
+Currency
+CurrentValue
+FiscalYear
+CostGroups
+GO
+use ezBIZ_PRO_SCHEMAONLY
+Alter TABLE Academics.userSessions
+	ADD Assigned bit NOT NULL 
+GO
+
+
+GO
+use ezBIZ_PRO_SCHEMAONLY
+Alter TABLE Academics.userSessions
+	ADD BranchId smallint  NULL 
+GO
+
+
+GO
+use ezBIZ_PRO_SCHEMAONLY
+Alter TABLE HR.Designations
+	ADD BranchId smallint null;
+GO
+
+ 
+
+GO
+use ezBIZ_PRO_SCHEMAONLY
+Alter TABLE HR.Designations
+	ADD GlobalDesignationId smallint null;
+GO
+
+GO
+use ezBIZ_PRO_SCHEMAONLY
+Alter TABLE HR.Departments
+	ADD GlobalDepartmentId smallint null;
+GO
+
+GO
+use ezBIZ_PRO_SCHEMAONLY
+Alter TABLE HR.Departments
+	ADD BranchId smallint null;
+GO
+
+
+remove identity from finance.Currencies
+remove identity from finance.currencyValue
+remove identity from finance.fiscalyear
+remove identity from finance.CostGroup
+remove identity from Hr.shifts.shiftid
+remove identity from country, state, cities
+remove identity from finance.UserGroup
+remove identity from Hr.Designations
+
+
+ 

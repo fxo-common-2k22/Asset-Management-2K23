@@ -1,0 +1,82 @@
+﻿@model List<FAPP.ViewModel.FormModels.FormsViewModel>
+@using FAPP.DAL;
+
+@if (Model != null)
+{
+
+    foreach (var form in Model.Where(s => s.ParentForm == 1).OrderBy(s => s.MenuItemPriority))
+    {
+
+        if (Model.Where(s => s.ParentForm == form.FormID && !s.IsHideChilds).Any())
+        {
+            <li class="dropdown-submenu">
+                <a href="@form.FormURL" data-toggle="dropdown" class="dropdown-toggle"><span><img src="~/App_Themes/Icons/Setup.png" width="20" height="27"/> @form.MenuText</span><span class="caret"></span></a>
+
+                <ul class="dropdown-menu">
+                    @foreach (var childForm in Model.Where(s => s.ParentForm == form.FormID))
+                    {
+                        if (Model.Where(s => s.ParentForm == childForm.FormID && !s.IsHideChilds).Any())
+                        {
+                            if (childForm.MenuText.ToLower() == "dashboard")
+                            {
+                                <li><a href="@childForm.FormURL"><b>@childForm.MenuText</b></a></li>
+                                <li role="presentation" class="divider"></li>
+                            }
+                            else
+                            {
+                                <li class="dropdown-submenu">
+                                    <a href="@childForm.FormURL">@childForm.MenuText</a>
+                                    <ul class="dropdown-menu">
+                                        @foreach (var grandChildForm in Model.Where(s => s.ParentForm == childForm.FormID))
+                                        {
+                                            <li>
+                                                <a href="@grandChildForm.FormURL">@grandChildForm.MenuText</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            if (childForm.MenuText.ToLower() == "dashboard")
+                            {
+                                <li><a href="@childForm.FormURL"><b>@childForm.MenuText</b></a></li>
+
+
+                                <li role="presentation" class="divider"></li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a href="@childForm.FormURL"> @childForm.MenuText </a>
+                                </li>
+                            }
+                        }
+                    }
+                </ul>
+            </li>
+        }
+        else
+        {
+            if (form.FormName.ToLower() != "dashboard")
+            {
+            <li>
+                <a href="@form.FormURL"> <span><img src="~/App_Themes/Icons/Setup.png" width="20" height="27" /> @form.MenuText</span></a>
+            </li>
+            }
+        }
+
+    }
+}
+
+@*@if (SessionHelper.DashboardUrl != "")
+{
+    <script>
+    $(document).ready(function () {
+        debugger
+        var dashbaordurl = '@SessionHelper.DashboardUrl';
+        $("#brand").attr("href", dashbaordurl)
+    });
+    </script>
+}*@

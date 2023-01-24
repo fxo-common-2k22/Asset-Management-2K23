@@ -1,0 +1,58 @@
+﻿@model FAPP.Areas.AM.ViewModels.SetupModelViewModel
+@{ 
+    ViewBag.Title = "Manage Warehouse";
+}
+@section TopRightMenu{
+
+    <ul class="minitiles">
+        <li class="blue">
+            <a href="#new-warehouse" data-toggle="modal" title="Add Warehouse">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+}
+<div class="vbox" style="margin-top: -15px;">
+    @using (Ajax.BeginForm("SearchWarehouses", "Setup", new AjaxOptions { HttpMethod = "GET", OnSuccess = "onSearchSuccess", OnFailure = "OnSearchFailure" }, new { @class = "form-inline" }))
+    {
+        Html.EnableClientValidation(false);
+
+        <div class="form-group">
+            @Html.TextBoxFor(model => model.Search, new { @class = "form-control  input-sm", @placeholder = "Search Types ", @id = "TypeSearchField", @autofocus = "autofocus", @title = "search here" })
+            @Html.ValidationMessageFor(model => model.Search, "", new { @class = "text-danger" })
+        </div>
+        <button type="submit" class="btn btn-success">Search</button>
+    }
+</div>
+<div id="WarehousesGrid">
+    @Html.Partial("~/Areas/AM/Views/Setup/_PartialWarehousesList.cshtml")
+</div>
+<script>
+    $('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+@{
+<label class="label label-darkblue" title="Total Warehouse">Total: @(Model?.AMWarehousePagedList?.TotalItemCount??0)</label>
+} </p>`);
+</script>
+
+<script>
+    $(window).load(function () {
+         
+        //Same-----------------****------------------
+        var ParentForm = 13003; //int
+        var MenuItemPriority = 1; //short
+        var isActive = "Yes"; //string //"Yes" and "No"
+        var PageType = "";//string For Child page // "HaveChild"
+        var IsMenuItem = false;//bool
+        var IsDashboardPart = false;//bool only for Dashboard
+        var ShowOnDesktop = true;//bool for quick links
+        var IsMasterMenu = false;//bool for Main Menu
+        var IsQuickLink = true;//bool for quick links
+
+        //-----------------****------------------
+        var FormName = "Manage Warehouse"; //string
+        var MenuText = "Manage Warehouse"; //string
+        var FormURL = "/AM/Setup/ManageWarehouses";//string
+        InsertInMembershipForms(FormName, ParentForm, FormURL, MenuText, MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink);
+
+    });
+</script>

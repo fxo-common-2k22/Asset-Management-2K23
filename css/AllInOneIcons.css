@@ -1,0 +1,241 @@
+﻿
+.i-32-calendar{ background-image: url('/area/academics/content/images/icons/calendar.png'); }
+.i-48-calendar{ background-image: url('/area/academics/content/images/icons/calendar.png'); }
+.i-32-certificate{ background-image: url('/area/academics/content/images/icons/certificate.png'); }
+.i-48-certificate{ background-image: url('/area/academics/content/images/icons/certificate.png'); }
+.i-32-list{ background-image: url('/area/academics/content/images/icons/list.png'); }
+.i-48-list{ background-image: url('/area/academics/content/images/icons/list.png'); }
+.i-32-rating{ background-image: url('/area/academics/content/images/icons/rating.png'); }
+.i-48-rating{ background-image: url('/area/academics/content/images/icons/rating.png'); }
+.i-32-report_card{ background-image: url('/area/academics/content/images/icons/report_card.png'); }
+.i-48-report_card{ background-image: url('/area/academics/content/images/icons/report_card.png'); }
+.i-32-test_paper{ background-image: url('/area/academics/content/images/icons/test_paper.png'); }
+.i-48-test_paper{ background-image: url('/area/academics/content/images/icons/test_paper.png'); }
+
+
+
+
+.ix32xdashboard{ background-image: url('/area/central/content/images/icons/dashboard.png'); }
+.ix48xdashboard{ background-image: url('/area/central/content/images/icons/dashboard.png'); }
+
+
+.i-32-give_coin{ background-image: url('/area/fee/content/images/icons/give_coin.png'); }
+.i-48-give_coin{ background-image: url('/area/fee/content/images/icons/give_coin.png'); }
+.i-32-invoices{ background-image: url('/area/fee/content/images/icons/invoices.png'); }
+.i-48-invoices{ background-image: url('/area/fee/content/images/icons/invoices.png'); }
+
+
+
+
+
+
+.i-32-out{ background-image: url('/portals/branch/area/library/content/images/icons/out.png'); }
+.i-48-out{ background-image: url('/portals/branch/area/library/content/images/icons/out.png'); }
+
+
+.i-32-filing_cabinet{ background-image: url('/area/other/dm/content/images/icons/filing_cabinet.png'); }
+.i-48-filing_cabinet{ background-image: url('/area/other/dm/content/images/icons/filing_cabinet.png'); }
+.i-32-give_coin{ background-image: url('/area/other/dm/content/images/icons/give_coin.png'); }
+.i-48-give_coin{ background-image: url('/area/other/dm/content/images/icons/give_coin.png'); }
+.i-32-man{ background-image: url('/area/other/dm/content/images/icons/man.png'); }
+.i-48-man{ background-image: url('/area/other/dm/content/images/icons/man.png'); }
+.i-32-receive_cash{ background-image: url('/area/other/dm/content/images/icons/receive_cash.png'); }
+.i-48-receive_cash{ background-image: url('/area/other/dm/content/images/icons/receive_cash.png'); }
+
+
+.ix32xexit{ background-image: url('/area/profile/content/images/icons/exit.png'); }
+.ix48xexit{ background-image: url('/area/profile/content/images/icons/exit.png'); }
+.ix32xpassword{ background-image: url('/area/profile/content/images/icons/password.png'); }
+.ix48xpassword{ background-image: url('/area/profile/content/images/icons/password.png'); }
+.ix32xprofile{ background-image: url('/area/profile/content/images/icons/profile.png'); }
+.ix48xprofile{ background-image: url('/area/profile/content/images/icons/profile.png'); }
+
+
+
+
+.ix32xadd_user{ background-image: url('/area/settings/content/images/icons/add_user.png'); }
+.ix48xadd_user{ background-image: url('/area/settings/content/images/icons/add_user.png'); }
+.ix32xfind_user{ background-image: url('/area/settings/content/images/icons/find_user.png'); }
+.ix48xfind_user{ background-image: url('/area/settings/content/images/icons/find_user.png'); }
+.ix32xgroup{ background-image: url('/area/settings/content/images/icons/group.png'); }
+.ix48xgroup{ background-image: url('/area/settings/content/images/icons/group.png'); }
+.ix32xlog{ background-image: url('/area/settings/content/images/icons/log.png'); }
+.ix48xlog{ background-image: url('/area/settings/content/images/icons/log.png'); }
+.ix32xuser_folder{ background-image: url('/area/settings/content/images/icons/user_folder.png'); }
+.ix48xuser_folder{ background-image: url('/area/settings/content/images/icons/user_folder.png'); }
+
+
+
+
+.i-32-administrative_tools{ background-image: url('/area/shop/content/images/icons/administrative_tools.png'); }
+.i-48-administrative_tools{ background-image: url('/area/shop/content/images/icons/administrative_tools.png'); }
+.i-32-brand{ background-image: url('/area/shop/content/images/icons/brand.png'); }
+.i-48-brand{ background-image: url('/area/shop/content/images/icons/brand.png'); }
+.i-32-cat{ background-image: url('/area/shop/content/images/icons/cat.png'); }
+.i-48-cat{ background-image: url('/area/shop/content/images/icons/cat.png'); }
+.i-32-cog{ background-image: url('/area/shop/content/images/icons/cog.png'); }
+.i-48-cog{ background-image: url('/area/shop/content/images/icons/cog.png'); }
+.i-32-identity_theft{ background-image: url('/area/shop/content/images/icons/identity_theft.png'); }
+.i-48-identity_theft{ background-image: url('/area/shop/content/images/icons/identity_theft.png'); }
+.i-32-org_unit{ background-image: url('/area/shop/content/images/icons/org_unit.png'); }
+.i-48-org_unit{ background-image: url('/area/shop/content/images/icons/org_unit.png'); }
+.i-32-product-group{ background-image: url('/area/shop/content/images/icons/product-group.png'); }
+.i-48-product-group{ background-image: url('/area/shop/content/images/icons/product-group.png'); }
+.i-32-return{ background-image: url('/area/shop/content/images/icons/return.png'); }
+.i-48-return{ background-image: url('/area/shop/content/images/icons/return.png'); }
+.i-32-return_purchase{ background-image: url('/area/shop/content/images/icons/return_purchase.png'); }
+.i-48-return_purchase{ background-image: url('/area/shop/content/images/icons/return_purchase.png'); }
+.i-32-stock{ background-image: url('/area/shop/content/images/icons/stock.png'); }
+.i-48-stock{ background-image: url('/area/shop/content/images/icons/stock.png'); }
+.i-32-transfer{ background-image: url('/area/shop/content/images/icons/transfer.png'); }
+.i-48-transfer{ background-image: url('/area/shop/content/images/icons/transfer.png'); }
+.i-32-warehouse{ background-image: url('/area/shop/content/images/icons/warehouse.png'); }
+.i-48-warehouse{ background-image: url('/area/shop/content/images/icons/warehouse.png'); }
+.i-32-24h{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/24h.png'); }
+.i-48-24h{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/24h.png'); }
+.i-32-bags-add{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/bags-add.png'); }
+.i-48-bags-add{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/bags-add.png'); }
+.i-32-bags{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/bags.png'); }
+.i-48-bags{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/bags.png'); }
+.i-32-basket{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/basket.png'); }
+.i-48-basket{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/basket.png'); }
+.i-32-cards{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/cards.png'); }
+.i-48-cards{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/cards.png'); }
+.i-32-gift-box{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/gift-box.png'); }
+.i-48-gift-box{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/gift-box.png'); }
+.i-32-manager{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/manager.png'); }
+.i-48-manager{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/manager.png'); }
+.i-32-shop{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/shop.png'); }
+.i-48-shop{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/shop.png'); }
+.i-32-shoulder-tag{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/shoulder-tag.png'); }
+.i-48-shoulder-tag{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/shoulder-tag.png'); }
+.i-32-shoulder{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/shoulder.png'); }
+.i-48-shoulder{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/shoulder.png'); }
+.i-32-sign{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/sign.png'); }
+.i-48-sign{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/sign.png'); }
+.i-32-tag-green-1{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/tag-green-1.png'); }
+.i-48-tag-green-1{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/tag-green-1.png'); }
+.i-32-tag-green-2{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/tag-green-2.png'); }
+.i-48-tag-green-2{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/tag-green-2.png'); }
+.i-32-tag-orange{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/tag-orange.png'); }
+.i-48-tag-orange{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/tag-orange.png'); }
+.i-32-trolley-add{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/trolley-add.png'); }
+.i-48-trolley-add{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/trolley-add.png'); }
+.i-32-trolley{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/trolley.png'); }
+.i-48-trolley{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/trolley.png'); }
+.i-32-truck-add{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/truck-add.png'); }
+.i-48-truck-add{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/truck-add.png'); }
+.i-32-truck{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/truck.png'); }
+.i-48-truck{ background-image: url('/area/shop/content/images/icons/n010-shopping-icons/truck.png'); }
+
+
+.i-32-business_user{ background-image: url('/area/client/content/images/icons/business_user.png'); }
+.i-48-business_user{ background-image: url('/area/client/content/images/icons/business_user.png'); }
+.i-32-business_user_accept{ background-image: url('/area/client/content/images/icons/business_user_accept.png'); }
+.i-48-business_user_accept{ background-image: url('/area/client/content/images/icons/business_user_accept.png'); }
+.i-32-business_user_add{ background-image: url('/area/client/content/images/icons/business_user_add.png'); }
+.i-48-business_user_add{ background-image: url('/area/client/content/images/icons/business_user_add.png'); }
+.i-32-business_user_comment{ background-image: url('/area/client/content/images/icons/business_user_comment.png'); }
+.i-48-business_user_comment{ background-image: url('/area/client/content/images/icons/business_user_comment.png'); }
+.i-32-business_user_delete{ background-image: url('/area/client/content/images/icons/business_user_delete.png'); }
+.i-48-business_user_delete{ background-image: url('/area/client/content/images/icons/business_user_delete.png'); }
+.i-32-business_user_edit{ background-image: url('/area/client/content/images/icons/business_user_edit.png'); }
+.i-48-business_user_edit{ background-image: url('/area/client/content/images/icons/business_user_edit.png'); }
+.i-32-business_user_info{ background-image: url('/area/client/content/images/icons/business_user_info.png'); }
+.i-48-business_user_info{ background-image: url('/area/client/content/images/icons/business_user_info.png'); }
+.i-32-business_user_search{ background-image: url('/area/client/content/images/icons/business_user_search.png'); }
+.i-48-business_user_search{ background-image: url('/area/client/content/images/icons/business_user_search.png'); }
+
+
+.i-32-add-ticket{ background-image: url('/area/frontdesk/content/images/icons/add-ticket.png'); }
+.i-48-add-ticket{ background-image: url('/area/frontdesk/content/images/icons/add-ticket.png'); }
+.i-32-apartment{ background-image: url('/area/frontdesk/content/images/icons/apartment.png'); }
+.i-48-apartment{ background-image: url('/area/frontdesk/content/images/icons/apartment.png'); }
+.i-32-booking{ background-image: url('/area/frontdesk/content/images/icons/booking.png'); }
+.i-48-booking{ background-image: url('/area/frontdesk/content/images/icons/booking.png'); }
+.i-32-broom{ background-image: url('/area/frontdesk/content/images/icons/broom.png'); }
+.i-48-broom{ background-image: url('/area/frontdesk/content/images/icons/broom.png'); }
+.i-32-building{ background-image: url('/area/frontdesk/content/images/icons/building.png'); }
+.i-48-building{ background-image: url('/area/frontdesk/content/images/icons/building.png'); }
+.i-32-categorize{ background-image: url('/area/frontdesk/content/images/icons/categorize.png'); }
+.i-48-categorize{ background-image: url('/area/frontdesk/content/images/icons/categorize.png'); }
+.i-32-checkout{ background-image: url('/area/frontdesk/content/images/icons/checkout.png'); }
+.i-48-checkout{ background-image: url('/area/frontdesk/content/images/icons/checkout.png'); }
+.i-32-cog{ background-image: url('/area/frontdesk/content/images/icons/cog.png'); }
+.i-48-cog{ background-image: url('/area/frontdesk/content/images/icons/cog.png'); }
+.i-32-delete-ticket{ background-image: url('/area/frontdesk/content/images/icons/delete-ticket.png'); }
+.i-48-delete-ticket{ background-image: url('/area/frontdesk/content/images/icons/delete-ticket.png'); }
+.i-32-double_bed{ background-image: url('/area/frontdesk/content/images/icons/double_bed.png'); }
+.i-48-double_bed{ background-image: url('/area/frontdesk/content/images/icons/double_bed.png'); }
+.i-32-exit{ background-image: url('/area/frontdesk/content/images/icons/exit.png'); }
+.i-48-exit{ background-image: url('/area/frontdesk/content/images/icons/exit.png'); }
+.i-32-floor-plan{ background-image: url('/area/frontdesk/content/images/icons/floor-plan.png'); }
+.i-48-floor-plan{ background-image: url('/area/frontdesk/content/images/icons/floor-plan.png'); }
+.i-32-gantt-chart{ background-image: url('/area/frontdesk/content/images/icons/gantt-chart.png'); }
+.i-48-gantt-chart{ background-image: url('/area/frontdesk/content/images/icons/gantt-chart.png'); }
+.i-32-guest{ background-image: url('/area/frontdesk/content/images/icons/guest.png'); }
+.i-48-guest{ background-image: url('/area/frontdesk/content/images/icons/guest.png'); }
+.i-32-list{ background-image: url('/area/frontdesk/content/images/icons/list.png'); }
+.i-48-list{ background-image: url('/area/frontdesk/content/images/icons/list.png'); }
+.i-32-meal{ background-image: url('/area/frontdesk/content/images/icons/meal.png'); }
+.i-48-meal{ background-image: url('/area/frontdesk/content/images/icons/meal.png'); }
+.i-32-office-women{ background-image: url('/area/frontdesk/content/images/icons/office-women.png'); }
+.i-48-office-women{ background-image: url('/area/frontdesk/content/images/icons/office-women.png'); }
+.i-32-opacity{ background-image: url('/area/frontdesk/content/images/icons/opacity.png'); }
+.i-48-opacity{ background-image: url('/area/frontdesk/content/images/icons/opacity.png'); }
+.i-32-report{ background-image: url('/area/frontdesk/content/images/icons/report.png'); }
+.i-48-report{ background-image: url('/area/frontdesk/content/images/icons/report.png'); }
+.i-32-service_bell{ background-image: url('/area/frontdesk/content/images/icons/service_bell.png'); }
+.i-48-service_bell{ background-image: url('/area/frontdesk/content/images/icons/service_bell.png'); }
+.i-32-teapot{ background-image: url('/area/frontdesk/content/images/icons/teapot.png'); }
+.i-48-teapot{ background-image: url('/area/frontdesk/content/images/icons/teapot.png'); }
+.i-32-ticket{ background-image: url('/area/frontdesk/content/images/icons/ticket.png'); }
+.i-48-ticket{ background-image: url('/area/frontdesk/content/images/icons/ticket.png'); }
+.i-32-time_table{ background-image: url('/area/frontdesk/content/images/icons/time_table.png'); }
+.i-48-time_table{ background-image: url('/area/frontdesk/content/images/icons/time_table.png'); }
+.i-32-train-ticket{ background-image: url('/area/frontdesk/content/images/icons/train-ticket.png'); }
+.i-48-train-ticket{ background-image: url('/area/frontdesk/content/images/icons/train-ticket.png'); }
+.i-32-two-beds{ background-image: url('/area/frontdesk/content/images/icons/two-beds.png'); }
+.i-48-two-beds{ background-image: url('/area/frontdesk/content/images/icons/two-beds.png'); }
+
+
+.i-32-student{ background-image: url('/area/sb/content/images/icons/Student-32.png'); }
+.i-48-student{ background-image: url('/area/sb/content/images/icons/Student-48.png'); }
+.i-32-invoice{ background-image: url('/area/sb/content/images/icons/invoice-32.png');}
+.i-48-invoice{ background-image: url('/area/sb/content/images/icons/invoice-48.png'); }
+.i-32-payment{ background-image: url('/area/sb/content/images/icons/payment-32.png');}
+.i-48-payment{ background-image: url('/area/sb/content/images/icons/payment-48.png'); }
+.i-32-cpayment{ background-image: url('/area/sb/content/images/icons/cpayment-32.png');}
+.i-48-cpayment{ background-image: url('/area/sb/content/images/icons/cpayment-48.png'); }
+.i-32-bank{ background-image: url('/area/sb/content/images/icons/bank-32.png');}
+.i-48-bank{ background-image: url('/area/sb/content/images/icons/bank-48.png'); }
+
+.i-32-Vehicle{ background-image: url('/Area/TM/Content/Images/Icons/Vehicle.png'); }
+.i-48-Vehicle{ background-image: url('/Area/TM/Content/Images/Icons/Vehicle.png');  }
+
+.i-32-Vehicletype{ background-image: url('/Area/TM/Content/Images/Icons/Vehicletype.png'); }
+.i-48-Vehicletype{ background-image: url('/Area/TM/Content/Images/Icons/Vehicletype.png');  }
+
+.i-32-TripManagement{ background-image: url('/Area/TM/Content/Images/Icons/TripManagement.png'); }
+.i-48-TripManagement{ background-image: url('/Area/TM/Content/Images/Icons/TripManagement.png');  }
+
+.i-32-exptype{ background-image: url('/Area/TM/Content/Images/Icons/exptype.png'); }
+.i-48-exptype{ background-image: url('/Area/TM/Content/Images/Icons/exptype.png');  }
+
+.i-32-vehicleexpenses{ background-image: url('/Area/TM/Content/Images/Icons/vehicleexpenses.png'); }
+.i-48-vehicleexpenses{ background-image: url('/Area/TM/Content/Images/Icons/vehicleexpenses.png');  }
+
+.i-32-mvexp{ background-image: url('/Area/TM/Content/Images/Icons/mvexp.png'); }
+.i-48-mvexp{ background-image: url('/Area/TM/Content/Images/Icons/mvexp.png');  }
+
+.i-32-site{ background-image: url('/Area/TM/Content/Images/Icons/site.png'); }
+.i-48-site{ background-image: url('/Area/TM/Content/Images/Icons/site.png');  }
+
+.i-32-visa{ background-image: url('/Area/TM/Content/Images/Icons/visa.png'); }
+.i-48-visa{ background-image: url('/Area/TM/Content/Images/Icons/visa.png');  }
+
+.i-32-driver{ background-image: url('/Area/TM/Content/Images/Icons/driver.png'); }
+.i-48-driver{ background-image: url('/Area/TM/Content/Images/Icons/driver.png');  }
+
+.i-32-adddriver{ background-image: url('/Area/TM/Content/Images/Icons/adddriver.png'); }
+.i-48-adddriver{ background-image: url('/Area/TM/Content/Images/Icons/adddriver.png');  }

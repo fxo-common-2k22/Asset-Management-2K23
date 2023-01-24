@@ -1,0 +1,174 @@
+﻿@model FAPP.Areas.AM.ViewModels.FixedAssetVM
+
+@using FAPP.DAL
+@section TopRightMenu{
+    <ul class="minitiles">
+        @*<li class="blue">
+                <a href="/Setup/Branches/ManageBuildings/@(SessionHelper.BranchId)" target="_blank" title="Add New Location">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            </li>*@
+        <li class="orange">
+            <a href="" title="Print">
+                <i class="fa fa-print" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+}
+
+<style>
+    .red-span {
+        background: #e51400 !important;
+        color: #fff;
+        border: 1px solid #e51400;
+    }
+
+    .satgreen-span {
+        background: #56af45;
+        color: #fff;
+        border: 1px solid #56af45;
+    }
+
+    .darkblue-span {
+        background: #3F729B;
+        color: #fff;
+        border: 1px solid #3F729B;
+    }
+
+    .user-span {
+        background: #9e9e9e;
+        color: #fff;
+        border: 1px solid #9e9e9e;
+    }
+
+    .Status-span {
+        width: auto;
+        padding: 2px;
+        border-radius: 2px;
+    }
+
+
+    .hide {
+        display: none;
+    }
+</style>
+
+
+<div id="BannerInfoId">
+
+</div>
+@Html.AntiForgeryToken()
+<div id="Vouchers">
+
+
+    @using (Ajax.BeginForm("IssueItems", "Issue", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divStudents", LoadingElementId = "loader" }))
+    {
+
+        <div class="vbox col-md-12 form-inline">
+            <table>
+                <tr>
+
+                    <td>
+                        @Html.DropDownListFor(model => model.CategoryId, new SelectList(ViewBag.Categories, "Value", "Text", Model.CategoryId), "---- All Categories ----", htmlAttributes: new { @class = "form-control", @style = "width:200px" })
+                    </td>
+
+                    @*<td>
+                            @Html.DropDownListFor(model => model.ProductId, new SelectList(ViewBag.Products, "Value", "Text", Model.ProductId), "---- All Product ----", htmlAttributes: new { @class = "form-control", @style = "width:300px" })
+                        </td>*@
+                    <td>
+                        @Html.DropDownListFor(model => model.Status, new SelectList(ViewBag.Statuses, "Value", "Text", Model.Status), htmlAttributes: new { @class = "form-control", @style = "width:200px" })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Search, new { @class = "form-control", @placeholder = "Search Item Code,Item Name", @title = "Search By Item Name and Code", @autofocus = "autofocus", @style = "width:200px" })
+                    </td>
+                    <td>
+                        <input type="submit" class="btn btn-primary" value="Search" title="Search" />
+                    </td>
+                </tr>
+                <tr>
+
+                    <td>
+                        @Html.DropDownListFor(model => model.DepartmentId, new SelectList(ViewBag.Departments, "Value", "Text", Model.DepartmentId), "---- All Department ----", htmlAttributes: new { @class = "form-control", @style = "width:200px" })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.EmployeeId, new SelectList(ViewBag.Employees, "Value", "Text", Model.EmployeeId), "---- All Employee ----", htmlAttributes: new { @class = "form-control", @style = "width:200px;" })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.LocationId, new SelectList(ViewBag.Locations, "Value", "Text", Model.LocationId), "---- All Location ----", htmlAttributes: new { @class = "form-control", @style = "width:200px" })
+                        <span>
+                            <a href="/Setup/Branches/ManageBuildings/@(SessionHelper.BranchId)" target="_blank" title="Add New Location">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </span>
+
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.ConditionTypeId, new SelectList(ViewBag.ConditionTypes, "Value", "Text", Model.ConditionTypeId), "---- All Condition ----", htmlAttributes: new { @class = "form-control", @style = "width:200px;" })
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+
+
+
+    }
+
+
+    @using (Ajax.BeginForm("PostIssueItems", "Issue", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divStudents", LoadingElementId = "loader", OnComplete = "OnComplete('IssuedModal')" }))
+    {
+        <div id="divStudents">
+            @Html.Partial("_IssueItems", Model)
+        </div>
+    }
+</div>
+
+
+@section scripts{
+   <script>
+      
+           var pageSize = 20;
+           $ajaxRemoteSearchUrl = '@Url.Action("SearchDepartments")';
+           $ajaxRemotePlaceHolder = "--Select Department--";
+           $ajaxRemoteOnTemplateSelection = onFormSelection;
+           function onFormSelection(repo) {
+               debugger;
+               if (repo.id) {
+                   debugger;
+                   $('.DepartmentId').val(repo.id);
+               }
+               return repo.title || repo.text;
+           }
+      
+ 
+      
+           var pageSize = 20;
+           $ajaxRemoteSearchUrl_1 = '@Url.Action("SearchEmployees")';
+           $ajaxRemotePlaceHolder_1 = "--Select Employee--";
+           $ajaxRemoteOnTemplateSelection_1 = onFormSelection_1;
+           function onFormSelection_1(repo) {
+               debugger;
+               if (repo.id) {
+                   debugger;
+                   $('#PostingData_EmployeeId').val(repo.id);
+               }
+               return repo.title || repo.text;
+           }
+      
+           var pageSize = 20;
+           $ajaxRemoteSearchUrl_2 = '@Url.Action("SearchLocations")';
+           $ajaxRemotePlaceHolder_2 = "--Select Location--";
+           $ajaxRemoteOnTemplateSelection_2 = onFormSelection_2;
+           function onFormSelection_2(repo) {
+               debugger;
+               if (repo.id) {
+                   debugger;
+                   $('#PostingData_LocationId').val(repo.id);
+               }
+               return repo.title || repo.text;
+           }
+      
+    </script>
+    <script src="~/Scripts/remoteSearch.js"></script>
+}
+

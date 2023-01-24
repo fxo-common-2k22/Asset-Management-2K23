@@ -1,0 +1,116 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageAMCategoryViewModel
+@{
+    ViewContext.FormContext = new FormContext();
+}
+
+<div class="modal-content">
+    <div class="modal-header" style="background-color: #368ee0; color:white;">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit Category</h4>
+    </div>
+    <div class="box-content nopadding">
+        <ul class="tabs tabs-inline tabs-top">
+            <li class="active">
+                <a href="#profile" data-toggle="tab">
+                    <i class="fa fa-user"></i>Category
+                </a>
+            </li>
+            <li>
+                <a href="#notifications" data-toggle="tab">
+                    <i class="fa fa-bullhorn"></i>Category Accounts
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content padding tab-content-inline tab-content-bottom" style="padding:0px">
+            <div class="tab-pane active" id="profile">
+                @using (Ajax.BeginForm("SaveEditedCategory", "Setup",
+new AjaxOptions
+{
+    OnSuccess = "OnResponceBackFromServer"
+}))
+                {
+                    Html.EnableClientValidation(true);
+                    @Html.HiddenFor(m => m.Category.CategoryId)
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="box-content nopadding">
+                                    <div class="form-horizontal form-bordered">
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Name</label>
+                                            <div class="col-sm-9">
+                                                @Html.EditorFor(model => model.Category.CategoryName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Item Name" } })
+                                                @Html.ValidationMessageFor(model => model.Category.CategoryName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Short Name</label>
+                                            <div class="col-sm-9">
+                                                @Html.EditorFor(model => model.Category.ShortName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Short Name" } })
+                                                @Html.ValidationMessageFor(model => model.Category.ShortName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Category Code</label>
+                                            <div class="col-sm-9">
+                                                @Html.DisplayFor(model => model.Category.CategoryCode, new { htmlAttributes = new { @class = "form-control", @placeholder = "Category Code" } })
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input type="submit" value="Update Category" class="btn btn-primary load" />
+                    </div>
+                }
+            </div>
+            <div class="tab-pane" id="notifications">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="box-content nopadding">
+                                <div class="form-horizontal form-bordered">
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">COGI Account</label>
+                                        <div class="col-sm-9">
+                                            C(@(Model.Category?.C_COGIAccount?.ACCOUNT_ID)-@(Model.Category?.C_COGIAccount?.TITLE))
+                                            <br />
+                                            T(@(Model.Category?.T_COGIAccount?.ACCOUNT_ID)-@(Model.Category?.T_COGIAccount?.TITLE))
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Inv Account</label>
+                                        <div class="col-sm-9">
+                                            C(@(Model.Category?.C_InventoryAccount?.ACCOUNT_ID)-@(Model.Category?.C_InventoryAccount?.TITLE))
+                                            <br />
+                                            T(@(Model.Category?.T_InventoryAccount?.ACCOUNT_ID)-@(Model.Category?.T_InventoryAccount?.TITLE))
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Depreciation Account</label>
+                                        <div class="col-sm-9">
+                                            C(@(Model.Category?.C_DepreciationAccount?.ACCOUNT_ID)-@(Model.Category?.C_DepreciationAccount?.TITLE))
+                                            <br />
+                                            T(@(Model.Category?.T_DepreciationAccount?.ACCOUNT_ID)-@(Model.Category?.T_DepreciationAccount?.TITLE))
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $.validator.unobtrusive.parse($("form"))
+</script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

@@ -1,0 +1,141 @@
+﻿@using FAPP.Helpers
+@model FAPP.ViewModel.MessagingVM
+
+<div class="modal-header" style="">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title" id="myModalLabel"> SMS Details</h4>
+</div>
+
+<div class="modal-body ">
+    <div class="box box-bordered">
+        @*<div class="box-title">
+
+            </div>*@
+        <div class="box-content nopadding">
+            <div class="form-horizontal form-bordered" style="border-top: 2px solid #DDDDDD;">
+                <div class="form-group">
+                    <label for="textfield" class="control-label col-sm-4">Reciever</label>
+                    <div class="col-sm-8">
+                        @Model.SmsQueue.ReceiverMobile
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="textfield" class="control-label col-sm-4">Message Status</label>
+                    <div class="col-sm-8">
+                        @Model.SmsQueue.MessageStatus
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="textfield" class="control-label col-sm-4">Delivered</label>
+                    <div class="col-sm-8">
+                        @if (Model.SmsQueue.DeliveredStatus ?? false)
+                        {
+                            <i data-toggle="tooltip" title="Yes" class="fa fa-check pointer" style="color:green;"> </i>
+                        }
+                        else
+                        {
+                            <i data-toggle="tooltip" title="No" class="fa fa-times pointer" style="color:red;"></i>
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="textfield" class="control-label col-sm-4">Sent By</label>
+                    <div class="col-sm-8">
+                        @Model.SmsQueue.User.Username
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="textfield" class="control-label col-sm-4">Sent on</label>
+                    <div class="col-sm-8">
+                        @if (Model.SmsQueue.SentOn == null)
+                        {
+                            <text>Not Sent</text>
+                        }
+                        else
+                        {
+                            @Utilities.DateTimeFormat(Convert.ToDateTime(Model.SmsQueue.SentOn))
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="textfield" class="control-label col-sm-4">Scheduled on</label>
+                    <div class="col-sm-8">
+                        @if (Model.SmsQueue.ScheduledOn == null)
+                        {
+                            <text>Not Schecduled</text>
+                        }
+                        else
+                        {
+                            @Utilities.DateTimeFormat(Convert.ToDateTime(Model.SmsQueue.ScheduledOn))
+
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="textfield" class="control-label col-sm-4">Message Body</label>
+                    <div class="col-sm-8">
+                        @if (Model.SmsQueue.MessageBody != null)
+                        {
+                            <text>@Model.SmsQueue.MessageBody</text>
+                        }
+                    </div>
+                </div>
+                @if (Model.SmsQueue.Remarks != null)
+                {
+                    <div class="form-group">
+                        <label for="textfield" class="control-label col-sm-4">Remarks</label>
+                        <div class="col-sm-8">
+
+                            <text>@Model.SmsQueue.Remarks</text>
+
+                        </div>
+                    </div>
+                }
+                @if (Model.SmsQueue.MessageId != null)
+                {
+                    <div class="form-group">
+                        <label for="textfield" class="control-label col-sm-4">Messege Id</label>
+                        <div class="col-sm-8">
+                            @if (Model.SmsQueue.MessageId != null)
+                            {
+                                <text>@Model.SmsQueue.MessageId</text>
+                            }
+                        </div>
+                    </div>
+                }
+                @if (Model.SmsQueue.Description != null)
+                {
+                    <div class="form-group">
+                        <label for="textfield" class="control-label col-sm-4">Description</label>
+                        <div class="col-sm-8">
+                            @Model.SmsQueue.Description
+                        </div>
+                    </div>
+                }
+
+                @if (Model.SmsQueue.SmsReference != null)
+                {
+                    <div class="form-group">
+                        <label for="textfield" class="control-label col-sm-4">Reference</label>
+                        <div class="col-sm-8">
+                            @Model.SmsQueue.SmsReference
+
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+
+

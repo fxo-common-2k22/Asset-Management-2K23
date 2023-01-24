@@ -1,0 +1,27 @@
+﻿
+
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-8">
+        <div class="box box-color green box-bordered">
+            <div class="box-title">
+                <h3>
+                    <i class="fa fa-bar-chart-o"></i>
+                    Reports
+                </h3>
+                <div class="actions">
+                    <a href="#" class="btn btn-mini content-slideUp">
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="box-content">
+                @Html.Action("GetDashboardReports","CustomReporting", new { area = "", mid = 1, vid = 1 })
+            </div>
+        </div>
+    </div>
+</div>

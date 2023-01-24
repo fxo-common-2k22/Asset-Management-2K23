@@ -1,0 +1,32 @@
+﻿@model  FAPP.Areas.AM.ViewModels.GraphsModel
+
+
+@if (Model != null && Model.v_mnl_FormRights != null)
+{
+    <div class="col-lg-8">
+        @foreach (var item in Model.v_mnl_FormRights.Where(u => u.PageDescription == "col-lg-8" && u.FormURL != "_PartialShowTopIcons").OrderBy(u => u.MenuItemPriority))
+        {
+            @Html.Partial(item.FormURL, Model)
+        }
+    </div>
+    <div class="col-lg-4">
+        @foreach (var item in Model.v_mnl_FormRights.Where(u => u.PageDescription != "col-lg-8" && u.FormURL != "_PartialShowTopIcons").OrderBy(u => u.MenuItemPriority))
+        {
+            if (item.IsAction != true && item.FormURL!="" && item.FormURL!=null)
+            {
+            @Html.Partial(item.FormURL, Model)
+            }
+        }
+    </div>
+}
+
+
+<script>
+    let e1 = $('a[href="/Academics/Results"]').next();
+    let e2 = $('a[href="/Academics/Results"]').next().next();
+    var html = $('a[href="/Academics/Results"]').next().html();
+    html = html + $('a[href="/Academics/Results"]').next().next().html();
+    $('a[href="/Academics/Results"]').html(html)
+    e1.remove();
+    e2.remove();
+</script>

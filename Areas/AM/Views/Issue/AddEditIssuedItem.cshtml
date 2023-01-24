@@ -1,0 +1,103 @@
+﻿@model FAPP.Areas.AM.ViewModels.AddIssuedItemViewModel
+
+<style>
+    .Noline {
+        border-top: none !important;
+    }
+
+    .noborderRight {
+        border-right: none !important;
+    }
+
+    hr {
+        display: block;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        margin-left: auto;
+        margin-right: auto;
+        border-style: dashed;
+        border-width: 1px;
+    }
+
+    .AllBorder {
+        padding: inherit;
+        margin: auto;
+        border-top: solid !important;
+        border-bottom: solid !important;
+        border-left: solid !important;
+        border-right: solid !important;
+        border-style: solid !important;
+        border-width: medium;
+        /*text-align: center;
+        font-weight: bold;*/
+    }
+
+    .topbottomBorder {
+        padding: inherit;
+        margin: auto;
+        border-top: solid !important;
+        border-bottom: solid !important;
+        border-style: solid !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-width: medium;
+        /*text-align: center;*/
+        /*font-weight: bold;*/
+    }
+
+    .noLeftBottomBorder {
+        /*border-left: none !important;*/
+        border-bottom: none !important;
+    }
+
+    .rightborder {
+        border-right: solid !important;
+    }
+
+    .style5 {
+        text-align: right;
+        font-family: Vivaldi;
+        font-size: x-large;
+    }
+
+    .Dottedline {
+        border-bottom: dotted !important;
+        border-width: thick;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .modalTable {
+        padding: 0px 15px;
+    }
+</style>
+
+@section topRightMenu{
+<div id="headersection">
+    @Html.Partial("_PartialIssueHeaderSection", Model)
+</div>    
+
+}
+@section scripts{
+    <script src="~/Areas/AM/Scripts/AddEditIssuedItem.js"></script>
+}
+@using (Ajax.BeginForm("SaveIssuedItem", "Issue", new AjaxOptions { OnSuccess = "OnResponceBackFromServer" }))
+{
+    Html.EnableClientValidation(false);
+    <div id="mainsection">
+        @Html.Partial("_PartialIssueItem", Model)
+    </div>
+    <div id="printsection" style="display:none">
+        @Html.Partial("_PartialIssueItemPrintSection", Model)
+    </div>
+}
+<script>
+    $('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+@{
+<label id="lblissuevoucherid" class="label label-darkblue" title="Issue Voucher">New</label>
+} </p>`);
+</script>

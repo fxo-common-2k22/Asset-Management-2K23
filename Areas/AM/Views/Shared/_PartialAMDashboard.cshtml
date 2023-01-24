@@ -1,0 +1,21 @@
+﻿@model  FAPP.Areas.AM.ViewModels.GraphsModel
+<div class="row">
+    <div class="col-md-8" style="padding-right:10px !important;padding-left:10px !important;">
+
+        <div class="" id="DashboardICons">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialShowDashboardMenus").Any())
+            {
+                @Html.Partial("~/Areas/AM/Views/Shared/_PartialAMDashboardMenus.cshtml", Model)
+            }
+        </div>
+
+    </div>
+    <div class="col-md-4">
+        <div class="" id="MenuLinks">
+            @if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialShowQuickLinks").Any())
+            {
+                @Html.Partial("~/Areas/AM/Views/Shared/_PartialAMQuickLinks.cshtml", Model)
+            }
+        </div>
+    </div>
+</div>

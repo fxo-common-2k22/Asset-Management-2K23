@@ -1,0 +1,190 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageAMItemsViewModel
+@{
+//ViewContext.FormContext = new FormContext();
+}
+@using (Ajax.BeginForm("SaveEditedItem", "Setup",
+                new AjaxOptions
+                {
+                    OnSuccess = "OnResponceBackFromServer",
+                    UpdateTargetId = "UpdateTarget"
+                }))
+{
+    Html.EnableClientValidation(true);
+    @Html.HiddenFor(m => m.Item.ItemId)
+    <div class="modal-content">
+        <div class="modal-header" style="background-color: #368ee0; color:white;">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit Item</h4>
+        </div>
+        <div class="">
+            <ul class="tabs tabs-inline tabs-top">
+                <li class="active">
+                    <a href="#profile" data-toggle="tab">
+                        <i class="fa fa-user"></i>Edit Item
+                    </a>
+                </li>
+                <li class="">
+                    <a href="#notifications" data-toggle="tab">
+                        <i class="fa fa-bullhorn"></i>Accounts
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content tab-content-inline tab-content-bottom" style="padding:5px">
+                <div class="tab-pane active" id="profile">
+                    <div class="modal-body" style="padding:0px">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="">
+                                    <div class="form-horizontal form-bordered">
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Name</label>
+                                            <div class="col-sm-9">
+                                                @Html.EditorFor(model => model.Item.ItemName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Item Name" } })
+                                                @Html.ValidationMessageFor(model => model.Item.ItemName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Short Name</label>
+                                            <div class="col-sm-9">
+                                                @Html.EditorFor(model => model.Item.ShortName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Item Name" } })
+                                                @Html.ValidationMessageFor(model => model.Item.ShortName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Category</label>
+                                            <div class="col-sm-9">
+                                                @Html.DropDownListFor(model => model.Item.CategoryId, (SelectList)ViewBag.Categoires, "--Select Category--", htmlAttributes: new { @class = "chosen-select", @style = "width:100%" })
+                                                @Html.ValidationMessageFor(model => model.Item.CategoryId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Unit</label>
+                                            <div class="col-sm-9">
+                                                @Html.DropDownListFor(model => model.Item.UnitId, (SelectList)ViewBag.Units, "--Select Unit--", htmlAttributes: new { @class = "chosen-select", @style = "width:100%" })
+                                                @Html.ValidationMessageFor(model => model.Item.UnitId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Depriciation Type</label>
+                                            <div class="col-sm-9">
+                                                @Html.DropDownListFor(model => model.Item.DepriciationTypeId, (SelectList)ViewBag.DepriciationTypes, "--Select Depriciation Type--", htmlAttributes: new { @class = "chosen-select", @style = "width:100%" })
+                                                @Html.ValidationMessageFor(model => model.Item.DepriciationTypeId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Type</label>
+                                            <div class="col-sm-9">
+                                                <div class="vd_radio radio-success">
+                                                    @Html.RadioButtonFor(model => model.Item.IsConsumable, "true", new { id = "Item_IsConsumableEdit_1", @class = "yes" })
+                                                    <label for="Item_IsConsumableEdit_1"> Consumable </label>
+                                                    @Html.RadioButtonFor(model => model.Item.IsConsumable, "false", new { id = "Item_IsConsumableEdit_2", @class = "no" })
+                                                    <label for="Item_IsConsumableEdit_2"> Fixed Asset </label>
+                                                </div>
+                                                @*@Html.EditorFor(model => model.Item.IsConsumable, new { htmlAttributes = new { @id= "Item_IsConsumable11" } })*@
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Price</label>
+                                            <div class="col-sm-9">
+                                                @Html.EditorFor(model => model.Item.Price, new { htmlAttributes = new { @class = "form-control", @placeholder = "Price" } })
+                                                @Html.ValidationMessageFor(model => model.Item.Price, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Description</label>
+                                            <div class="col-sm-9">
+                                                @Html.TextAreaFor(model => model.Item.Description, new { @class = "form-control", @placeholder = "Description" })
+                                                @Html.ValidationMessageFor(model => model.Item.Description, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Barcode</label>
+                                            <div class="col-sm-9">
+                                                @Html.TextBoxFor(model => model.Item.Barcode, new { @class = "form-control", @placeholder = "Barcode" })
+                                                @Html.ValidationMessageFor(model => model.Item.Barcode, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input type="submit" value="Update Item" class="btn btn-primary load" />
+                    </div>
+                </div>
+                <div class="tab-pane" id="notifications">
+                    <div class="modal-body" style="padding:0px">
+                        @*<table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Account Id</th>
+                                    <th>Account Title</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Accounts != null)
+                                {
+                                    foreach (var item in Model.Accounts)
+                                    {
+                                        <tr>
+                                            <td>@Html.DisplayFor(s => item.Value)</td>
+                                            <td>@Html.DisplayFor(s => item.Text)</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>*@
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="box-content nopadding">
+                                    <div class="form-horizontal form-bordered">
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">COGI Account</label>
+                                            <div class="col-sm-9">
+                                                @(Model.Item.COGIAccount?.ACCOUNT_ID)-@(Model.Item?.COGIAccount?.TITLE)
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Inv Account</label>
+                                            <div class="col-sm-9">
+                                                @(Model.Item?.InventoryAccount?.ACCOUNT_ID)-@(Model.Item?.InventoryAccount?.TITLE)
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="textfield" class="control-label col-sm-3">Depreciation Account</label>
+                                            <div class="col-sm-9">
+                                                @(Model.Item?.DepreciationAccount?.ACCOUNT_ID)-@(Model.Item?.DepreciationAccount?.TITLE)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+}
+
+<script>
+    $.validator.unobtrusive.parse($("form"))
+    RefreshAllScripts();
+    @*var temp = '@Model.IsConsumable.Contains("Yes")';
+    if (temp == 'True') {
+        $("#c8.icheck-me[value='true']").prop('checked', 'checked');
+    }
+    $('#UnitIdselect>option:eq(@Model.UnitId)').attr('selected', true);*@
+</script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

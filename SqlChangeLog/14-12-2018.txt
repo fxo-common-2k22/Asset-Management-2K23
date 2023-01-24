@@ -1,0 +1,13 @@
+﻿Add new table Fee.FeeTypeGroups
+Add new table Fee.StageAccounts
+Add new table Fee.VoucherAutoCreationSettings
+
+
+add column IsPreviousHead  in Fee.Types 
+add column FeeTypeGroupId  in Fee.Types 
+
+
+column added in Finance.Accounts
+[StringLength(200)]
+        public string AccountDetail { get; set; }
+

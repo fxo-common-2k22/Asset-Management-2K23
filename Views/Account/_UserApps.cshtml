@@ -1,0 +1,47 @@
+﻿@model List<FAPP.ViewModel.UserAppVM>
+@if (Model != null)
+{
+    <div class="row  text-center m-1 loaded">
+        @foreach (var item in Model)
+        {
+            <div class="col-6 col-md-4 loaded">
+                @if (item.AppUrl == null)
+                {
+                    <a href="#" target="_blank">
+                        <span>
+                            @if (item.AppIcon == null)
+                            {
+                                <img src="~/Images/orderedList0.png" style="height: 45px;">
+                            }
+                            else
+                            {
+                                <img src="data:image/png;base64,@(item.AppIcon)" style="height: 45px;">
+                            }
+
+                        </span>
+                        <p>@item.ApplicationTitle</p>
+                    </a>
+                }
+                else
+                {
+                    <a href="@item.AppUrl/Account/sso?q=@System.Web.HttpContext.Current.Session["Token"]" target="_blank">
+                        <span>
+                            @if (item.AppIcon == null)
+                            {
+                                <img src="~/Images/orderedList0.png" style="height: 45px;">
+                            }
+                            else
+                            {
+                                <img src="data:image/png;base64,@(item.AppIcon)" style="height: 45px;">
+                            }
+
+                        </span>
+                        <p>@item.ApplicationTitle</p>
+                    </a>
+                }
+
+            </div>
+        }
+    </div>
+}
+

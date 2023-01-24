@@ -1,0 +1,27 @@
+﻿@model  FAPP.Areas.AM.ViewModels.GraphsModel
+<div class="box box-color box-bordered green" id="UpcomingEvents">
+    <div class="box-title">
+        <h3>
+            <i class="fa fa-bars"></i>
+            <span id="LabelTitle">Upcoming Events</span>
+        </h3>
+    </div>
+    <div class="box-content" style="min-height: 155px;">
+        @{
+            int count = 0;
+            string dec = "";
+        }
+        @if (Model?.v_mnl_UpcomingEvent != null)
+        {
+            foreach (var item in Model.v_mnl_UpcomingEvent.OrderByDescending(u => u.EventDate))
+            {
+                dec = item.EventDate.ToShortDateString() + "," + item.ClientName + "," + item.EventTitle + "," + item.MealTitle + "," + item.LocationTitle;
+                <a class="wrap-text" href="/Event/Event/AddEditEvent/@(item.EventId)" title="@dec">
+                    <span class="label label-default current-theme">@(++count)</span>
+                    @(dec)
+                </a><br />
+            }
+        }
+    </div>
+
+</div>

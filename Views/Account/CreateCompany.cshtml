@@ -1,0 +1,174 @@
+﻿@model FAPP.ViewModel.PrimaryDataViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Company</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link href="~/css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/form-elements.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="shortcut icon" type="image/x-png" href="~/Images/ez-favicon.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+</head>
+
+<body class="container-fluid">
+    <style>
+        /*.first {
+            height: 0% !important;
+        }*/
+
+        .inner-bg {
+            background: rgb(238, 238, 238) !important;
+        }
+
+        /*.form-top {
+            background: rgb(238, 238, 238) !important;
+            padding: 0;
+        }
+
+        .form-top-left {
+            background: rgb(238, 238, 238) !important;
+        }*/
+
+        label.module {
+            display: inline-block;
+            width: 150px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: normal;
+            line-height: 25px;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <!-- Top content -->
+    <div class="top-content">
+        <div class="inner-bg">
+            <div class="first">
+                <div class="col-sm-4 col-sm-offset-4 form-box f">
+                    <div class="form-top form-top1">
+                        <div class="form-top-left" id="topdiv" style="text-align:center; width:100%">
+                            @if (ViewBag.logoimage != null)
+                            {
+                                @*<h3><img src="data:image;base64,@System.Info.Convert.ToBase64String(ViewBag.logoimage)" id="logo" /></h3>*@
+                            }
+                            else
+                            {
+                                <h3><img id="logo" src="/uploads/Logos/CompanyLogo.png" /></h3>
+                            }
+                            @*<h3><img id="logo" /></h3>*@
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="second">
+
+                <div class="row">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        @Html.Partial("_PartialAlerts")
+                        <div class="box box-bordered blue">
+                            <div class="box-title">
+                                <h3 class="Bold">
+                                    <strong>  Create Company</strong>
+                                </h3>
+                            </div>
+                            <div class="box-content nopadding">
+                                <form action="@Url.Action("CreateCompany")" method="POST" class="form-horizontal form-bordered" autocomplete="off">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Info.CompanyName, "Company Name", new { @class = "control-label col-sm-3" })
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Info.CompanyName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Company Name" } })
+                                            @Html.ValidationMessageFor(m => m.Info.CompanyName, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Info.Phone, "Phone", new { @class = "control-label col-sm-3" })
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Info.Phone, new { htmlAttributes = new { @class = "form-control mobile", @placeholder = "Phone" } })
+                                            @Html.ValidationMessageFor(m => m.Info.Phone, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Info.CompanyAddress, "Address", new { @class = "control-label col-sm-3" })
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Info.CompanyAddress, new { htmlAttributes = new { @class = "form-control", @placeholder = "Company Address" } })
+                                            @Html.ValidationMessageFor(m => m.Info.CompanyAddress, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Info.NoOfBranchesAllowed, "No. Of Branches", new { @class = "control-label col-sm-3" })
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Info.NoOfBranchesAllowed, new { htmlAttributes = new { @class = "form-control", @placeholder = "No. Of Branches" } })
+                                            @Html.ValidationMessageFor(m => m.Info.NoOfBranchesAllowed, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Info.SoftwareType, "Software Type", new { @class = "control-label col-sm-3" })
+                                        <div class="col-sm-9">
+                                            @*@Html.DropDownListFor(model => model.Info.CompanyType, new SelectList(ViewBag.UserGroups != null ? ViewBag.UserGroups : string.Empty, "Value", "Text"), new { @class = "form-control", @style = "width:100%;" })*@
+                                            @Html.EnumDropDownListFor(x => x.Info.SoftwareType, "--Select Software Type--", new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.Info.SoftwareType, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for=" ">Select Module</label>
+                                        <div class="col-sm-9">
+                                            @for (int i = 0; i < Model.Forms.Count(); i++)
+                                            {
+                                                <label class="module">
+                                                    @Html.HiddenFor(m => m.Forms[i].FormId)
+                                                    @Html.CheckBoxFor(m => m.Forms[i].IsChecked)
+                                                    @Html.DisplayFor(m => m.Forms[i].FormName)
+                                                </label>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="form-actions col-sm-offset-0 col-sm-8">
+                                        <button type="submit" class="btn btn-primary" onclick="showBlockUI()">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Javascript -->
+    <script src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.backstretch.min.js"></script>
+    <script src="~/Scripts/scripts.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.mask.js"></script>
+    <script src="/frameworks/blockUI/jquery.blockUI.js"></script>
+    <script>
+        $('.mobile').mask("0000-0000000", { placeholder: "____-_______" });
+        function showBlockUI() {
+            $.blockUI({ message: '<div style="font-size: 18px;padding: 9px;"><i class="fa fa-cog fa-spin fa-fw"></i><span class="">Please wait. We are setting things up.</span></div>' });
+        }
+    </script>
+</body>
+
+</html>
+
+

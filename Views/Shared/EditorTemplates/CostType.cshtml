@@ -1,0 +1,8 @@
+﻿@model FAPP.Model.CostTypes?
+@{
+    var collection = FAPP.ViewModel.Common.ProceduresModel.GetEnumDictionary<FAPP.Model.CostTypes>();
+    var tagId = ViewData.TemplateInfo.GetFullHtmlFieldId("");
+}
+<div>
+    @Html.DropDownList("", new SelectList(collection, "Key", "Value",(int?)Model), "=Select Cost Type=", new { @class = "chosen-select chosen-select", @style = "width:100%;", @id = tagId })
+</div>

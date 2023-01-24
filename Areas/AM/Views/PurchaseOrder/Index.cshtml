@@ -1,0 +1,8 @@
+﻿@{
+    FAPP.Areas.AM.ViewModels.GraphsModel _model = new FAPP.Areas.AM.ViewModels.GraphsModel();
+    _model.Action = ViewContext.RouteData.Values["action"].ToString();
+    _model.Contoller = ViewContext.RouteData.Values["Controller"].ToString();
+    _model.Area = ViewContext.RouteData.DataTokens["area"].ToString();
+    _model.Module = ViewContext.RouteData.DataTokens["area"].ToString();
+}
+@Html.Partial("_PartialDashboard", _model)

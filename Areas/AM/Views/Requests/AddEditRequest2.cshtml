@@ -1,0 +1,221 @@
+﻿@model FAPP.Areas.AM.ViewModels.AddEditRequestViewModel
+@{
+    ViewBag.Title = "Add/Edit Request";
+}
+@section topRightMenu{
+    @if (ViewBag.CanCreate)
+    {
+        <ul class="minitiles link">
+            <li class="green">
+                <label for="SaveRequestSubmitBtn" id="ReqSaveLbl" data-toggle="tooltip" title="Save (ctrl + s)">
+                    <i class=" fa fa-save">
+                    </i>
+                </label>
+            </li>
+            @if (Model.EditMode)
+            {
+                <li class="orange">
+                    <a id="ReqPrintLbl" onclick="printGV()" style="cursor:pointer" data-toggle="tooltip" title="Print (ctrl + p)">
+                        <i class=" fa fa-print"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+    @if (Model.EditMode)
+    {
+        <ul class="stats">
+            <li class="satgreen" style="padding-bottom:12px !important" >
+                <i class="fa fa-clock-o"></i>
+                <div class="details" data-toggle="tooltip" title="Pending">
+                    <span class="big" id="StatusText">@Model.Status.Where(s => s.Value == Model.StatusId.ToString()).FirstOrDefault().Text</span>
+                    <span>Status</span>
+                </div>
+            </li>
+            <li class="grey" style="padding-bottom:12px !important; cursor:pointer;" data-toggle="modal" data-target="#ConvertToOPModal" id="convertToOPBtn">
+                <i class="fa fa-exchange"></i>
+                <div class="details">
+                    <span class="big" id="">Convert to </span>
+                    <span>Purchase Order</span>
+                </div>
+            </li>
+        </ul>
+    }
+}
+
+
+<style>
+    .table tr th, .table tr td {
+        border: 0px !important;
+    }
+    .displayNone{
+        display:none;
+    }
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        padding:3px !important;
+    }
+</style>
+@if (ViewBag.Error == "Error")
+{
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Oops!</strong> Request not found...
+    </div>
+}
+@using (Ajax.BeginForm("SaveRequest", "Requests",
+        new AjaxOptions
+        {
+            
+            OnSuccess = "OnRequestSaveSuccess",
+            OnFailure = "OnSaveFailure",
+            UpdateTargetId = "UpdateTarget"
+            //LoadingElementId = "progress"
+        }))
+{
+    Html.EnableClientValidation(false); 
+    <div id="UpdateTarget">
+        @Html.Partial("_PartialAddEditRequest",Model)
+    </div>
+}
+<!-- Modal -->
+<div class="modal fade" id="ConvertToOPModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <strong>
+                        Convert To Purchase Order
+                    </strong>
+                </h5>
+            </div>
+            @using (Ajax.BeginForm("SaveOrderPurchase", "Requests", new AjaxOptions { OnFailure = "FailedOrderPurchase",OnBegin = "SaveOrdrePurchase", OnSuccess="SavedOrderPurchase"}))
+            {
+                @Html.HiddenFor(m => m.RequestId);
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="box-content nopadding">
+                            <div class="form-horizontal form-bordered">
+                                <div class="form-group">
+                                    <label for="textfield" class="control-label col-sm-3">Purchase Order Date</label>
+                                    <div class="col-sm-9">
+                                        @Html.EditorFor(model => model.OrderPurchaseDate, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "Date" } })
+                                        @Html.ValidationMessageFor(model => model.OrderPurchaseDate, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="textfield" class="control-label col-sm-3">Supplier</label>
+                                    <div class="col-sm-9">
+                                        @Html.DropDownListFor(model => model.ClientId, new SelectList(Model.ClientsDD, "Value", "Text", Model.ClientId), "--Select Supplier--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+                                        @Html.ValidationMessageFor(model => model.ClientId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="textfield" class="control-label col-sm-3">Description</label>
+                                    <div class="col-sm-9">
+                                        @Html.TextAreaFor(model => model.PurchaseOrderDescription, new { htmlAttributes = new { @class = "form-control", @placeholder = "Description" } })
+                                        @Html.ValidationMessageFor(model => model.PurchaseOrderDescription, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+@section scripts{
+<script src="~/Scripts/printThis.js"></script>
+ <script src="~/Areas/AM/Scripts/AddEditRequest.js"></script>
+    <script>
+        
+        $(document).ready(function () {
+            $('#RequestDate').val("@String.Format("{0:yyyy/MM/dd}", Model.RequestDate)");
+            $('#OrderPurchaseDate').val("@String.Format("{0:yyyy/MM/dd}", Model.OrderPurchaseDate)");
+            $('select').on('keydown', function (e) {
+                if (e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 39 || e.keyCode === 37) { //up or down
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            $('[data-toggle="tooltip"]').tooltip();
+        })
+        $('#RequestId').keydown(function (e) {
+            if (e.which == 13) {//Enter key pressed
+                 ;
+                e.preventDefault();
+                window.location  = '/AM/Requests/AddEditRequest/'+this.value;
+            }
+
+        });
+        function OnBegin(request) {
+            $notify = $.notify('<strong>Loading</strong> Do not close this page...', {
+                allow_dismiss: false,
+                showProgressbar: true,
+                delay: 1400,
+                offset: {
+                    x: 400,
+                    y: 300
+                }
+            });
+        }
+        function OnRequestSaveSuccess(response) {
+            if (response != "") {
+            $.getScript('@Url.Content("~/Scripts/select2.min.js")');
+            $.getScript('@Url.Content("~/Scripts/Custom/trans_header.js")');
+            $.getScript('@Url.Content("~/Areas/AM/Scripts/AddEditRequest.js")');
+            setTimeout(function () {
+                $notify.update({ 'type': 'success', 'message': '<strong>Added</strong> Requests has been saved...', });
+            }, 300);
+        }
+        else {
+            OnSaveFailure(response)
+        }
+    }
+        
+    function OnSaveFailure(response) {
+        setTimeout(function () {
+            $notify.update({ 'type': 'Failure', 'message': '<strong>Failed</strong> Something went wrong while Processing your request ...!', });
+        }, 600);
+    }
+    function SaveOrdrePurchase(request) {
+            $("#ConvertToOPModal").modal('hide'); 
+            $notify = $.notify('<strong>Saveing Order Purchase</strong> Do not close this page...', {
+                allow_dismiss: false,
+                showProgressbar: true,
+                delay: 1400,
+                offset: {
+                    x: 400,
+                    y: 300
+                }
+            });
+       
+    }
+    function SavedOrderPurchase(response) {
+        if (response == "True")
+        {
+            setTimeout(function () {
+                $notify.update({ 'type': 'success', 'message': '<strong>Saved</strong> Order Purchase has been saved...', });
+            }, 300);
+        }
+        else {
+            FailedOrderPurchase(request)
+        }
+    }
+    function FailedOrderPurchase(response) {
+        setTimeout(function () {
+            $notify.update({ 'type': 'Failure', 'message': '<strong>Failed</strong> Something went wrong while Processing your request ...!', });
+        }, 600);
+    }
+    </script>
+}

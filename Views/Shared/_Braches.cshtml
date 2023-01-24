@@ -1,0 +1,26 @@
+﻿@model IEnumerable<FAPP.Areas.AM.ViewModels.v_mnl_UserBranches_Result>
+
+@{
+    if (Model != null && Model.Count() > 0)
+    {
+        foreach (var item in Model)
+        {
+            if (item.BranchId == FAPP.DAL.SessionHelper.BranchId)
+            {
+                <li class="text-center subtitle active">
+                    <a href="/Home/SaveSession/@item.BranchId">
+                        <span>@item.Name</span>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="text-center subtitle">
+                    <a href="@Url.Action("SaveBranch","Home",new { id = item.BranchId, area = "", url = Request.RawUrl })">
+                        <span>@item.Name</span>
+                    </a>
+                </li>
+            }
+        }
+    }
+}

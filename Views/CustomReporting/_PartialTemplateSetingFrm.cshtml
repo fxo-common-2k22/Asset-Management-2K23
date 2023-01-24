@@ -1,0 +1,73 @@
+﻿@model FAPP.ViewModel.TemplatesViewModel
+<style>
+    .form-group {
+        background: none !important;
+    }
+
+    .col-sm-8 {
+        background: none !important;
+        border-left: none !important;
+    }
+
+    .col-sm-12 {
+        background: none !important;
+    }
+</style>
+<link href="~/Scripts/bootstrap-iconpicker/dist/css/bootstrap-iconpicker.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Content/plugins/multiselect/multi-select.css" rel="stylesheet" />
+<link href="~/Scripts/summernote/summernote.css" rel="stylesheet" />
+<div class="searchbox   " style="margin-top:10px">
+    @using (Ajax.BeginForm("Setting", "CustomReporting",
+        new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnSuccess = "OnCreateUpdateSuccess", OnFailure = "OnFailure" },
+        new { @class = "new-task-form form-horizontal form-bordered", @id = "frmadd", autocomplete = "off" }))
+
+    {
+
+        @Html.Hidden("ckinputH", Model.Branch.ReportHeader)
+        @Html.Hidden("ckinputF", Model.Branch.ReportFooter)
+
+
+        <div class="row">
+            <h2 class="text-center">Header</h2>
+            <div class="col-sm-12">
+                @Html.TextAreaFor(model => model.Branch.ReportHeader, new { @class = "summernote" })
+            </div>
+        </div>
+        <div class="row">
+            <h2 class="text-center">Footer</h2>
+            <div class="col-sm-12">
+                @Html.TextAreaFor(model => model.Branch.ReportFooter, new { @class = "summernote" })
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-primary" id="saveBtn" style="display:none" value="ss">
+            </div>
+        </div>
+    }
+</div>
+<script src="~/Scripts/plugins/multiselect/jquery.multi-select.js"></script>
+<script src="~/Scripts/bootstrap-iconpicker/dist/js/bootstrap-iconpicker-iconset-all.min.js"></script>
+<script src="~/Scripts/bootstrap-iconpicker/dist/js/bootstrap-iconpicker.min.js"></script>
+<script src="~/Scripts/summernote/summernote.min.js"></script>
+<script src="~/Scripts/summernote/summernote-data.js"></script>
+@*<script src="~/Scripts/ckeditor/ckeditor.js"></script>*@
+<script>
+    $(function () {
+        $('.append').click(function () {
+            $(".summernote").summernote('editor.insertText', '{' + $(this).text() + '}');
+            //CKEDITOR.instances['Certificate_CertificateContent'].insertText('{' + $(this).text() + '}');
+            return false;
+        });
+    });
+  
+ 
+
+    //if (CKEDITOR.instances['Certificate_CertificateContent'])
+    //    delete CKEDITOR.instances['Certificate_CertificateContent'];
+
+    //CKEDITOR.replace('Certificate_CertificateContent');
+    //CKEDITOR.instances['Certificate_CertificateContent'].setData($("#ckinput").val());
+</script>

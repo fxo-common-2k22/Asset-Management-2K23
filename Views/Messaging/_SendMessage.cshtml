@@ -1,0 +1,332 @@
+﻿@using FAPP.DAL
+@model FAPP.ViewModel.MessagingVM
+
+<div class="col-lg-9" style="padding-left:0 !important;">
+    <div class="searchbox" style="margin-top:10px">
+
+        @Html.HiddenFor(m => m.Template.Title)
+        @Html.HiddenFor(m => m.SendMessage.TemplateId)
+        @Html.HiddenFor(m => m.Command)
+
+        @if (SessionHelper.ModuleId == 1 || SessionHelper.ModuleId == 7)
+        {
+            <div class="row">
+                <div class="col-sm-3" style="margin-left: 10px; margin-right: 10px;margin-top: 10px;">
+                    @Html.DropDownListFor(model => model.SendMessage.GroupId, new SelectList(ViewBag.GroupsDD, "Value", "Text"), "--Select Group--", new { @required = "required", @style = "width:90%;", @class = "" })
+                    @Html.ValidationMessageFor(model => model.SendMessage.GroupId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        @if (SessionHelper.ModuleId == 9)
+        {
+            <div class="row">
+                <div class="col-sm-3" style="margin-left: 10px; margin-right: 10px;margin-top: 10px;">
+                    @Html.DropDownListFor(model => model.SendMessage.DepartmentId, new SelectList(ViewBag.DepartmentsDD, "Value", "Text"), "--Select Department--", new { @required = "required", @style = "width:90%;", @class = "" })
+                    @Html.ValidationMessageFor(model => model.SendMessage.DepartmentId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-sm-12" style="margin-left: 10px; margin-right: 10px;margin-top: 10px;margin-bottom: 10px;padding-right: 4%;">
+                @Html.TextAreaFor(model => model.SendMessage.MobNos, new { htmlAttributes = new { @class = " form-control", @required = "required", @data_val_required = "This field is required.", @placeholder = "Mob Nos", @cols = "40", @rows = "3", @style = "max-height: 70px;max-width: 100%;" } })
+                <span id="valMsg" class="text-danger"></span>
+                <span class="text-danger">Mobile No with incorrect format are not included. Sample '92xxxxxxxxxx'</span>
+                @Html.ValidationMessageFor(model => model.SendMessage.MobNos, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div id="mobNoGrid">
+
+        </div>
+        <div class="row" style="margin-bottom: 10px">
+            <div class="col-lg-12" style="margin-left: 10px;margin-right: 10px;padding-right:4%;">
+                @Html.TextBoxFor(model => model.SendMessage.NotificationTitle, new { @class = " form-control", @placeholder = "Notification Title" })
+                @Html.ValidationMessageFor(model => model.SendMessage.NotificationTitle, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px">
+            <div class="col-sm-12" style="padding-right:4%;">
+                @Html.TextAreaFor(model => model.SendMessage.Message, new { @class = "form-control ", @style = "width:100%;height:200px;margin-left:10px;margin-right:10px;", @placeholder = "Message Body", @onkeyup = "countChar(this)" })
+                @Html.ValidationMessageFor(model => model.SendMessage.Message, "", new { @class = "text-danger" })
+                <span id="charCount" style="margin-left:10px;"></span>&nbsp;&nbsp;
+                <span id="smsCount"></span>
+            </div>
+
+        </div>
+        <div class="row" style="margin-bottom: 10px">
+            <div class="col-lg-12" style="margin-left: 10px;margin-right: 10px;padding-right:4%;">
+                @Html.TextBoxFor(model => model.SendMessage.Remarks, new { @class = " form-control", @placeholder = "Enter Remarks Here" })
+                @Html.ValidationMessageFor(model => model.SendMessage.Remarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 10px;margin-left: 10px">
+            <div class="col-sm-3" style="padding: 0;">
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker2'>
+                        @{ Html.EnableClientValidation(false); }
+                        @Html.EditorFor(model => model.SendMessage.ScheduledOn, new { htmlAttributes = new { @class = "datePicker form-control", @placeholder = "Scheduled On" } })
+                        @{ Html.EnableClientValidation(true); }
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.SendMessage.ScheduledOn, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-9" style="margin-bottom: 10px; margin-left: 0px;margin-top: 10px;">Select Date to Schedule this SMS For later Date</div>
+            <br />
+            <input type="button" id="btnScheduleSMS" class="btn btn-primary" style="display:none;" onclick="GeneralConfirmSendingMessage('SMS');" value="Schedule SMS" />
+            <input type="button" id="btnSendNotification" class="btn btn-darkblue" style="display:none;" onclick="GeneralConfirmSendingMessage('Notification');" value="Send Mobile Notification" />
+
+        </div>
+
+    </div>
+</div>
+@if (Model.ModuleId == 1 || Model.ModuleId == 7)
+{
+<div class="col-lg-3 " style="margin-top:10px;padding:0;">
+    @*<div class="footerContainer ">*@
+    <div class="box box-color box-bordered orange">
+        <div class="box-title"style="margin-top:0 !important;">
+            <h3>
+                <i class="fa fa-bars"></i>
+                <span id="LabelTitle">Send To All</span>
+            </h3>
+        </div>
+        <div class="box-content">
+            <table class="table table-nohead">
+                <tbody>
+                    <tr style="display: table-row;">
+                        <td>
+                            <span class="label label-default"><i class="fa fa-envelope"></i></span>
+                            <a style="cursor:pointer;" onclick="ConfirmSendingMessageToAll()">Send Message To All</a>
+                        </td>
+                    </tr>
+                    <tr style="display: table-row;">
+                        <td>
+                            <span class="label label-default"><i class="fa fa-sticky-note"></i></span>
+                            <a style="cursor:pointer;" onclick="ConfirmSendingNotificationToAll()">Send Notification To All</a>
+                        </td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @*<div class="row">
+        <div class="col-md-4 ">
+
+            <a onclick="ConfirmSendingMessageToAll()" class="btn btn-success " style="margin-bottom:10px;">
+                <i class="fa fa-envelope"></i> Send Message To All
+            </a>
+
+            <a onclick="ConfirmSendingNotificationToAll()" class="btn btn-darkblue ">
+                <i class="fa fa-sticky-note"></i> Send Notification To All
+            </a>
+        </div>
+    </div>*@
+</div>
+}
+<div id="ConfirmBoxModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="frmModalContent">
+            <div class="modal-header modalHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Confirmation!</h4>
+            </div>
+            <div class="modal-body">
+                <p id="prgConfirm">
+
+                </p>
+                <br />
+                <p>This will be sent to <span id="spnTotalStudents"></span> Students.</p>
+                <input id="hdnBtnId" type="hidden" />
+                <input id="txtCSVSmsQueueIds" type="hidden" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default bTn" data-dismiss="modal">Cancel</button>
+                <button type="button" onclick="SendMessegeToAllStudents()" class="btn btn-primary bTn" id="btnSendSMSToALL">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="GeneralConfirmBoxModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="frmModalContent">
+            <div class="modal-header modalHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Confirmation!</h4>
+            </div>
+            <div class="modal-body">
+                <p id="prgConfirmGeneral"></p>
+                <br />
+                <p>Are you Sure? To Send This <span id="spnSendingType"></span>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default bTn" data-dismiss="modal">Cancel</button>
+                <button type="button" onclick="sendmsg('SMS')" class="btn btn-primary bTn" id="btnSendSMSToSelected">Send Message</button>
+                <button type="button" onclick="sendmsg('Notification')" class="btn btn-primary bTn" id="btnSendNotificationToSelected">Send Notification</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ConfirmBoxModalNotification" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="frmModalContent">
+            <div class="modal-header modalHeader">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Confirmation!</h4>
+            </div>
+            <div class="modal-body">
+                <p id="prgConfirmN">
+
+                </p>
+                <br />
+                <p>This Notification will be sent to <span id="spnTotalStudentsForNotification">All</span> Active Students of this Branch.</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default bTn" data-dismiss="modal">Cancel</button>
+                <button type="button" onclick="SendNotificationToAllStudents()" class="btn btn-primary bTn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function sendmsg(Command) {
+         
+         if ($("#SendMessage_ScheduledOn").val() !== "") {
+                $("#Command").val(Command);
+                $("#frmsendsms").submit();
+            } else {
+                DisplayMessage('error', 'Select Datetime');
+            }
+
+    };
+    function ConfirmSendingMessageToAll() {
+         
+        $("#prgConfirm").html( $("#SendMessage_Message").val());
+        $.ajax({
+            url: "/Messaging/GetStudentStrengthForMessaging",
+            method: "Get",
+            data: { TemplateId: $("#SendMessage_TemplateId").val()},
+            success: function (data) {
+                $("#spnTotalStudents").html(data);
+                $("#ConfirmBoxModal").modal('show');
+            }
+        });
+    }
+    function GeneralConfirmSendingMessage(type) {
+         
+        if ($("#SendMessage_Remarks").val() != '' && $("#SendMessage_Remarks").val() != undefined) {
+            $("#prgConfirmGeneral").html($("#SendMessage_Message").val());
+            $("#spnSendingType").html(type);
+            if (type == "SMS") {
+                $("#btnSendNotificationToSelected").hide();
+                $("#btnSendSMSToSelected").show();
+                $("#GeneralConfirmBoxModal").modal("show");
+            } else {
+                $("#btnSendSMSToSelected").hide();
+                $("#btnSendNotificationToSelected").show();
+                if ($("#SendMessage_NotificationTitle").val() != "" && $("#SendMessage_NotificationTitle").val() != undefined) {
+                    $("#GeneralConfirmBoxModal").modal("show");
+                } else {
+                    toastr.error("Notification Title is Required!");
+                }
+            }
+        } else {
+            toastr.error("Remarks are Required!");
+        }
+    }
+    function ConfirmSendingNotificationToAll() {
+         
+        if ($("#SendMessage_NotificationTitle").val() != "" && $("#SendMessage_NotificationTitle").val() != undefined) {
+      
+        $("#prgConfirmN").html( $("#SendMessage_Message").val());
+        $.ajax({
+            url: "/Messaging/GetStudentStrengthForNotification",
+            method: "Get",
+
+            success: function (data) {
+                $("#spnTotalStudentsForNotification").html(data);
+                $("#ConfirmBoxModalNotification").modal('show');
+            }
+            });
+        } else {
+            toastr.error("Notification Title is Required!");
+        }
+    }
+    function SendMessegeToAllStudents() {
+        $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+            url: '/Messaging/SendBulkSMSToAll',
+                type: 'POST',
+            data: JSON.stringify({ ScheduledOn: $("#SendMessage_ScheduledOn").val(), Remarks: $("#SendMessage_Remarks").val(), TemplateId: $("#SendMessage_TemplateId").val(), MessageBody: $("#SendMessage_Message").val()}),
+                success: function (data) {
+                     
+                    var res = OnCreateUpdateSuccess(data);
+                    setTimeout(res, 2000);
+                    $("#searchFormSubmitBtnId").click();
+
+                    //if (data.Error == "") {
+                    //    toastr.success(data.Messages)
+                    //} else {
+                    //    toastr.error(data.Error)
+
+                    //}
+                }
+            });
+    }
+    function SendNotificationToAllStudents() {
+        $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+            url: '/Messaging/SendBulkNotificationToAll',
+                type: 'POST',
+            data: JSON.stringify({ NotificationTitle: $("#SendMessage_NotificationTitle").val(), TemplateId: $("#SendMessage_TemplateId").val(), MessageBody: $("#SendMessage_Message").val()}),
+                success: function (data) {
+                     
+                    var res = OnCreateUpdateSuccess(data);
+                    setTimeout(res, 5000);
+                    $("#searchFormSubmitBtnId").click();
+
+                    //if (data.Error == "") {
+                    //    toastr.success(data.Messages)
+                    //} else {
+                    //    toastr.error(data.Error)
+
+                    //}
+                }
+            });
+    }
+    $('.datetimePicker')
+        .datetimepicker(
+            {
+                format:'DD-MM-YYYY HH:mm:ss '
+            }
+        );
+
+
+    $("select#SendMessage_GroupId").change(function () {
+        var selected = this.value;
+        if (selected !== '') {
+            var url = '@Url.Action("SearchStudentsParentMobNo", "Messaging")/' + selected;
+            GetMobileNosForSms(url);
+        }
+    });
+    $("select#SendMessage_DepartmentId").change(function () {
+        var selected = this.value;
+        if (selected !== '') {
+            var url = '@Url.Action("SearchEMployeeMobNo", "Messaging")/' + selected;
+            GetMobileNosForSms(url);
+        }
+    });
+    $(function () {
+        $("#SendMessage_Message").keyup();
+    })
+    function countChar(val) {
+        var len = val.value.length;
+        $('#charCount').text("Characters: "+len);
+        $('#smsCount').text("SMS: "+Math.ceil(len/160));
+    };
+</script>

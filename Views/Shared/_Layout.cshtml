@@ -1,0 +1,1008 @@
+﻿<!DOCTYPE html>
+@using FAPP.Areas.AM.Helpers
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title id="tabtitle">@ViewBag.Title | @System.Web.HttpContext.Current.Session["CompanyName"]</title>
+    <script src="~/Scripts/dist/sweetalert-dev.js"></script>
+    <link href="~/Scripts/dist/sweetalert.css" rel="stylesheet" />
+    <link href="~/css/AllInOneIcons.min.css" rel="stylesheet" />
+    <link href="~/css/icons.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/frameworks/datetimepicker/jquery.datetimepicker.css" rel="stylesheet" />
+    <link href="~/frameworks/jquery-ui-1.11.4.custom/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/frameworks/EasyAutocomplete-1.3.3/easy-autocomplete.min.css" rel="stylesheet" />
+    <link href="~/frameworks/EasyAutocomplete-1.3.3/easy-autocomplete.themes.min.css" rel="stylesheet" />
+    <link href="~/Content/build.css" rel="stylesheet" />
+    <link href="~/Content/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/css/extra.css" rel="stylesheet" />
+    <link href="~/css/common.min.css" rel="stylesheet" />
+    @*<link rel="shortcut icon" type="image/x-png" href="~/Images/ez-favicon.png" />*@
+    <link rel="shortcut icon" type="image/x-png" href="~/App_Themes/Assets/assets-favicon.png" />
+
+    <link href="~/App_Themes/Flat/css/plugins/chosen/chosen.css" rel="stylesheet" />
+    <link href="~/App_Themes/Flat/css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" />
+    <link href="~/App_Themes/Flat/css/plugins/fullcalendar/fullcalendar.print.css" rel="stylesheet" />
+    <link href="~/App_Themes/Flat/css/plugins/icheck/all.css" rel="stylesheet" />
+    <link href="~/App_Themes/Flat/css/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/App_Themes/Flat/blue.min.css" rel="stylesheet" />
+    <link href="~/App_Themes/Flat/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/App_Themes/Flat/style.css" rel="stylesheet" />
+    <link href="~/App_Themes/Flat/themes.css" rel="stylesheet" />
+    <script src="/frameworks/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    @*<script src="~/ckeditor/ckeditor.js"></script>*@
+    <link href="~/App_Themes/Flat/loadingbar.css" rel="stylesheet" />
+    @*<link href="~/App_Themes/Flat/css/plugins/gritter/jquery.gritter.css" rel="stylesheet" />*@
+    <link href="~/css/skins/square/_all.css" rel="stylesheet" />
+    <link href="~/css/skins/minimal/_all.css" rel="stylesheet" />
+    <link href="~/Content/Content/dist/ladda-themeless.min.css" rel="stylesheet" />
+    @*<link href="~/Content/ezSchoolStyle.css" rel="stylesheet" />*@
+    @*<script src="~/App_Themes/Flat/js/jquery.gritter.min.js"></script>*@
+    <script src="/frameworks/datetimepicker/jquery.datetimepicker.js"></script>
+    <link href="~/Scripts/Toaster/toastr.css" rel="stylesheet" />
+    <link href="~/Scripts/iconPicker/bootstrap-iconpicker.min.css" rel="stylesheet" />
+    <link href="~/Content/print.css" rel="stylesheet" />
+    <link href="~/css/TableSorter/theme.default.css" rel="stylesheet" />
+    <style>
+
+
+        .mix-fa-icon {
+            font-size: 23px !important;
+            color: yellow;
+            line-height: 0px !important;
+            top: 45px;
+            left: 15px;
+        }
+
+        .icon-stack {
+            position: relative;
+            display: inline-block;
+            width: 2em;
+            height: 5em;
+            line-height: 4em;
+            vertical-align: middle;
+        }
+
+        .icon-stack-1x,
+        .icon-stack-2x,
+        .icon-stack-3x {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            text-align: right;
+        }
+
+        .icon-stack-1x {
+            line-height: inherit;
+        }
+
+        .icon-stack-2x {
+            font-size: 1.5em;
+        }
+
+        .icon-stack-3x {
+            font-size: 2em;
+        }
+
+        .pointerontd td {
+            cursor: pointer;
+            /*cursor: hand;*/
+        }
+
+        .pointerontd tr:hover {
+            background-color: white;
+        }
+
+        .minitiles > li > label {
+            display: block;
+            height: 61px;
+            width: 61px;
+            color: #fff;
+            text-decoration: none;
+            position: relative;
+            text-align: center;
+            font-size: 36px;
+            line-height: 61px;
+            cursor: pointer;
+            margin-bottom: 0px;
+        }
+
+        ul.minitiles > li:last-child {
+            margin-right: 0px !important;
+        }
+
+        ul.minitiles > li:first-child {
+            margin-left: 10px !important;
+        }
+
+        ul.stats > li:last-child {
+            margin-right: 0px !important;
+        }
+
+        ul.stats > li:first-child {
+            margin-left: 10px !important;
+        }
+
+        .pagination {
+            margin-top: 0px !important;
+            margin-bottom: 0px !important;
+        }
+
+        .box-title {
+            margin-top: 10px !important
+        }
+
+        .modal-header {
+            background-color: #368ee0;
+            color: white;
+        }
+
+        .main-branch {
+            /*border-radius: 40px;*/
+            font-size: 10px;
+            display: block;
+            border: 0px solid;
+            border-bottom: 1px solid #f6fbff;
+            padding: 5px;
+        }
+
+        .border-radius-30 {
+            border-radius: 40px;
+            font-size: 12px !important;
+        }
+
+        .simpleHref {
+            color: white !important;
+            text-decoration: blink !important;
+        }
+
+        .stickyFooter {
+            width: 82.3% !important;
+        }
+
+        .pvtRowLabel {
+            white-space: nowrap;
+        }
+    </style>
+    <script src="/Scripts/select2.js"></script>
+    <script src="~/Scripts/Toaster/toastr.min.js"></script>
+    <script src="~/Scripts/Toaster/toastr.js"></script>
+    <script src="~/Scripts/Custom/custom.js"></script>
+    <script src="~/Scripts/custom_1.js"></script>
+    <script src="~/Scripts/Custom/RefreshedFunctions.js"></script>
+    <script src="~/Scripts/Custom/trans_header.js"></script>
+    <script src="~/Scripts/jquery.timeago.js"></script>
+    <script>
+        var IsAnotherUIObjectCalled = false;
+        var ElementIdToSetFocus;
+        function OnResponceBackFromServer(responce) {
+            if (responce.status == true) {
+                if (responce.msg) {
+                    DisplayMessage('success', responce.msg);
+                } else {
+                    if (responce.HideMsg) { } else {
+                        DisplayMessage('success', 'Successfully updated');
+                    }
+                }
+            }
+            else {
+                if (responce.msg) {
+                    DisplayMessage("error", responce.msg);
+                }
+            }
+
+            if (jQuery.type(responce.PartialList) != "undefined") {
+                $.each(responce.PartialList, function (index, val) {
+                    if (val.IdToHideModalPopup) {
+                        $("#" + val.IdToHideModalPopup).modal('hide');
+                        if ($('.modal-backdrop.fade.in').length > 0) {
+                            $('.modal-backdrop.fade.in').remove();
+                        }
+                    }
+                    $('#' + val.divToReplace).html(val.partialData);
+                    if (val.IdToShowModalPopup) {
+                        $("#" + val.IdToShowModalPopup).modal();
+                        $("#" + val.IdToShowModalPopup).removeAttr('tabindex');
+                    }
+                    if (val.ElementIdToSetFocus) {
+                        ElementIdToSetFocus = val.ElementIdToSetFocus;
+                        setTimeout(function () {
+                            $("#" + val.ElementIdToSetFocus).focus();
+                            //$("#" + val.ElementIdToSetFocus).select2('open');
+                        }, 1000);
+                    }
+
+
+                });
+            }
+        }
+    </script>
+</head>
+<body class="@System.Web.HttpContext.Current.Session["ThemeColor"]">
+    @*<form>
+            <input type="text" id="hdnfakeemail" class="form-control" style="/* display: none; */opacity: 0; position: absolute;">
+            <input type="password" id="hdnfakepassword" class="form-control" style="/* display: none; */opacity: 0; position: absolute;">
+        </form>*@
+    <div id="navigation" class="navbar-fixed-top">
+        <div class="container-fluid">
+            <a href="@(FAPP.DAL.SessionHelper.DashboardUrl ?? "/Home/Index")" id="brand" style="background: none !important">@System.Web.HttpContext.Current.Session["CompanyName"]</a>
+            <a href="#" class="toggle-nav" rel="tooltip" data-placement="bottom" title="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul class='main-nav'>
+                @Html.Action("GetAllForms", "Forms", new { area = "", area2 = ViewContext.RouteData.DataTokens["area"], controller = ViewContext.RouteData.Values["Controller"], action = ViewContext.RouteData.Values["action"] })
+            </ul>
+            <div class="user">
+                <ul class="icon-nav">
+                    <li class="dropdown sett">
+                        <a href="#" class='dropdown-toggle pe-0' data-toggle="dropdown">
+                            <i class="fa fa-align-justify"></i>
+
+                        </a>
+                        <ul class="dropdown-menu  pull-right app-top  p-0" style="width:310px">
+
+                            <li class="position-relative" id="GetUserApps">
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li id="fiscalyear" class="dropdown fiscalyear-select">
+                        <a href="#" title="Fiscal Year @FAPP.DAL.SessionHelper.FiscalYearName" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-usd"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-right" id="divtoreplacefiscalyear">
+                            @*<div id="divtoreplacefiscalyear">*@
+                            @Html.Action("FiscalYears", "Primary", new { area = "" })
+                            @*</div>*@
+                        </ul>
+                    </li>
+                    <li class='dropdown'>
+                        <a href="#" title="@FAPP.DAL.SessionHelper.BranchName" class='dropdown-toggle' data-toggle="dropdown">
+                            <i class="fa fa-home"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            @Html.Action("Branches", "Primary", new { area = "" })
+                        </ul>
+                    </li>
+                    @if (FAPP.DAL.SessionHelper.IsAcademicsActive)
+                    {
+                        <li id="session" class="dropdown session-select" data-toggle="tooltip" title="Current Session">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-calendar"></i>
+                            </a>
+                            @*@Html.Action("GetSessionList", "Primary", new { area = "" })*@
+                        </li>
+
+                        <li class="dropdown setup">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-cog"></i>
+                            </a>
+                            @Html.Action("GetGlobalSettings", "Primary", new { area = "" })
+
+                        </li>
+                    }
+                    <li class='dropdown colo'>
+                        <a href="#" title="Theme Color" class='dropdown-toggle' data-toggle="dropdown">
+                            <i class="fa fa-tint"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-right theme-colors">
+                            <li class="subtitle">
+                                Predefined colors
+                            </li>
+                            <li>
+                                <span class='red'></span>
+                                <span class='orange'></span>
+                                <span class='green'></span>
+                                <span class="brown"></span>
+                                <span class="blue"></span>
+                                <span class='lime'></span>
+                                <span class="teal"></span>
+                                <span class="purple"></span>
+                                <span class="pink"></span>
+                                <span class="magenta"></span>
+                                <span class="grey"></span>
+                                <span class="darkblue"></span>
+                                <span class="lightred"></span>
+                                <span class="lightgrey"></span>
+                                <span class="satblue"></span>
+                                <span class="satgreen"></span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="dropdown">
+                    <a href="#" class='dropdown-toggle' title="User" data-toggle="dropdown">
+                        <span>@System.Web.HttpContext.Current.Session["Username"]</span>
+                        @if (FAPP.DAL.SessionHelper.UserPhoto == null)
+                        {
+                            <img src="/images/no-photox45.png" width="27" />
+                        }
+                        else
+                        {
+                            try
+                            {
+                                @*<img src="data:image;base64,@System.Convert.ToBase64String(FAPP.DAL.SessionHelper.UserPhoto)" width="35" style="height: 27px;" />*@
+                                <img src="/images/no-photox45.png" width="27" />
+                            }
+                            catch
+                            {
+                                <img src="/images/no-photox45.png" width="27" />
+                            }
+                        }
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="@Url.Action("ChangePassword", "Account", new { area= ""})">Change Password</a>
+                        </li>
+                        <li>
+                            <a href="/Account/Logout">Sign out</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid nav-fixed" id="content">
+        <div id="left" class="sidebar-fixed hasScroll">
+            <div class="text-center bold"><span class="label label-default current-theme main-branch">@FAPP.DAL.SessionHelper.BranchName</span></div>
+            <div id="searchform" class='search-form' style="display:none;">
+                <div class="search-pane">
+                    <button class="hidden" type="submit" value="Search" name="Command"></button>
+                    <button type="submit" class="BackwardBtn searchfromBtn" id="BackwardBtn" value="Backward" name="Command" rel="tooltip" data-placement="bottom" title="Previous">
+                        <i class="fa fa-backward"></i>
+                    </button>
+                    <input type="text" name="OPDNo" id="OPDNo" placeholder="Search here..." value="@FAPP.DAL.SessionHelper.OPDNo" data-id="OPDNo" data-tableId="resTable" data-action="livesearch">
+                    <input type="hidden" name="PrevURL" value="@ViewContext.HttpContext.Request.RawUrl">
+                    <button type="submit" class="ForwardBtn searchfromBtn" id="ForwardBtn" value="Forward" name="Command" tabindex="24" rel="tooltip" data-placement="bottom" title="Next">
+                        <i class="fa fa-forward"></i>
+                    </button>
+                </div>
+            </div>
+            @RenderSection("Profile", false)
+            <div class="quickLinksArea">
+                <div class="quickLinks">
+                    <div id="quickLinks">
+                        @RenderSection("quicklinks", required: false)
+                        @Html.Action("GetQuickLinks", "Forms", new { area = "", area2 = ViewContext.RouteData.DataTokens["area"], controller = ViewContext.RouteData.Values["Controller"], action = ViewContext.RouteData.Values["action"] })
+                    </div>
+                    <div class="quickTables" id="quickTables">
+                        @RenderSection("quickTables", required: false)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="main">
+            <div class="container-fluid">
+                <div class="page-header" style="padding:0px !important">
+                    <div class="pull-left">
+                        <h1 id="pageTitle" style="margin-top: 5px;">
+                            <span id="pageHeading">@ViewBag.Title</span>
+                            <input type="text" class="" id="invoiceno" style="width:70px;display:none;float: right;font-size: inherit;" />
+                            <span id="extendedPageHeader" class="h6"></span>
+                        </h1>
+                        <ul id="topleftdropdown" class="stats" style="margin-right: 20px; display:none;">
+                            <li class="lightred" style="background:#00bcd4; margin-left: 0px !important;">
+                                <i class="fa fa-clock-o"></i>
+                                <div class="details">
+                                    <span class="big">
+                                        <select class="chosen-select" id="selectcontrolid" style="width:300px;"> </select>
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                        <span id="extendedPageHeader2" class="h5"></span>
+                    </div>
+                    <div class="pull-right" @*style="margin-bottom: 5px;"*@>
+                        @RenderSection("topRightMenu", false)
+                    </div>
+                    <div class="pull-right">
+                        <div id="toprightsection"></div>
+                    </div>
+                    <div class="col-md-12 nopadding">
+                        <span id="extendedPageHeade3" class="h5"></span>
+                    </div>
+                </div>
+                <div class="breadcrumbs hidden">
+                    <ul>
+                        <li>
+                            <a href="/Home/Index">Home</a>
+                            <i class="fa fa-angle-right"></i>
+                        </li>
+                        @RenderSection("breadcrumbs", required: false)
+
+                    </ul>
+                    <div class="close-bread">
+                        <a href="#">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <div id="body">
+                        @RenderSection("featured", required: false)
+                        <section class="content-wrapper main-content clear-fix" style="margin-top: -15px;">
+                            @RenderBody()
+                            <div class="modal fade" id="MessageModal" role="dialog">
+                                <div class="modal-dialog modelNew">
+                                    <div class="modal-content">
+                                        <div class="modal-header modalHeader">
+                                            <button type="button" class="close newClose" id="modal_btncross" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Modal Header</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p id="error_msg">Some text in the modal.</p>
+                                        </div>
+                                        <div class="modal-footer messageFooter">
+                                            <button type="button" class="btn btn-success bTn" data-dismiss="modal" id="modal_btnYes">Yes</button>
+                                            <button type="button" class="btn btn-blue bTn" data-dismiss="modal" id="modal_btnclose">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="PopupModal" tabindex="-1" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content" id="PopupModalSection">
+                                        @RenderSection("PopupModalContent", required: false)
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var branchId = @FAPP.DAL.SessionHelper.BranchId;
+    </script>
+
+    <script>
+        $.get("/Account/GetUserApps", function (data) {
+            $("#GetUserApps").html(data);
+        });
+    </script>
+    <script>
+        var reportDate = '@DateTime.Now.ToString()';
+    </script>
+    <script src="/frameworks/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script src="/frameworks/jquery.cookie.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+    <script src="/Scripts/bootbox.min.js"></script>
+    <script src="/frameworks/jQueryUIMonthpicker/jquery.mtz.monthpicker.js"></script>
+    <script src="/Scripts/handlebars.min.js"></script>
+    <script src="/frameworks/blockUI/jquery.blockUI.js"></script>
+    <script src="/Scripts/moment.min.js"></script>
+    <script src="/frameworks/iCheck/jquery.icheck.min.js"></script>
+    <script src="/frameworks/EasyAutocomplete-1.3.3/jquery.easy-autocomplete.min.js"></script>
+    <script type="text/x-handlebars-template" id="rowTemplate">
+    </script>
+    <script src="/Scripts/custom.js"></script>
+    <script src="~/App_Themes/Flat/css/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script src="~/App_Themes/Flat/css/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/App_Themes/Flat/css/plugins/wizard/jquery.form.wizard.min.js"></script>
+    <script src="~/App_Themes/Flat/js/application.min.js"></script>
+    <script src="~/App_Themes/Flat/js/eakroko.min.js"></script>
+    <script>
+    </script>
+    @*<script src="~/Scripts/eakroko.min.js"></script>*@
+    <script>
+        //window.timetableurl = false;
+        //$(document).ajaxSend(function (event, jqxhr, settings) {
+        //
+        //    if (settings.url == "http://localhost:54663/Academics/TimeTables/TimeTableSettingsHead?Length=10") {
+        //        window.timetableurl = true
+        //    }
+        //    else {
+        //        window.timetableurl = false
+        //    }
+        //})
+
+        $(document).on({
+            ajaxStart: function () {
+                IsDisableControl(true);
+                if (IsAnotherUIObjectCalled == false) {
+                    $.blockUI({ message: '<div style="font-size: 18px;padding: 9px;"><i class="fa fa-cog fa-spin fa-fw"></i><span class="">Loading... Please wait</span></div>' });
+                }
+            },
+            ajaxStop: function () {
+                //$('.justtogiveselector').showLess();
+                $('.justtogiveselector').textSummarize();
+                setpaging();
+                RefreshAllScripts();
+                IsDisableControl(false);
+                try {
+                    if (typeof ($ajaxRemoteControlId) !== 'undefined' && $ajaxRemoteControlId != undefined && typeof ($ajaxBoldPlaceholder) !== 'undefined' && $ajaxBoldPlaceholder != undefined) {
+
+                        $('#' + $ajaxRemoteControlId).livedropdown();
+                        $('#' + $ajaxRemoteControlId_2).livedropdown_2();
+                        $('#' + $ajaxRemoteControlId_3).livedropdown_3();
+                        if ($ajaxBoldPlaceholder === true) {
+                            $('.select2-selection__placeholder').css({ "font-size": "24px", "color": "black" });
+                        }
+                    }
+                } catch (e) { console.log(e); }
+                if (IsAnotherUIObjectCalled == false) {
+                    $.unblockUI();
+                }
+                if (ElementIdToSetFocus) {
+                    try {
+                        $("#" + ElementIdToSetFocus).focus();
+                        //$("#" + ElementIdToSetFocus).select2('open');
+                        ElementIdToSetFocus = null;
+                    } catch (e) { ElementIdToSetFocus = null; console.log(e); }
+                }
+            }
+        });
+        $(document).ajaxSuccess(function (event, xhr, ajaxOptions, thrownError) {
+            if (thrownError) {
+                try {
+                    if (thrownError.indexOf('<html class="errorPage">') != -1) {
+                        $("html").html(thrownError);
+                    }
+                } catch (e) { }
+            }
+            //$.getScript("/App_Themes/Flat/js/eakroko.min.js");
+        });
+        $(document).ajaxError(function myErrorHandler(event, xhr, ajaxOptions, thrownError) {
+            if (xhr.status === 401) {
+                var CurrentURL = "/Account/Login?returnUrl=" + window.location.pathname;
+                window.location.href = CurrentURL;
+                return;
+            }
+            if (xhr.status === 403) {
+                var CurrentURL = "/Error/NotAuthorized?returnUrl=" + window.location.pathname;
+                window.location.href = CurrentURL;
+                return;
+            }
+            // ;
+            //if (xhr.status != 200 && xhr.responseText) {
+            //    $("html").html(xhr.responseText);
+            //}
+        });
+
+        $('#Todaydate').text(GetDate());
+        $('#Today').text(GetDay());
+        (function () {
+            //to remove toaster before printing
+            var beforePrint = function () {
+                $('#toast-container').remove();
+                $.unblockUI();
+            };
+            //var afterPrint = function () {
+            //console.log('Functionality to run after printing');
+            //};
+            //if (window.matchMedia) {
+            //    var mediaQueryList = window.matchMedia('print');
+            //    mediaQueryList.addListener(function (mql) {
+            //        if (mql.matches) {
+            //            beforePrint();
+            //        } else {
+            //            afterPrint();
+            //        }
+            //    });
+            //}
+            window.onbeforeprint = beforePrint;
+            //window.onafterprint = afterPrint;
+
+        }());
+
+    </script>
+    <script src="/Scripts/jquery.tablesorter.js"></script>
+    <script src="~/App_Themes/Flat/js/jquery.dataTables.min.js"></script>
+    <script src="~/App_Themes/Flat/js/bootstrap-fileupload.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/bootstrap-notify.js"></script>
+    <script src="~/Scripts/jquery.tabbable.js"></script>
+    <script src="~/Content/Content/dist/spin.min.js"></script>
+    <script src="~/Content/Content/dist/ladda.min.js"></script>
+    <script src="~/Scripts/iconPicker/bootstrap-iconpicker-iconset-all.min.js"></script>
+    <script src="~/Scripts/iconPicker/bootstrap-iconpicker.min.js"></script>
+    <script src="~/Scripts/jquery.mask.js"></script>
+    <script src="//code.highcharts.com/highcharts.js" type="text/javascript"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="//code.highcharts.com/modules/exporting.js" type="text/javascript"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="~/Scripts/printThis.js"></script>
+    <script type="text/javascript">
+        setpaging();
+        var AppConstraintsMsg = "@Html.Raw(ViewData["AppConstraintsMsg"] == null ? "" : ViewData["AppConstraintsMsg"].ToString())";
+        function DisplayConstraint() {
+            if (IsAnotherUIObjectCalled == false) {
+                if (AppConstraintsMsg) {
+                    $.blockUI({ message: "<div style='font-size: 18px;padding: 9px;cursor:not-allowed;'>" + AppConstraintsMsg + "</div>" });
+                    IsAnotherUIObjectCalled = true;
+                }
+            }
+        }
+
+
+
+        $(document).ready(function () {
+
+            //adding btn-xs class
+            $('button:contains("Delete")').addClass('btn-xs');
+            $('a:contains("Delete")').addClass('btn-xs');
+            $('a:contains("Edit")').addClass('btn-xs');
+            if ((urlContains('Academics') != -1 || urlContains('academics')) != -1 ||
+                (urlContains('Students') != -1 || urlContains('students')) != -1 ||
+                ((urlContains('Fee') != -1 || urlContains('fee') != -1)) ||
+                ((urlContains('Library') != -1 || urlContains('library') != -1)) ||
+                ((urlContains('Certificates') != -1 || urlContains('certificates') != -1)) ||
+                ((urlContains('customReporting') != -1 || urlContains('CustomReporting') != -1)) ||
+                ((urlContains('Global') != -1 || urlContains('global') != -1))) {
+                loadCSS("/Content/ezSchoolStyle.css");
+            }
+
+            try { $('select').not('.mtz-monthpicker').not('.nochosen').not('.ajax').removeClass('form-control').select2({ width: 'resolve' }); } catch (ex) { }
+            replaceWithLabels();
+
+
+            $('input[type=text]').first().focus();//focus on first element of page
+            $(".alert").not('.cannotAutoClose').delay(8000).slideUp(200, function () {
+                $(this).alert('close');
+            });
+
+            $(".monthPicker").datepicker({
+                autoclose: true,
+                format: "mm/yyyy"
+            });
+
+
+
+            $(".yearPicker").datepicker({
+                autoclose: true,
+                minViewMode: 2,
+                format: "yyyy"
+            });
+
+            $('.modal').on('shown.bs.modal', function (e) {
+                //console.log('modal shown');
+                $('.datePicker, .datepicker').each(function () {
+                    if (!$(this).hasClass('hasDatepicker')) {
+                        //console.log('apply datepucjer');
+                        //$('.datepicker').datepicker({
+                        //    autoclose: true,
+                        //    format: "dd/mm/yyyy"
+                        //});
+                    }
+                })
+            });
+
+            $('.mobile').mask("0000-0000000", { placeholder: "____-_______" });
+            $('.phone').mask("000-0000000", { placeholder: "____-______" });
+            //$('.datePicker,.datepicknew').mask("00/00/0000", { placeholder: "__/__/____" });
+            $('.monthPicker').mask("00/0000", { placeholder: "__/____" });
+            $('.timePicker').mask("00:00", { placeholder: "__:__" });
+
+            //OnLoad();
+            jQuery("time.timeago").timeago();
+            $(document).keydown(handleDocumentKeyDown);
+            //$.fn.showLess();
+            DisplayConstraint();
+            SetTopMenuActive();
+            $("[title]").tooltip({ html: true });
+            $('[data-toggle="popover"]').popover();
+            $('input').attr('autocomplete', 'off');
+
+
+        });
+
+        $('.datepicker').datetimepicker({
+            timepicker: false,
+            format: 'd/m/Y',
+            scrollMonth: false,
+            scrollInput: false,
+        });
+        $('.datepickerAutoClose').datetimepicker({
+            timepicker: false,
+            format: 'd/m/Y',
+            autoClose: true,
+            scrollMonth: false,
+            scrollInput: false,
+        });
+        $('.datepickerSessionStartEndDate').datetimepicker({
+            timepicker: false,
+            format: 'd/m/Y',
+            autoClose: true,
+            scrollMonth: false,
+            scrollInput: false,
+            minDate: moment('@FAPP.DAL.SessionHelper.SessionYearStartDate.ToShortDateString()').format('YYYY/MM/DD'),
+            maxDate: moment('@FAPP.DAL.SessionHelper.SessionYearEndDate.ToShortDateString()').format('YYYY/MM/DD')
+        });
+
+        $('.monthpicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'MM yy',
+            showButtonPanel: true,
+            onClose: function () {
+                var iMonth = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                var iYear = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                $(this).datepicker('setDate', new Date(iYear, iMonth, 1));
+            },
+            beforeShow: function () {
+                if ((selDate = $(this).val()).length > 0) {
+                    iYear = selDate.substring(selDate.length - 4, selDate.length);
+                    iMonth = jQuery.inArray(selDate.substring(0, selDate.length - 5),
+                             $(this).datepicker('option', 'monthNames'));
+                    $(this).datepicker('option', 'defaultDate', new Date(iYear, iMonth, 1));
+                    $(this).datepicker('setDate', new Date(iYear, iMonth, 1));
+                }
+            }
+        });
+        //$('.datetimepicker').datetimepicker({
+        //    datepicker: true,
+        //    format: 'd/m/Y H:i',
+        //    step: 5
+        //});
+
+
+
+        //$('.modal').on('hidden.bs.modal', function (e) {
+        //    // do something...
+        //    $('.vd_radio input').attr('id', function (i, val) { return val + "___"; })
+        //})
+
+
+
+        $(document).ajaxComplete(function (event, xhr, settings) {
+
+            //$('.modal').on('shown.bs.modal', function (e) {
+            //    var modal = $(this);
+            //    var r = parseInt(Math.random() * 100);
+            //    modal.find('input').attr('id', function (i, val) { return "__"+val; })
+            //    //modal.find('select').attr('id', function (i, val) { return val + r; })
+            //    modal.find('label').attr('for', function (i, val) { return "__"+val; })
+            //})
+
+            //adding btn-xs class
+            $('button:contains("Delete")').addClass('btn-xs');
+            $('a:contains("Delete")').addClass('btn-xs');
+            $('a:contains("Edit")').addClass('btn-xs');
+            replaceWithLabels();
+
+            $('.mobile').mask("0000-0000000", { placeholder: "____-_______" });
+            $('.phone').mask("000-0000000", { placeholder: "____-______" });
+            //$('.datePicker').mask("00/00/0000", { placeholder: "__/__/____" });
+            $('.monthPicker').mask("00/00/0000", { placeholder: "__/____" });
+            $('.timePicker').mask("00:00", { placeholder: "__:__" });
+            $('input').attr('autocomplete', 'off');
+            $('[data-toggle="popover"]').popover();
+
+            if (xhr.responseJSON != undefined && typeof xhr.responseJSON != 'undefined') {
+                //redirect to login page when session expired during ajax call.
+                if (xhr.Status == 401)
+                    window.location.href = '@Url.Action("Login", "Account", new { returnUrl = Request.Url.AbsoluteUri })';
+            }
+            $('[data-toggle="tooltip"]').tooltip({ html: true });
+            $('[data-toggle="popover"]').popover();
+            $("[title]").tooltip({ html: true });
+            $('select').not('.mtz-monthpicker').not('.nochosen').not('.ajax').removeClass('form-control').select2({ width: 'resolve' });
+
+
+
+            $(".datepickerDDMMYYY").datepicker({
+                autoclose: true,
+                format: "dd/mm/yyyy"
+            });
+
+
+            ////without masking
+            //$(".datepicker").datepicker({
+            //    autoclose: true,
+            //    format: "dd/mm/yyyy"
+            //});
+            $(".yearPicker").datepicker({
+                autoclose: true,
+                minViewMode: 2,
+                format: "yyyy"
+            });
+            $(".monthPicker").datepicker({
+                autoclose: true,
+                format: "mm/yyyy"
+            });
+            $.validator.unobtrusive.parse(document)
+            //console.log('sresult');
+            //$('form').find('input[type=text], input[type=password], input[type=number], input[type=email], textarea').val('');
+            $('#sresult').select2({
+                ajax: {
+                    delay: 150,
+                    global: false,
+                    url: (typeof $ajaxRemoteSearchUrl !== 'undefined' ? $ajaxRemoteSearchUrl : ''),
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: params.term,
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                        };
+                    }
+                },
+                placeholder: (typeof $ajaxRemotePlaceHolder !== 'undefined' ? $ajaxRemotePlaceHolder : '--Select--'),
+                minimumInputLength: 2,
+                allowClear: true,
+                templateSelection: redirectTo
+            });
+
+
+            //$('input[type=text]').first().focus();
+
+            $(".alert").not('.cannotAutoClose').delay(8000).slideUp(200, function () {
+                $(this).alert('close');
+            });
+            //if ($('.pagination-container').length > 0) {
+            //    $('#stickyPagination').html($('.pagination-container').html())
+            //    $('.pagination-container').hide();
+            //}
+        })
+
+        function redirectTo(repo) {
+            if (repo.id && typeof $ajaxRemoteRedirectUrl !== 'undefined') {
+                window.location.replace($ajaxRemoteRedirectUrl + repo.id);
+                return 'please wait...';
+            }
+            return repo.title || repo.text;
+        }
+
+        $('body').on('click', function (e) {
+            if ($(e.target).data('toggle') !== 'popover'
+                && $(e.target).parents('.popover.in').length === 0) {
+                $('[data-toggle="popover"]').popover('hide');
+            }
+        });
+        //$('input[type=text]').not('.datepicker').focus(function (e) {
+        //    $(this).select();
+        //});
+        //$('.main-nav').hide()
+
+        function replaceWithLabels() {
+            if ($('.orangeLabel').html() && !$('.orangeLabel').html().includes('span')) {
+                $('.orangeLabel').html(function (i, val) {
+                    return '<span class="label label-orange border-radius-30">' + val + ' </span>'
+                });
+            }
+            if ($('.greenLabel').html() && !$('.greenLabel').html().includes('span')) {
+                $('.greenLabel').html(function (i, val) {
+                    return '<span class="label label-green border-radius-30">' + val + '</span>'
+                });
+            }
+            if ($('.darkblueLabel').html() && !$('.darkblueLabel').html().includes('span')) {
+                $('.darkblueLabel').html(function (i, val) {
+                    return '<span class="label label-darkblue border-radius-30">' + val + ' </span>'
+                });
+            }
+            if ($('.greyLabel').html() && !$('.greyLabel ').html().includes('span')) {
+                $('.greyLabel ').html(function (i, val) {
+                    return '<span class="label label-success border-radius-30">' + val + ' </span>';
+                });
+            }
+        }
+
+    </script>
+    @*<script src="~/Areas/Finance/Scripts/voucher.js"></script>*@
+
+    @RenderSection("scripts", false)
+    <div style="display: none">
+        @RenderSection("PageHeader", false)
+    </div>
+
+    <div id="frmModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content" id="frmModalContent">
+
+            </div>
+        </div>
+    </div>
+    <div id="frmModalLg" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" id="frmModalContentLg">
+
+            </div>
+        </div>
+    </div>
+    <iframe id="myIframe" style="visibility: hidden; height: 1px; width: 100%" seamless="seamless"></iframe>
+    <script>
+        function printData(id, h1, beforehtml, afterhtml, iframe, printHeader, h3, branchName, branchAddress, ElementToShowAfterPrint) {
+            if (printHeader == null || typeof printHeader === "undefined") {
+                printHeader = true;
+            }
+
+            if (branchName == null || typeof branchName === "undefined") {
+                branchName = '';
+            }
+
+            if (branchAddress == null || typeof branchAddress === "undefined") {
+                branchAddress = '';
+            }
+
+            if (iframe) {
+                var ifrm = document.getElementById(iframe);
+                ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
+                setTimeout(function () {
+                    ifrm.print();
+                }, 500);
+            }
+            else {
+                h1 = h1 || "";
+                beforehtml = beforehtml || "";
+                afterhtml = afterhtml || "";
+                var divToPrint = document.getElementById(id);
+                var ifrm = document.getElementById('myIframe');
+                ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
+                ifrm.document.open();
+                ifrm.document.write('<!doctype html><html>');
+                ifrm.document.write('<head>');
+                ifrm.document.write('<link href="/Uploads/pdf.css" rel="stylesheet" media="all"  />');
+                ifrm.document.write('<link href="/Content/pivot.css" media="all" rel="stylesheet" />');
+                ifrm.document.write('<link href="/Content/font-awesome.min.css" rel="stylesheet" media="all" />');
+                ifrm.document.write('</head>');
+                ifrm.document.write('<body>');
+
+                if (printHeader) {
+                    if (branchId) {
+                        ifrm.document.write('<table style="width:100%">');
+                        ifrm.document.write('<tr><td style="width:1%" rowspan="2"><img src="/Uploads/Logos/WebLogoMini.png" width="60" /></td><td style="text-align:left; font-size:26px;padding-left:5px;">' + branchName + '</td></tr><tr><td style="text-align:left; font-size:20px;padding-left:5px;">' + branchAddress + '</td></tr>');
+                        if (h1.length > 0) {
+                            ifrm.document.write('<tr><td style="text-align: center;" colspan="2">' + '<h1>' + h1 + '</h1>' + '</td></tr>');
+                        }
+                        ifrm.document.write('</table>');
+                    }
+                    else {
+                        ifrm.document.write('<div><img src="/uploads/Logos/WebLogoFull.png" style="width:100%" /></div>');
+                    }
+                }
+                else {
+                    ifrm.document.write('<h1 style="font-size: 24px; text-align: center;">' + h1 + '</h1>');
+                }
+                if (h3)
+                    ifrm.document.write('<h3>' + h3 + '</h3>');
+                ifrm.document.write(beforehtml + divToPrint.outerHTML + afterhtml);
+                ifrm.document.write('</body>');
+                ifrm.document.write('</html>');
+
+                setTimeout(function () {
+                    ifrm.print();
+                    //document.body.innerHTML = ifrm.document.body.innerHTML;
+                }, 500);
+            }
+            $("." + ElementToShowAfterPrint).show();
+
+        }
+
+    </script>
+    <script>
+        try {
+            var dateFormat = "dd/mm/yy"; // en-gb date format, substitute your own
+            jQuery.validator.addMethod('date',
+                function (value, element, params) {
+                    if (this.optional(element)) {
+                        return true;
+                    };
+                    var result = false;
+                    try {
+                        $.datepicker.parseDate(dateFormat, value);
+                        result = true;
+                    } catch (err) {
+                        result = false;
+                    }
+                    return result;
+                },
+                ''
+            );
+        } catch (e) {
+            console.log('jQuery.validator.addMethod')
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageAMItemsViewModel
+@{
+    ViewBag.Title = "Manage Items";
+}
+<style>
+    #main .page-header {
+        padding-bottom: 9px;
+    }
+</style>
+
+
+@section topRightMenu{
+
+    @if (ViewBag.CanCreate)
+    {
+<ul class="minitiles link">
+    <li class="blue">
+        <a href="javascript:" id="" data-toggle="modal" data-target="#AddItemModel">
+            <i class="fa fa-plus"></i>
+        </a>
+    </li>
+    <li class='orange' title="Fix product code and its accounts">
+        <a href="@Url.Action("FixItems")">
+            <i class="fa fa-cogs"></i>
+        </a>
+    </li>
+</ul>
+    }
+    <ul class="stats">
+        <li hidden class='green' title="Total Categories">
+            <i class="fa fa-slack"></i>
+            <div class="details">
+                <span class="big largeFont" id="topTotal">
+                    @*@(Model.Items == null ? "" : Model.Items.Count().ToString())*@
+                </span>
+            </div>
+        </li>
+        
+    </ul>
+
+}
+
+
+<div class="vbox row">
+    @using (Ajax.BeginForm("ManageItems", "Setup",
+                                                                                new AjaxOptions
+                                                                                {
+
+                                                                                    OnSuccess = "OnResponceBackFromServer",
+                                                                                    UpdateTargetId = "UpdateTarget"
+                                                                                }))
+    {
+        Html.EnableClientValidation(false);
+        <div class="form-group col-md-3" style="padding:0px;padding-right: 5px; margin:0px;">
+            @Html.DropDownListFor(model => model.CategoryId, (SelectList)ViewBag.Categoires, "--Select Category--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+            @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-3" style="padding:0px;padding-right: 5px; margin:0px;">
+            @Html.EditorFor(x => x.SearchItem, new { htmlAttributes = new { @class = "form-control", @placeholder = "Search Here..." } })
+            @Html.ValidationMessageFor(model => model.SearchItem, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-2" style="padding:0px;padding-right: 5px; margin:0px;width:19%">
+            <label for="SearchFixedRadioBtn" style="cursor:pointer">Fixed Asset</label>
+            @Html.CheckBoxFor(x => x.SearchFixedRadioBtn, new { @class = "", style = "cursor:pointer" })
+            @Html.ValidationMessageFor(model => model.SearchItem, "", new { @class = "text-danger" })
+            <label for="SearchConsumableRadioBtn" style="cursor:pointer">Consumable</label>
+            @Html.CheckBoxFor(x => x.SearchConsumableRadioBtn, new { @class = "", style = "cursor:pointer" })
+            @Html.ValidationMessageFor(model => model.SearchItem, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-3" style="padding-left: 0px; margin:0px;">
+            <input type="submit" name="" id="GenerateReport" value="Search" class="btn btn-default">
+        </div>
+    }
+</div>
+
+<div id="UpdateTarget">
+    @Html.Partial("_PartialManageItems", Model)
+</div>
+
+<div class="modal fade" id="AddItemModel" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        @using (Ajax.BeginForm("AddItem", "Setup",
+                                            new AjaxOptions
+                                            {
+
+                                                OnSuccess = "OnResponceBackFromServer",
+                                                UpdateTargetId = "UpdateTarget"
+                                            }, new { id = "AddItemForm" }))
+        {
+            { Html.EnableClientValidation(); }
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #368ee0; color:white;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Item</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="box-content nopadding">
+                                <div class="form-horizontal form-bordered">
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Name</label>
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Item.ItemName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Item Name" } })
+                                            @Html.ValidationMessageFor(model => model.Item.ItemName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Short Name</label>
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Item.ShortName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Item Name" } })
+                                            @Html.ValidationMessageFor(model => model.Item.ShortName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Category</label>
+                                        <div class="col-sm-9">
+                                            @Html.DropDownListFor(model => model.Item.CategoryId, (SelectList)ViewBag.Categoires, "--Select Category--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+                                            @Html.ValidationMessageFor(model => model.Item.CategoryId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Unit</label>
+                                        <div class="col-sm-9">
+                                            @Html.DropDownListFor(model => model.Item.UnitId, (SelectList)ViewBag.Units, "--Select Unit--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+                                            @Html.ValidationMessageFor(model => model.Item.UnitId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Depriciation Type</label>
+                                        <div class="col-sm-9">
+                                            @Html.DropDownListFor(model => model.Item.DepriciationTypeId, (SelectList)ViewBag.DepriciationTypes, "--Select Depriciation Type--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+                                            @Html.ValidationMessageFor(model => model.Item.DepriciationTypeId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Type</label>
+                                        <div class="col-sm-9">
+                                            <div class="vd_radio radio-success">
+                                                @Html.RadioButtonFor(model => model.Item.IsConsumable, "true", new { id = "Item_IsConsumableNew_1", @class = "yes" })
+                                                <label for="Item_IsConsumableNew_1"> Consumable </label>
+                                                @Html.RadioButtonFor(model => model.Item.IsConsumable, "false", new { id = "Item_IsConsumableNew_2", @class = "no" })
+                                                <label for="Item_IsConsumableNew_2"> Fixed Asset </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Price</label>
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.Item.Price, new { htmlAttributes = new { @class = "form-control", @placeholder = "Price" } })
+                                            @Html.ValidationMessageFor(model => model.Item.Price, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Description</label>
+                                        <div class="col-sm-9">
+                                            @Html.TextAreaFor(model => model.Item.Description, new { @class = "form-control", @placeholder = "Description", @style = "overflow:auto" })
+                                            @Html.ValidationMessageFor(model => model.Item.Description, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Barcode</label>
+                                        <div class="col-sm-9">
+                                            @Html.TextBoxFor(model => model.Item.Barcode, new { @class = "form-control", @placeholder = "Barcode" })
+                                            @Html.ValidationMessageFor(model => model.Item.Barcode, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success ladda-button" id="AddItemBtn" data-style="zoom-in">
+                        <span class="ladda-label">Add Item</span><span class="ladda-spinner"></span>
+                    </button>
+                    @*<input type="submit" value="Add Item" class="btn btn-primary load" />*@
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="EditModal" role="dialog">
+    <div class="modal-dialog">
+        <div id="EditModalTarget"> </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jqueryui.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#Price").val(0.0);
+        })
+$('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+@{
+<label class="label label-darkblue" title="Total">Total: @(Model.Items == null ? "" : Model.Items.Count().ToString())</label>
+} </p>`);
+
+    </script>
+}

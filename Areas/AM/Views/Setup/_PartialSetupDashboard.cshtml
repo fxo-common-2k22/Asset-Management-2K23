@@ -1,0 +1,49 @@
+﻿@model  FAPP.Areas.AM.ViewModels.GraphsModel
+<div class="row">
+    <div class="col-md-8">
+        @Html.Partial("~/Areas/AM/Views/Setup/_PartialSetupDashboardMenus.cshtml", Model)
+
+    </div>
+    <div class="col-md-4">
+        <div class="" id="MenuLinks">
+            @*@if (Model.v_mnl_FormRights.Where(u => u.FormURL == "_PartialShowQuickLinks").Any())
+                {*@
+            @Html.Partial("~/Areas/AM/Views/Setup/_PartialSetupQuickLinks.cshtml", Model)
+
+
+            @*}*@
+        </div>
+    </div>
+</div>
+
+@*<table id="StrengthTable" style="display:none;">
+        <thead>
+            <tr>
+                <th>Branch Name</th>
+                <th>Total</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.GraphData)
+            {
+                <tr>
+                    <td>@item.AccountTypeName</td>
+                    <td>@Math.Abs(Convert.ToDecimal(item.Amount))</td>
+
+
+
+                </tr>
+            }
+        </tbody>
+    </table>*@
+<script>
+    $('#extendedPageHeader').html(`<p style="margin:13px 0px">
+    @{
+        <label class="label label-blue" title="Branch">@(FAPP.DAL.SessionHelper.BranchName)</label>
+        <label class="label label-darkblue" title="Current Session">@(FAPP.DAL.SessionHelper.CurrentSession)</label>
+    }
+</p>`);
+</script>
+

@@ -1,0 +1,97 @@
+﻿@model FAPP.ViewModel.MessagingVM
+@{
+    ViewBag.Title = "Manage Batches";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
+<link href="~/Content/ezSchoolStyle.css" rel="stylesheet" />
+@section PageHeader {
+    SMS Batches
+}
+@section TopRightMenu{
+<ul class="minitiles">
+    <li class="blue" style="margin-right:0">
+        <a href="@Url.Action("Templates","Messaging",new { id = Model.ModuleId })" data-toggle="tooltip" title="Dashboard">
+            <i class="fa fa-tachometer"></i>
+        </a>
+    </li>
+    @*<li class="blue">
+            <a href="@Url.Action("Create","Applicants")" data-toggle="tooltip" title="Add New Applicant">
+                <i class="fa fa-plus"></i>
+            </a>
+        </li>
+        <li class="green">
+            <a href="#" data-toggle="tooltip" title="Print">
+                <i class="fa fa-print" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li class="darkblue">
+            <a href="@Url.Action("Index","Setup", new { area = "Academics"})" data-toggle="tooltip" title="Go To Setup">
+                <i class="fa fa-external-link-square" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li class="darkblue">
+            <a href="#" data-toggle="tooltip" title="Graphical Representation" id="hideShowCharts" data-value="false">
+                <i class="fa fa-pie-chart" aria-hidden="true"></i>
+            </a>
+        </li>*@
+</ul>
+}
+<div class="alert alert-info alert-dismissable cannotAutoClose h4" style="margin-top:15px;margin-bottom:6px">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+
+    <p style="padding-top:5px !important;">
+        <strong>[<i class="fa fa-info"></i>]</strong> Messages with status <strong>Pending</strong> and <strong>Current Date</strong> will be sent only.
+
+    </p>
+</div>
+@Html.Partial("_PartialAlerts")
+
+
+    @using (Ajax.BeginForm("SearchBatches", "Messaging",
+        new AjaxOptions { HttpMethod = "POST", OnSuccess = "onSearchSuccess", OnFailure = "OnSearchFailure" },
+        new { @class = "form-inline" }))
+    {
+        <div class="vbox">
+          @Html.HiddenFor(model => model.ModuleId)
+            <div class="col-sm-2" style="padding-left: 1px">
+                @Html.DropDownListFor(model => model.SearchMessage.TemplateTypeId, new SelectList(ViewBag.TypesDD, "Value", "Text"), "-All Templates-", new {@style = "width:100%", @class = ""})
+                @Html.ValidationMessageFor(model => model.SearchMessage.TemplateTypeId, "", new {@class = "text-danger"})
+            </div>
+            <div class="col-sm-2" style="padding-left:1px">
+                @Html.EditorFor(model => model.SearchMessage.Batch, new { htmlAttributes = new { @style = "width:100%", @class = " form-control", @placeholder = "Batch No" } })
+                @Html.ValidationMessageFor(model => model.SearchMessage.Batch, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-2" style="padding-left: 1px">
+                @Html.EditorFor(model => model.SearchMessage.Date, new { htmlAttributes = new { @style = "width:100%", @class = "datePicker form-control", @placeholder = "Batch Date" } })
+                @Html.ValidationMessageFor(model => model.SearchMessage.Date, "", new {@class = "text-danger"})
+            </div> 
+            <button type="submit" class="btn btn-success">Search</button>
+        </div>
+
+    }
+
+<div id="smsGrid">
+    @if (Model.SmsBatchList != null && Model.SmsBatchList.Any())
+    {
+        @Html.Partial("_PartialSmsBatchGrid", Model)
+    }
+</div>
+
+<script>
+                 $('#extendedPageHeader').html(`<p style="margin:12px 0px">
+                @{
+                <label class="label label-green" title="Module Name">@ViewBag.ModuleName</label>
+                <label class="label label-green" title=" Batch">Total Batches: @(Model.SmsBatchList.Count)</label>
+                } </p>`);
+</script>
+
+
+
+

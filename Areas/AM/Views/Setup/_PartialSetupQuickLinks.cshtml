@@ -1,0 +1,19 @@
+﻿@model  FAPP.Areas.AM.ViewModels.GraphsModel
+<div class="box box-color box-bordered green" id="ShowQuickLinks">
+    <div class="box-title">
+        <h3>
+            <i class="fa fa-bars"></i>
+            <span id="LabelTitle">Links</span>
+        </h3>
+    </div>  
+    <div class="box-content" style="min-height: 155px;">
+        @if (Model.Module == "Home")
+        {
+            @Html.Action("GetHomeDashboardMenus", "Primary", new { area = string.Empty, url = "/AM/Setup/Index" })
+        }
+        else
+        {
+            @Html.Action("GetDashboardQuickLinks", "Primary", new { area = "", area2 = Model.Area, controller = Model.Contoller, action = Model.Action })
+        }
+    </div>
+</div>

@@ -1,0 +1,211 @@
+﻿@using FAPP.Helpers
+@model FAPP.ViewModel.MessagingVM
+@using PagedList.Mvc;
+<div id="table">
+    <div class="row">
+        <div class="col-sm-12 downpadding">
+            <div class="table-responsive">
+                <table class="table table-hover table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th width="1%">Sr.#</th>
+                            <th width="1%"><input name="SelectAll" id="SelectAll" type="checkbox" style="cursor:pointer" title="Select All" onclick="$('.checkBoxes').prop('checked', $(this).prop('checked')).change();" /></th>
+                            <th>Reciever</th>
+                            <th>Module</th>
+                            <th>Msg Status</th>
+                            <th class="text-center">Delivered</th>
+                            <th>Sent On</th>
+                            <th>Scheduled On</th>
+                            <th>Sent by</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int count = (100 * (Model.SmsQuesList.PageNumber - 1)) + 1;}
+                        @foreach (var item in Model.SmsQuesList)
+                        {
+                            <tr>
+                                <td><span class="label label-default current-theme">@(count++)</span></td>
+                                
+                                <td id="checkboxes">
+                                    @if (item.MessageStatus != "Sent" || item.MessageStatus != "Delivered")
+                                    {
+                                        <input type="checkbox" name="SelectedSMSQueueId" value="@item.SmsQueueId" data-id="@item.SmsQueueId" class="checkBoxes checkbox" style="cursor:pointer" />
+                                    }
+                                </td>
+                                <td>@Html.DisplayFor(m => item.ReceiverMobile)</td>
+                                <td>@Html.DisplayFor(m => item.Module.ModuleName)</td>
+                                <td>
+                                    @if (item.MessageStatus == "Delivered")
+                                    {
+                                        <span class="label label-default colored-span Status-span  blue-span">@item.MessageStatus</span>
+                                    }
+                                    else if (item.MessageStatus == "Failed")
+                                    {
+                                        <span class="label label-default colored-span Status-span  red-span">@item.MessageStatus</span>
+                                    }
+                                    else if (item.MessageStatus == "Canceled")
+                                    {
+                                        <span class="label label-default colored-span Status-span  brown-span">@item.MessageStatus</span>
+                                    }
+                                    else if (item.MessageStatus == "Sent")
+                                    {
+                                        <span class="label label-default colored-span Status-span  green-span">@item.MessageStatus</span>
+                                    }
+                                    else if (item.MessageStatus == "Pending")
+                                    {
+                                        <span class="label label-default colored-span Status-span  orange-span">@item.MessageStatus</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (item.DeliveredStatus ?? false)
+                                    {
+                                        <i data-toggle="tooltip" title="Yes" class="fa fa-check pointer" style="color:green"></i>
+                                    }
+                                    else
+                                    {
+                                        <i data-toggle="tooltip" title="No" class="fa fa-times pointer" style="color:red"></i>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.SentOn != null)
+                                    {
+                                        @String.Format("{0:dd MM yyyy hh:mm:ss}",
+                      Convert.ToDateTime(item.SentOn))
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.ScheduledOn != null)
+                                    {
+                                        @String.Format("{0:dd MM yyyy hh:mm:ss}",
+                  Convert.ToDateTime(item.ScheduledOn))
+                                    }
+                                </td>
+                                <td>@Html.DisplayFor(m => item.User.Username)</td>
+                                <td>
+                                    <a class="btn btn-sm btn-info" href="/Messaging/SmsDetails/@item.SmsQueueId" data-ajax="true" data-ajax-failure="OnFailure" data-ajax-method="GET" data-ajax-success="onEditSuccess" data-toggle="tooltip" title="SMS Details">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    @*<button class="btn btn-danger" type="button" onclick="DeleteRow('@item.CertificateId', '/Certificates/DeleteCertificate', 'certGrid', 'Delete Certificate?')">
+                                            Delete
+                                        </button>*@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <footer class="stickyFooter vbox" style="padding-bottom: 0px !important; width: 84%">
+                    <div class="footerContainer ">
+                        <div class="col-md-4 displayNone" style="padding-top: 5px;" id="stickyButtons">
+                            <a onclick="ConfirmSMSQueueUpdate('You Want To Resend Selected Messages?','Pending')" class="btn btn-primary btn-sm btn-xs" data-toggle="tooltip" title="Schedule SMS">
+                                <i class="fa fa-send"></i> Retry
+                            </a>
+                            <a onclick="ConfirmSMSQueueUpdate('You Want To Cancel Selected Messages?','Cancel')" class="btn btn-brown btn-sm btn-xs" data-toggle="tooltip" title="Schedule SMS">
+                                <i class="fa fa-times"></i> Cancel
+                            </a>
+                        </div>
+                        <div class="col-md-6 pull-right" id="stickyPagination">
+                            <div class="pull-right">
+                                @{                     var batch = FAPP.Controllers.MessagingController.SearchMessage.Batch != null ? FAPP.Controllers.MessagingController.SearchMessage.Batch.ToString() : "";
+}
+                                @Html.PagedListPager(Model.SmsQuesList, page => Url.Action("Index",
+                                new { page,batch}), new PagedListRenderOptions {
+                                    DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded,
+                                    DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+                                    DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded,
+                                    DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded,
+                                    MaximumPageNumbersToDisplay = 10,
+
+                                })
+                            </div>
+                        </div>
+                        <div class="col-md-2 center-block text-center">
+                            <strong id="noOfSelectedItems" class="displayNone" style="vertical-align: -webkit-baseline-middle"></strong>
+                        </div>
+                    </div>
+                </footer>
+                @*Page @(Model.SmsQuesList.PageCount < Model.SmsQuesList.PageNumber ? 0 : Model.SmsQuesList.PageNumber) of @Model.SmsQuesList.PageCount
+
+                    @Html.PagedListPager(Model.SmsQuesList, page => Url.Action("Index", new { page = page }))*@
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ConfirmBoxModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="frmModalContent">
+            <div class="modal-header modalHeader">
+                <h4 class="modal-title">Are You Sure?</h4>
+            </div>
+            <div class="modal-body">
+                <p id="prgConfirm">
+
+                </p>
+
+                <input id="hdnBtnId" type="hidden" />
+                <input id="txtCSVSmsQueueIds" type="hidden" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default bTn" id="btnCancelConfirmModal">Cancel</button>
+                <button type="button" id="btnConfirmAdmit" class="btn btn-primary bTn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="smsDetailModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="smsDetailModalontent">
+
+        </div>
+    </div>
+</div>
+<script>
+    $('.checkBoxes').change(function () {
+        $('#stickyButtons').addClass('displayNone');
+        $('#noOfSelectedItems').addClass('displayNone');
+        if ($('.checkBoxes:checked').length > 0) {
+            $('#stickyButtons').removeClass('displayNone');
+            $('#noOfSelectedItems').removeClass('displayNone');
+            $('#noOfSelectedItems').text($('.checkBoxes:checked').length + ' Message(s) Selected');
+        }
+    })
+    var arr = [];
+    function ConfirmSMSQueueUpdate(confirmMessage,command){
+     
+        $("#prgConfirm").html(confirmMessage);
+        $("#hdnBtnId").val(command);
+     $('.checkBoxes').each(function () { //iterate all listed checkbox items
+            if (this.checked == true) {
+                arr.push($(this).attr("data-id"));
+            }
+             if(arr.length > 0){
+                    var ids = arr.join(",");
+                    $("#txtCSVSmsQueueIds").val(ids);
+                }else{
+                    $("#txtCSVSmsQueueIds").val('');
+                }
+
+        });
+    $("#ConfirmBoxModal").modal('show');
+    }
+    $("#btnConfirmAdmit").click(function()
+    {
+
+        if (arr.length > 0) {
+
+            $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                url: '/Messaging/UpdateSMSQueue',
+                type: 'POST',
+                data: JSON.stringify({ SMSQueueIds: $("#txtCSVSmsQueueIds").val(), Command: $("#hdnBtnId").val(), BatchNo: $("#BatchNo").val() }),
+                success: function (data) {
+                     
+                    var res = OnCreateUpdateSuccess(data);
+                }
+            });
+        } else {
+            toastr.warning('Please Select Messages.');
+        }
+    });
+</script>

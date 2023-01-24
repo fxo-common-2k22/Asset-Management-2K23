@@ -1,0 +1,50 @@
+﻿@model List<FAPP.Models.ActionLinks>
+@using FAPP.Models
+@using FAPP.Helpers
+
+
+@helper singleLi(ActionLinks item, string action, string controller, string area, string url)
+    {
+        <li>
+            <a href="@url" style="@(item.Action == action && item.Controller == controller && item.Area == area.ToString() ? "background-color: #FFF" : "")">
+                @item.FormName
+            </a>
+        </li>
+}
+
+@helper  TopMenu(List<ActionLinks> nodeList)
+    {
+        var action = Request.RequestContext.RouteData.Values["action"].ToString();
+        var controller = Request.RequestContext.RouteData.Values["controller"].ToString();
+        var area = HttpContext.Current.Request.RequestContext.RouteData.DataTokens["area"] ?? "";
+        foreach (var itemmain in nodeList.Where(u => u.IsGroupReportHead))
+        {
+            <div class="subnav subnav-hidden">
+                <div class="subnav-title ui-sortable-handle">
+                    <a href="#" class="toggle-subnav">
+                        <i class="fa fa-angle-down"></i>
+                        <span>@itemmain.FormName</span>
+                    </a>
+                </div>
+                <ul class="subnav-menu" style="display: block;">
+                    @{
+                        if (nodeList.Where(u => u.ParentForm == itemmain.FormId).Any())
+                        {
+                            foreach (var item in nodeList.Where(u => u.ParentForm == itemmain.FormId))
+                            {
+                                @singleLi(item, action, controller, area.ToString(), item.FormUrl)
+                            }
+                        }
+                        else
+                        {
+                            @singleLi(itemmain, action, controller, area.ToString(), itemmain.FormUrl)
+                        }
+                    }
+                </ul>
+            </div>
+        }
+}
+@TopMenu(Model)
+
+
+

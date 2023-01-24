@@ -1,0 +1,155 @@
+﻿@model FAPP.ViewModel.MediaTemplatesViewModel
+<style>
+    .form-group {
+        background: none !important;
+    }
+
+    .col-sm-8 {
+        background: none !important;
+        border-left: none !important;
+    }
+
+    .col-sm-12 {
+        background: none !important;
+    }
+</style>
+@*<link href="~/Scripts/bootstrap-iconpicker/dist/css/bootstrap-iconpicker.min.css" rel="stylesheet" />*@
+<link href="~/Scripts/iconPicker/bootstrap-iconpicker.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Content/plugins/multiselect/multi-select.css" rel="stylesheet" />
+@using (Ajax.BeginForm("AddEditFrmModal", "Certificates",
+    new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnSuccess = "OnCreateUpdateSuccess", OnFailure = "OnFailure" },
+    new { @class = "new-task-form form-horizontal form-bordered", @id = "frmadd" }))
+{
+    <div class="modal-header" style="">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" id="myModalLabel"> @Model.Certificate.Title</h4>
+    </div>
+
+    <div class="modal-body nopadding">
+        <div class="searchbox  " style="margin-top:10px">
+
+            @Html.HiddenFor(m => m.Certificate.CertificateId)
+
+            @Html.Hidden("ckinput", Model.Certificate.CertificateContent)
+
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="form-group ">
+                        <label for="@Model.Certificate.Title" class="col-sm-4 control-label">Title</label>
+                        <div class="col-sm-8">
+                            @Html.EditorFor(model => model.Certificate.Title, new { htmlAttributes = new { @class = " form-control", @placeholder = "Title" } })
+                            @Html.ValidationMessageFor(model => model.Certificate.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="form-group">
+                        <label for="@Model.Certificate.FaIcon" class="control-label col-sm-4">Select Icon</label>
+                        <div class="col-sm-8">
+                            @{ var icon = "fa-th";
+                                if (Model.Certificate.CertificateId > 0)
+                                {
+                                    icon = Model.Certificate.FaIcon;
+                                }
+                            }
+                            <button class="btn btn-default" name="Certificate.FaIcon" id="Certificate_FaIcon" data-iconset="fontawesome" data-icon="@icon" role="iconpicker"></button>
+                            @*<div data-label-header="{0} - {1} pages" name="Template.FaIcon" id="Template_FaIcon" data-label-footer="{0} - {1} of {2} icons" role="iconpicker"></div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="form-group ">
+                        <label for="@Model.Certificate.RefNoFormat" class="col-sm-4 control-label">Ref No Format</label>
+                        <div class="col-sm-8">
+                            @Html.EditorFor(model => model.Certificate.RefNoFormat, new { htmlAttributes = new { @class = " form-control", @placeholder = "[PRE]/CODE/[YY][MM]/[0000]" } })
+                            @*<span id="genNo">[PRE]/CODE/[YY][MM]/[0000]</span>*@
+                            @Html.ValidationMessageFor(model => model.Certificate.RefNoFormat, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="form-group ">
+                        <label for="" class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8">
+                            <span id="genNo">[PRE]/CODE/[YY][MM]/[0000]</span>
+
+                            <div class="help-block">
+                                <ul style="list-style: none">
+                                    <li>[PRE] means prefix, [YY] means 2 digit year, [MM] means 2 digit year, [0000] is a number placeholder</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="form-group">
+                        <label for="@Model.Certificate.TemplateTypeId" class="col-sm-4 control-label">Type</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.Certificate.TemplateTypeId, new SelectList(Model.TemplateTypeList, "TemplateTypeId", "TemplateTypeName"), "-Select Type-", new { @style = "width:100%", @class = "ctype" })
+                            @Html.ValidationMessageFor(model => model.Certificate.TemplateTypeId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div class="col-sm-12" id="fieldsGrid1">
+                            @if (Model.ViewFields != null)
+                            {
+                                if (Model.ViewFields.Count > 0)
+                                {
+                                    @Html.Partial("~/Views/Certificates/_PartialFields.cshtml", Model.ViewFields)
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <input type="submit" class="btn btn-primary" onclick="setHeader('Editing ' + $('#Certificate_Title').val())" value="Save">
+            </div>
+        </div>
+    </div>
+
+
+}
+<script src="~/Scripts/plugins/multiselect/jquery.multi-select.js"></script>
+<script src="~/Scripts/iconPicker/bootstrap-iconpicker-iconset-all.min.js"></script>
+<script src="~/Scripts/iconPicker/bootstrap-iconpicker.min.js"></script>
+@*<script src="~/Scripts/bootstrap-iconpicker/dist/js/bootstrap-iconpicker-iconset-all.min.js"></script>
+    <script src="~/Scripts/bootstrap-iconpicker/dist/js/bootstrap-iconpicker.min.js"></script>*@
+<script type="text/javascript">
+
+    $(".ctype").change(function () {
+        var selected = this.value;
+        if (selected !== '')
+        {
+            $("#fieldsGrid1").load('@Url.Action("GetMediaTypeFields", "Certificates")/', { id: selected }, function (responseTxt, statusTxt, xhr) {
+                //alert(responseTxt.length);
+                $("#fieldsGrid1").html(responseTxt);
+                if (responseTxt.length === 306) {
+                    $("#fieldsGrid1").html("This type has No Fields!");
+                }
+                if (responseTxt.Messages !== '' && responseTxt.Messages !== undefined) {
+                    toastr.error(responseTxt.Messages, 'Failed');
+                }
+            });
+        }
+    });
+</script>

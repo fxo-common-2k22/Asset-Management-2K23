@@ -1,0 +1,164 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageAMUnitsViewModel
+
+@{
+    ViewBag.Title = "Manage Units";
+}
+
+@section topRightMenu{
+    @if (ViewBag.CanCreate)
+    {
+        <ul class="minitiles link">
+            <li class="blue">
+                <a href="javascript:" id="" data-toggle="modal" data-target="#AddUnitModal">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </li>
+        </ul>
+    }
+}
+
+<style>
+    #main .page-header {
+        padding-bottom:9px;
+    }
+
+</style>
+
+<div class="vbox row">
+    @using (Ajax.BeginForm("ManageUnits", "Setup",
+        new AjaxOptions
+        {
+            
+            OnSuccess = "OnSuccess",
+            OnFailure = "OnFailure",
+            UpdateTargetId = "UpdateTarget"
+            //LoadingElementId = "progress"
+        }))
+    {
+        Html.EnableClientValidation(true);
+        <div class="form-group col-md-3" style="padding:0px;padding-right: 5px; margin:0px;">
+            @Html.EditorFor(x => x.Search, new { htmlAttributes = new { @class = "form-control", @placeholder = "Search Here..." } })
+            @Html.ValidationMessageFor(model => model.Search, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-3" style="padding-left: 0px; margin:0px;">
+            <input type="submit" name="" id="GenerateReport" value="Search" class="btn btn-default">
+        </div>
+    }
+</div>
+
+<div id="UpdateTarget">
+    @Html.Partial("_PartialManageAMUnits", Model)
+</div>
+
+<div class="modal fade" id="AddUnitModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        @using (Ajax.BeginForm("AddUnit", "Setup",
+        new AjaxOptions
+        {
+            
+            OnSuccess = "OnAddCategorySuccess",
+            OnFailure = "OnFailure",
+            UpdateTargetId = "UpdateTarget"
+            //LoadingElementId = "progress"
+        }, new {id = "AddUnitForm" }))
+        {
+            { Html.EnableClientValidation(); }
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #368ee0; color:white;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Unit</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="box-content nopadding">
+                                <div class="form-horizontal form-bordered">
+                                    <div class="form-group">
+                                        <label for="textfield" class="control-label col-sm-3">Unit Name</label>
+                                        <div class="col-sm-9">
+                                            @Html.EditorFor(model => model.UnitName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Unit Name" } })
+                                            @Html.ValidationMessageFor(model => model.UnitName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Save Unit" class="btn btn-primary load" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="EditModal" role="dialog">
+    <div class="modal-dialog">
+        <div id="EditModalTarget"> </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
+        function DeleteUnit(id) {
+            bootbox.confirm({
+                title: "Delete Unit?",
+                message: "Are you sure? This cannot be undone.",
+                buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Cancel'
+                    },
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> Confirm'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        $.ajax({
+                            url: '@Url.Action("DeleteUnit","Setup")',
+                            method: "POST",
+                            data: { id: id },
+                            success: function (data) {
+                                if (data == "True") {
+                                    $("#row_" + id).remove();
+                                    DisplayMessage('', '<strong>Updated</strong> Unit has been Deleted!');
+                                } else {
+                                    DisplayMessage('error', "Something went while Updating placement. please try later...");
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        function OnSuccess(response) {
+            DisplayMessage('', '<strong>Updated</strong> Units has been Updated!');
+        }
+        function OnAddCategorySuccess(response) {
+            DisplayMessage('', '<strong>Updated</strong> Unit has been Updated!');
+        }
+        function OnFailure(response) {
+            DisplayMessage('error', 'Something went wrong while processing your request...!');
+        }
+        function OnBegin(aho) {
+            $('#AddUnitForm').trigger("reset");
+        }
+        function OnEditBegin(aho) {
+
+        }
+        function OnEditSuccess(response) {
+            $('#EditModal').modal('show');
+            $.getScript("/App_Themes/Flat/js/eakroko.min.js");
+        }
+        function OnEditedBegin(aho) {
+            $('#EditModal').modal('hide');
+        }
+        function OnEditedSuccess(response) {
+            DisplayMessage('', '<strong>Updated</strong> Record has been Updated!');
+        }
+    </script>
+}

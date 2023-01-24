@@ -1,0 +1,169 @@
+﻿@{
+    ViewBag.Title = "Academics";
+}
+
+<div class="row">
+    <div class="col-xs-8">
+        <div class="box box-color box-bordered">
+            <div class="box-title">
+                <h3>
+                    <i class="fa fa-bar-chart-o"></i>
+                    <span id="LabelTitle">Manage</span>
+                </h3>
+            </div>
+            <div class="box-content" style="min-height: 155px;">
+                <div id="PanelDeskItems">
+                    <div class="desktop-icons clearfix" style="clear: both; margin: 1em;">
+                        <ul>
+                            <li>
+                                <a id="HyperLink1" title="New Addmission" href="/Academics/Student/Index">
+                                    <img src="https://maxcdn.icons8.com/Color/PNG/48/City/students-48.png" width="48" height="48"><em>Student Management</em>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="box box-color box-bordered orange">
+            <div class="box-title">
+                <h3>
+                    <i class="fa fa-bars"></i>
+                    <span id="LabelTitle">Setup</span>
+                </h3>
+            </div>
+            <div class="box-content" style="min-height: 155px;">
+                <table class="table table-nohead">
+                    @*<tr style="display: table-row;">
+                            <td>
+                                <span class="label label-default"><i class="fa fa-check"></i></span>
+                                <a href="ManageCashAccounts.aspx">Transactions</a>
+                            </td>
+
+                        </tr>
+                        <tr style="display: table-row;">
+                            <td>
+                                <span class="label label-default"><i class="fa fa-check"></i></span>
+                                <a href="ManageBankAccounts.aspx">Payments</a>
+                            </td>
+                        </tr>
+                        <tr style="display: table-row;">
+                            <td>
+                                <span class="label label-default"><i class="fa fa-check"></i></span>
+                                <a href="YearlyOpeningBalance.aspx">View Books</a>
+                            </td>
+                        </tr>*@
+                    @*<tr style="display: table-row;">
+                            <td>
+                                <span class="label label-default"><i class="fa fa-check"></i></span>
+                                <a href="../Finance/Setup/ChartOfAccounts.aspx">Add Resources</a>
+                            </td>
+                        </tr>
+                        <tr style="display: table-row;">
+                            <td>
+                                <span class="label label-default"><i class="fa fa-check"></i></span>
+                                <a href="PrimaryData.aspx">SATs</a>
+                            </td>
+                        </tr>*@
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="box box-color box-bordered">
+    <div class="box-title">
+        <h3>
+            <i class="fa fa-bar-chart-o"></i>
+            <span id="LabelTitle">Some text</span>
+        </h3>
+    </div>
+    <div class="box-content">
+        <div id="PanelDeskItems">
+
+            <div class="desktop-icons clearfix" style="clear: both; margin: 1em;">
+                <ul>
+                    @*<li>
+                            <a id="HyperLink1" title="Voucher And Receipts" href="VoucherAndReceipts.aspx">
+                                <span class='i i-48 i-48-form'></span><em>Voucher And Receipts</em>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="HyperLink1" title="Quick Payments" href="QuickPayments.aspx">
+                                <span class='i i-48 i-48-form'></span><em>Quick Payments</em>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="HyperLink1" title="Cash Receipt" class="Cash Receipt" href="CashOrBankVoucher.aspx?vt=CR">
+                                <span class='i i-48 i-48-receive_cash'></span><em>Cash Receipt</em>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="HyperLink1" title="Cash Payment" class="Cash Payment" href="CashOrBankVoucher.aspx">
+                                <span class='i i-48 i-48-give_coin'></span><em>Cash Payment</em>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="HyperLink1" title="Bank Receipt" class="Bank Receipt" href="CashOrBankVoucher.aspx?vt=BR">
+                                <span class='i i-48 i-48-receipt'></span><em>Bank Receipt</em>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="HyperLink1" title="Bank Payment" class="Bank Payment " href="CashOrBankVoucher.aspx?vt=BP">
+                                <span class='i i-48 i-48-check_book'></span><em>Bank Payment</em>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="HyperLink1" title="Add Journal Voucher" class="Create Journal Voucher" href="AddJournalVoucher.aspx">
+                                <span class='i i-48 i-48-check'></span><em>Add Journal Voucher</em>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="HyperLink1" title="Manage Journal Voucher" class="Manage Journal Voucher " href="ManageJournalVouchers.aspx">
+                                <span class='i i-48 i-48-receipts'></span><em>Manage Journal Voucher</em>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="HyperLink1" title="Manage Payments And Receipts" href="ManagePaymentsAndReceipts.aspx">
+                                <span class='i i-48 i-48-form'></span><em>Manage Payments And Receipts</em>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="HyperLink1" title="Post Vouchers" class="accounts" href="PostVouchers.aspx">
+                                <span class='i i-48 i-48-hourglass'></span><em>Post Vouchers</em>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="HyperLink1" title="Unpost Vouchers" class="accounts" href="UnpostVouchers.aspx">
+                                <span class='i i-48 i-48-hourglass'></span><em>Unpost Vouchers</em>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="HyperLink1" title="Transaction Transfer" href="TransactionTransfer.aspx">
+                                <span class='i i-48 i-48-form'></span><em>Transaction Transfer</em>
+                            </a>
+                        </li>*@
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>

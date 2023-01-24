@@ -1,0 +1,49 @@
+﻿@model FAPP.Areas.AM.ViewModels.ReturnIssueModel
+
+<ul class="minitiles link">
+    @if (Model?.ReturnIssue?.IsPosted == false)
+    {
+        <li class="blue">
+            <label style="width: 150px;cursor: default;" id="statuslbl">Draft</label>
+        </li>
+    }
+    @if (Model?.ReturnIssue?.IsPosted == true)
+    {
+        <li class="blue">
+            <label style="width: 150px;cursor: default;" id="statuslbl">Posted</label>
+        </li>
+    }
+    <li>
+        <input style="display:none" type="button" class="voucherLink btn btn-success" value="Go back to invoice" id="lbUnPrintVoucher" />
+    </li>
+    <li class="orange topLi nodisplay">
+        <a id="lbPrintVoucher" class="voucherLink" title="Print (Ctrl+P)">
+            <i class="fa fa-print"></i>
+        </a>
+    </li>
+
+    @if (Model?.ReturnIssue?.IsPosted == false)
+    {
+        <li class="green">
+            <label for="IssueItemSubmitBtn" id="">
+                <i class="fa fa-save">
+                </i>
+            </label>
+        </li>
+        <li class="blue">
+            <a title="Post" style="cursor:pointer;" data-action="ConfirmPopup" data-href="@Url.Action("PostReturnIssueVoucher")" data-id="@(Model?.ReturnIssue?.ReturnIssueId)" data-message="Are you sure you want to post voucher?" data-title="Warning!">
+                <i class="fa fa-check">
+                </i>
+            </a>
+        </li>
+    }
+    @if (Model?.ReturnIssue?.IsPosted == true)
+    {
+        <li class="blue">
+            <a title="Unpost" style="cursor:pointer;" data-action="ConfirmPopup" data-href="@Url.Action("UnPostReturnIssueVoucher")" data-id="@(Model?.ReturnIssue?.ReturnIssueId)" data-message="Are you sure you want to post voucher?" data-title="Warning!">
+                <i class="fa fa-share">
+                </i>
+            </a>
+        </li>
+    }
+</ul>

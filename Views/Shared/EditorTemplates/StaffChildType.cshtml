@@ -1,0 +1,16 @@
+﻿@model string
+
+@{
+    var o = ViewData.ModelMetadata;
+    bool? isChecked = !string.IsNullOrEmpty(Model) ? (Model == "Father" ? (bool?)true : (bool?)false) : null;
+    var radioId = ViewData.TemplateInfo.GetFullHtmlFieldId("");
+}
+
+<div class="vd_radio radio-success">
+    @Html.RadioButton("", "NA", isChecked ?? true, new { id = @radioId + "_0", @class = "yes" })
+    <label for="@(radioId)_1"> NA </label>
+    @Html.RadioButton("", "Father", isChecked.HasValue ? isChecked.Value : false, new { id = @radioId + "_1", @class = "yes" })
+    <label for="@(radioId)_1"> Father </label>
+    @Html.RadioButton("", "Mother", isChecked.HasValue ? !isChecked.Value : !true, new { id = @radioId + "_2", @class = "no" })
+    <label for="@(radioId)_2"> Mother </label>
+</div>

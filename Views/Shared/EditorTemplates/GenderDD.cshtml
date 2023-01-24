@@ -1,0 +1,10 @@
+﻿@model string
+@{
+    var list = new List<SelectListItem>()
+    {
+        new SelectListItem(){ Text = "Male", Value = "Male"},
+        new SelectListItem(){ Text = "Female", Value = "Female"}
+    };
+}
+
+@Html.DropDownList("", new SelectList(list, "Value", "Text"), "--Gender--", new { @class = "form-control" })

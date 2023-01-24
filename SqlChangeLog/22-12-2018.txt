@@ -1,0 +1,3 @@
+﻿Add column in table
+ public long? COGSVoucherDetailId { get; set; }
+        public long? InventoryVoucherDetailId { get; set; }

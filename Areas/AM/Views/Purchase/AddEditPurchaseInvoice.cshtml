@@ -1,0 +1,223 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+@{
+    /**/
+
+    ViewBag.Title = "Purchase Invoice";
+}
+<style>
+    .Noline {
+        border-top: none !important;
+    }
+
+    hr {
+        display: block;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        margin-left: auto;
+        margin-right: auto;
+        border-style: dashed;
+        border-width: 1px;
+    }
+
+    .AllBorder {
+        padding: inherit;
+        margin: auto;
+        border-top: solid !important;
+        border-bottom: solid !important;
+        border-left: solid !important;
+        border-right: solid !important;
+        border-style: solid !important;
+        border-width: medium;
+        /*text-align: center;
+        font-weight: bold;*/
+    }
+
+    .topbottomBorder {
+        padding: inherit;
+        margin: auto;
+        border-top: solid !important;
+        border-bottom: solid !important;
+        border-style: solid !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-width: medium;
+        /*text-align: center;*/
+        /*font-weight: bold;*/
+    }
+
+    .noLeftBottomBorder {
+        /*border-left: none !important;*/
+        border-bottom: none !important;
+    }
+
+    .rightborder {
+        border-right: solid !important;
+    }
+
+    .style5 {
+        text-align: right;
+        font-family: Vivaldi;
+        font-size: x-large;
+    }
+
+    .Dottedline {
+        border-bottom: dotted !important;
+        border-width: thick;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    #trans_details > tbody > tr > td {
+        padding: 6px 3px 0px 0px !important;
+    }
+</style>
+@section topRightMenu{
+    <ul class="minitiles link">
+        <li class="nodisplay">
+            <input style="display:none" type="button" class="voucherLink btn btn-success" value="Go back to invoice" id="lbUnPrintVoucher" />
+        </li>
+        <li class="blue topLi nodisplay @(ViewBag.IsPosted == false ? " " : "hidden")">
+            <a id="lbPostVoucher" class="voucherLink" title="Post Voucher">
+                <i class="fa fa-check"></i>
+            </a>
+        </li>
+        <li class="blue topLi nodisplay @(ViewBag.IsPosted == true ? " " : "hidden")">
+            <a id="lbUnPostVoucher" class="voucherLink" title="UnPost Voucher">
+                <i class="fa fa-share"></i>
+            </a>
+        </li>
+        <li class="green topLi nodisplay @(ViewBag.IsPosted == true ? " " : "hidden")">
+            <a id="convertIssueItem" class="voucherLink" title="Issue Items">
+                <i class="fa fa-arrow-circle-up"></i>
+            </a>
+        </li>
+        <li class="orange topLi nodisplay">
+            <a id="lbPrintVoucher" class="voucherLink" title="Print (Ctrl+P)">
+                <i class="fa fa-print"></i>
+            </a>
+        </li>
+        <li class="grey convertToGRN" style="cursor:pointer;">
+            <a data-toggle="modal" href="#ConvertToPIModal" title="Convert to purchase invoice" data-target="#ConvertToPIModal" id="">
+                <i class="fa fa-exchange" data-toggle="tooltip"></i>
+            </a>
+        </li>
+        @*<li class="grey topLi nodisplay @(ViewBag.IsCancelled == true ? " " : "hidden")">
+                <a id="lbUnCancelVoucher" title="Uncancel Voucher" class="voucherLink">
+                    <i class="fa fa-check"></i>
+                </a>
+            </li>
+            <li class="grey topLi nodisplay @(ViewBag.IsCancelled == false ? " " : "hidden")">
+                <a id="lbCancelVoucher" title="Cancel Voucher" class="voucherLink">
+                    <i class="fa fa-times"></i>
+                </a>
+            </li>*@
+        <li class="blue topLi nodisplay">
+            <a id="lbReceivePayment" title="Make Payment (Ctrl+R)" class="voucherLink">
+                <i class="i i-48 i-48-receive_cash"></i>
+            </a>
+        </li>
+        @*<li class='satgreen topLi nodisplay' style="padding-bottom: 15px; ">
+                <i class="fa fa-money"></i>
+                <div class="details ">
+                    <span class="big largeFont" id="topTotal">
+                    </span>
+                </div>
+            </li>*@
+        <li class="green">
+            <a id="submitButton" class="voucherLink" title="Save (Ctrl+S)">
+                <i class="fa fa-floppy-o"></i>
+            </a>
+        </li>
+        <li class='blue' title="Purchase Invoices List">
+            <a href="/AM/Purchase/ManagePurchaseInvoices">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+    <ul class="stats">
+        <li class='satgreen topLi nodisplay'>
+            <i class="fa fa-money"></i>
+            <div class="details ">
+                <span class="big largeFont" id="topTotal">
+                </span>
+            </div>
+        </li>
+    </ul>
+}
+<script src="~/Areas/AM/Scripts/shortkeys.js"></script>
+<script src="~/Areas/AM/Scripts/purchase.js"></script>
+
+@using (Html.BeginForm("AddEditPurchaseInvoice", "Purchase", FormMethod.Post, new { id = "invoiceform" }))
+{
+    Html.EnableClientValidation(true);
+
+    <div id="UpdatePartial">
+        @Html.Partial("_PartialAddEditPI", Model)
+    </div>
+
+    <div class="modal fade" id="PIPDModal" role="dialog" style="">
+        <div class="modal-dialog" id="UpdatePIPD">
+            <!-- Modal content-->
+        </div>
+    </div>
+    <div class="modal fade" id="ServiceModal" tabindex="-1" role="dialog" aria-labelledby="ServiceModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header HeaderColor">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                    <h4 class="modal-title" id="serviceModalTitle">Issue purchase items</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Department</label>
+                            <div class="col-md-8">
+                                @Html.DropDownList("IssuedItem.DepartmentId", new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"), "Select Department", new { @class = "form-control chosen-select", @style = "width:100%;" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Description</label>
+                            <div class="col-md-8">
+                                @Html.TextArea("IssuedItem.Description", null, new { @class = "form-control", @placeholder = "Description" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer background-login">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success voucherLink inputenabledisable" id="btnIssueItem">Convert</button>
+                    <div class="help-block" id="Service_item_no_lbl"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+@section scripts{
+    <script>
+        function OnFetchSuccess(response) {
+            $("#PIPDModal").modal("show");
+        }
+        function OnFetchFailure(response) {
+            DisplayMessage('error', '<strong>Failed</strong> Something went wrong while processing your request...!');
+        }
+
+        $('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+        @{
+            if (ViewBag.EditMode)
+             {
+             <label class="label label-darkblue" title="Purchase Invoice Number">  PI: @(Model?.PurchaseInvoice?.PurchaseInvoiceId)</label>
+             }
+            else
+            {
+             <label class="label label-darkblue" id="newpurchaselabel" title="">New</label>
+            }
+        } </p>`);
+    </script>
+}

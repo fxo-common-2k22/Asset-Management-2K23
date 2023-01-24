@@ -1,0 +1,91 @@
+﻿USE [ezBIZ_PRO]
+GO
+
+/****** Object:  Table [Academics].[UserSessions]    Script Date: 11/27/2018 8:54:06 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [Academics].[UserSessions](
+	[UserSessionId] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
+	[SessionId] [uniqueidentifier] NOT NULL,
+	[Default] [bit] NOT NULL,
+	[CreatedOn] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedOn] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[IP] [nvarchar](50) NULL,
+	[User_UserID] [int] NULL,
+	[Assigned] [bit] NOT NULL,
+	[BranchId] [smallint] NULL,
+ CONSTRAINT [PK_Academics.UserSessions] PRIMARY KEY CLUSTERED 
+(
+	[UserSessionId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [Academics].[UserSessions] ADD  DEFAULT ((0)) FOR [Assigned]
+GO
+
+ALTER TABLE [Academics].[UserSessions]  WITH CHECK ADD  CONSTRAINT [FK_Academics.UserSessions_Academics.Sessions_SessionId] FOREIGN KEY([SessionId])
+REFERENCES [Academics].[Sessions] ([SessionId])
+GO
+
+ALTER TABLE [Academics].[UserSessions] CHECK CONSTRAINT [FK_Academics.UserSessions_Academics.Sessions_SessionId]
+GO
+
+ALTER TABLE [Academics].[UserSessions]  WITH CHECK ADD  CONSTRAINT [FK_Academics.UserSessions_Company.Branches_BranchId] FOREIGN KEY([BranchId])
+REFERENCES [Company].[Branches] ([BranchId])
+GO
+
+ALTER TABLE [Academics].[UserSessions] CHECK CONSTRAINT [FK_Academics.UserSessions_Company.Branches_BranchId]
+GO
+
+ALTER TABLE [Academics].[UserSessions]  WITH CHECK ADD  CONSTRAINT [FK_Academics.UserSessions_Membership.Users_CreatedBy] FOREIGN KEY([CreatedBy])
+REFERENCES [Membership].[Users] ([UserID])
+GO
+
+ALTER TABLE [Academics].[UserSessions] CHECK CONSTRAINT [FK_Academics.UserSessions_Membership.Users_CreatedBy]
+GO
+
+ALTER TABLE [Academics].[UserSessions]  WITH CHECK ADD  CONSTRAINT [FK_Academics.UserSessions_Membership.Users_ModifiedBy] FOREIGN KEY([ModifiedBy])
+REFERENCES [Membership].[Users] ([UserID])
+GO
+
+ALTER TABLE [Academics].[UserSessions] CHECK CONSTRAINT [FK_Academics.UserSessions_Membership.Users_ModifiedBy]
+GO
+
+ALTER TABLE [Academics].[UserSessions]  WITH CHECK ADD  CONSTRAINT [FK_Academics.UserSessions_Membership.Users_User_UserID] FOREIGN KEY([User_UserID])
+REFERENCES [Membership].[Users] ([UserID])
+GO
+
+ALTER TABLE [Academics].[UserSessions] CHECK CONSTRAINT [FK_Academics.UserSessions_Membership.Users_User_UserID]
+GO
+
+ALTER TABLE [Academics].[UserSessions]  WITH CHECK ADD  CONSTRAINT [FK_Academics.UserSessions_Membership.Users_UserId] FOREIGN KEY([UserId])
+REFERENCES [Membership].[Users] ([UserID])
+GO
+
+ALTER TABLE [Academics].[UserSessions] CHECK CONSTRAINT [FK_Academics.UserSessions_Membership.Users_UserId]
+GO
+
+
+
+USE ezBIZ_PRO_SCHEMAONLY
+ 
+Alter TABLE [Fee].[Types]
+	ADD [IsFineHead] [bit] NOT NULL 
+GO
+
+GO
+use ezBIZ_PRO_SCHEMAONLY
+Alter TABLE Academics.SchoolHouses
+	ADD HouseOrder smallint  NULL 
+GO
+
+
+ 

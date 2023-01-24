@@ -1,0 +1,259 @@
+﻿@model FAPP.ViewModel.TemplatesViewModel
+@{
+    if (Model.Template != null)
+    {
+        ViewBag.Title = Model.Template.TemplateTitle;
+    }
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Scripts/DataTables/DataTables-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Scripts/DataTables/Buttons-1.5.1/css/buttons.dataTables.min.css" rel="stylesheet" />
+@section TopRightMenu{
+    <ul class="minitiles">
+        <li class="darkblue">
+            <a href="/CustomReporting/Index" data-toggle="tooltip" title="Back to Dashboard">
+                <i class="fa fa-mail-reply"></i>
+            </a>
+        </li>
+        <li class="orange">
+            <a href="/CustomReporting/Setting/@Model.Template.View.Module.ModuleName/@Model.Template.View.ViewName" data-toggle="tooltip" title="@Model.Template.TemplateTitle Settings">
+                <i class="fa fa-gears"></i>
+            </a>
+        </li>
+
+        @if (Model.ReportBuilderViewModel.ReportTemplateId > 0)
+        {
+            <li class="blue">
+                <a href="/CustomReporting/AddEdit/@Model.Template.View.Module.ModuleName/@Model.Template.View.ViewName/@Model.Template.ReportTemplateId" data-toggle="tooltip" title="Edit @Model.Template.TemplateTitle">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            </li>
+        }
+        @*<li class="red">
+                <a href="" data-toggle="tooltip" title="Delete All Applicants" onclick="DeleteAllApplicants()">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            </li>
+            <li class="blue">
+                <a href="@Url.Action("Templates", "CustomReporting")" data-toggle="tooltip" title="Templates List">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </li>*@
+    </ul>
+}
+
+<style>
+    thead input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+
+    .dataTables_filter {
+        display: none;
+    }
+    /*tfoot {
+         display: table-header-group;
+     }*/
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.Partial("_PartialAlerts")
+    var rName = "";
+    <div class="vbox" style="padding:0px;">
+        <table>
+            <tbody>
+                <tr>
+                    <td style="width: 10%;">
+                        @Html.DropDownListFor(m => m.ReportBuilderViewModel.StageId, new SelectList(Model.StagesDD, "Value", "Text"), "--All Stages--", new { @class = "form-control", @style = "width:100% !important" })
+                        @*@Html.ValidationMessageFor(m => m.ReportBuilderViewModel.StageId, "", new { @class = "text-danger" })*@
+                    </td>
+                    <td style="width: 10%;">
+                        @Html.DropDownListFor(m => m.ReportBuilderViewModel.ClassId, new SelectList(Model.ClassesDD, "Value", "Text"), "--All Classes--", new { @class = "form-control", @style = "width:100% !important" })
+                        @*@Html.ValidationMessageFor(m => m.ReportBuilderViewModel.StageId, "", new { @class = "text-danger" })*@
+                    </td>
+                    <td style="width: 10%;">
+                        @Html.DropDownListFor(m => m.ReportBuilderViewModel.GroupId, new SelectList(Model.GroupsDD, "Value", "Text"), "--All Groups--", new { @class = "form-control", @style = "width:100% !important" })
+                        @*@Html.ValidationMessageFor(m => m.ReportBuilderViewModel.GroupId, "", new { @class = "text-danger" })*@
+                    </td>
+                    @Html.HiddenFor(m => m.ReportBuilderViewModel.ReportTemplateId)
+                    @{
+                        rName = Model.Template.TemplateName;
+                    }
+                    @*@{
+                            if (Model.Template.View.TemplateFilters != null)
+                            {
+                                foreach (var filter in Model.Template.View.TemplateFilters)
+                                {
+                                    <td width="2%" style="padding:6px">
+                                        @Html.Partial(filter.FilterView, filter)
+                                    </td>
+                                }
+                            }
+                        }*@
+                    <td width="10%" style="padding:6px">
+                        @Html.EditorFor(model => model.ReportBuilderViewModel.Title, new { htmlAttributes = new { @Value = rName, @style = "width:100% !important", @class = "form-control input-sm", @placeholder = "Report Title" } })
+                        @Html.ValidationMessageFor(model => model.ReportBuilderViewModel.Title, "", new { @class = "text-danger" })
+                    </td>
+
+                    <td width="10%" style="padding:6px">
+                        <button type="submit" class="btn btn-success">Load </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <div id="formGrid">
+        @if (Model.CustomReport != null)
+        {
+            @Html.Partial("_CustomReport", Model)
+        }
+    </div>
+}
+<script>
+    $(document).ready(function () {
+        $("body").css("overflow-x", "hidden");
+    });
+    @*$("#ReportBuilderViewModel_StageId").change(function () {
+            $.ajax({
+                url: "@Url.Action("GetGroupsByStage", "CustomReporting")?stageId=" + this.value,
+                method: "Get",
+                success: function (data) {
+                    $("#ReportBuilderViewModel_GroupId").empty();
+                    $("#ReportBuilderViewModel_GroupId").append("<option >--All Groups--</option>");
+                    for (var i = 0; i < data.length; i++) {
+                        $("#ReportBuilderViewModel_GroupId").append("<option value=" + data[i].Value + ">" + data[i].Text + "</option>")
+                    }
+                }
+            });
+        })*@
+</script>
+
+@section scripts{
+
+    <script src="~/Scripts/DataTables/DataTables-1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/DataTables/Buttons-1.5.1/js/dataTables.buttons.min.js"></script>
+    <script src="~/Scripts/DataTables/JSZip-2.5.0/jszip.min.js"></script>
+    <script src="~/Scripts/DataTables/pdfmake-0.1.32/pdfmake.min.js"></script>
+    <script src="~/Scripts/DataTables/pdfmake-0.1.32/vfs_fonts.js"></script>
+    <script src="~/Scripts/DataTables/Buttons-1.5.1/js/buttons.html5.min.js"></script>
+    <script src="~/Scripts/DataTables/Buttons-1.5.1/js/buttons.print.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var buttonCommon = {
+                exportOptions: {
+                    format: {
+                        body: function (data, row, column, node) {
+                            // Strip $ from salary column to make it numeric
+                            return column === 5 ?
+                                data.replace(/[$,]/g, '') :
+                                data;
+                        }
+                    }
+                }
+            };
+
+            var table = $('#example').DataTable({
+                //ajax: '../../../../examples/ajax/data/objects.txt',
+                //columns: [
+                //    { data: 'name' },
+                //    { data: 'position' },
+                //    { data: 'office' },
+                //    { data: 'extn' },
+                //    { data: 'start_date' },
+                //    { data: 'salary' }
+                //],
+                bPaginate: false,
+                colReorder: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    {
+                        extend: 'excelHtml5',
+                        title: $('#ReportBuilderViewModel_Title').val()
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        title: $('#ReportBuilderViewModel_Title').val()
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: $('#ReportBuilderViewModel_Title').val()
+                    },
+                    {
+                        extend: 'print',
+                        title: $('#ReportBuilderViewModel_Title').val(),
+                        customize: function (win) {
+                            if ($("#IsPrintHeader_1").val() === "True") {
+                                $(win.document.body)
+                                    .css('font-size', '10pt')
+                                    .prepend(
+                                        $("#Branch_ReportHeader").val()
+                                    );
+                            }
+                            if ($("#IsPrintFooter_1").val() === "True") {
+                                $(win.document.body)
+                                    .css('font-size', '10pt')
+                                    .append(
+                                        $("#Branch_ReportFooter").val()
+                                    );
+                            }
+                            $(win.document.body).find('table')
+                                .addClass('compact')
+                                .css('font-size', 'inherit');
+                        }
+                    }
+
+                ]
+            });
+            //function appendHeaderFooter()
+            //    {
+            //    var header = "";
+            //    if ($("#IsPrintHeader").val() === "Yes") {
+            //        header = $("#Branch_ReportHeader").val();
+            //    }
+            //    return header;
+            //}
+
+            $('#example thead th').each(function () {
+                var title = $(this).text();
+                $(this).html('<p>' + title + '</p>' + '<input type="text" placeholder="' + title + '" />');
+            });
+            // DataTable
+            table = $('#example').DataTable();
+
+            // Apply the search
+            table.columns().eq(0).each(function (colIdx) {
+                $('input', table.column(colIdx).header()).on('keyup change', function () {
+                    table
+                        .column(colIdx)
+                        .search(this.value)
+                        .draw();
+                });
+                $('input', table.column(colIdx).header()).on('click', function (e) {
+                    e.stopPropagation();
+                });
+            });
+        });
+
+
+
+            //$("#btnReportBuilder").click(function () {
+            //    $("#formGrid").load('/Academics/CustomReporting/BuildReport', {
+            //        tid: $("#ReportBuilderViewModel_ReportTemplateId").val(),
+            //        gid: $("#ReportBuilderViewModel_GroupId").val()
+            //    }, function (response, status, xhr) {
+            //        $.getScript("/Scripts/eakroko.min.js");
+
+            //        if (status == 'success') {
+            //            DisplayMessage("", "Report loaded successfully.");
+            //        } else {
+            //            DisplayMessage("error", "Something went wrong while processing.");
+            //        }
+            //    })
+            //});
+    </script>
+}

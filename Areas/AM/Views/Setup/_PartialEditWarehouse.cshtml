@@ -1,0 +1,53 @@
+﻿@model FAPP.Areas.AM.ViewModels.SetupModelViewModel
+
+
+
+<div class="modal-header" style="background-color: #368ee0 !important;color:white;">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title" id="myModalLabel">Edit Warehouse   : (@Model.AMWarehouse.WarehouseName) </h4>
+</div>
+
+
+@using (Ajax.BeginForm("EditWarehouse", "Setup", new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnComplete = "OnComplete('frmModal')", OnSuccess = "OnCreateUpdateSuccess", OnFailure = "OnFailure" }, new { @class = "new-task-form form-horizontal form-bordered" }))
+{
+    Html.EnableClientValidation(true);
+    @Html.HiddenFor(m => m.AMWarehouse.WarehouseId)
+
+
+
+    <div class="modal-body nopadding">
+        <div class="form-group">
+
+
+            <label for="tasktitel" class="col-sm-3 control-label">Warehouse Name </label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.AMWarehouse.WarehouseName, new { @required = true, @class = "form-control", @placeholder = "Warehouse Name" })
+                @Html.ValidationMessageFor(model => model.AMWarehouse.WarehouseName, null, new { @class = "text-danger" })
+            </div>
+
+            <label for="tasktitel" class="col-sm-3 control-label">Address</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.AMWarehouse.Address, new { @required = true, @class = "form-control ", @placeholder = "Address" })
+                @Html.ValidationMessageFor(model => model.AMWarehouse.Address, null, new { @class = "text-danger" })
+            </div>
+
+            <label for="tasktitel" class="col-sm-3 control-label">Phone</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.AMWarehouse.Phone, new { @required = true, @class = "form-control ", @placeholder = "Phone" })
+                @Html.ValidationMessageFor(model => model.AMWarehouse.Phone, null, new { @class = "text-danger" })
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+
+
+    <div class="modal-footer">
+        <input type="button" class="btn btn-orange" data-dismiss="modal" value="Cancel">
+        <input type="submit" class="btn btn-primary" value="Update Warehouse ">
+    </div>
+
+}

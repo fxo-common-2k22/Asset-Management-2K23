@@ -1,0 +1,577 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+
+@section topRightMenu
+        {
+    <ul class="minitiles">
+
+
+
+        <li class="blue">
+            <a href="/AM/Purchase/ManageInvoicePayments" target="_blank"><i class="fa fa-list"></i></a>
+        </li>
+
+        @if (Model.SupplierPayment.SupplierPaymentId > 0)
+        {
+
+            if (Model.SupplierPayment.VoucherId.HasValue)
+            {
+
+                <li class="orange">
+                    <a id="lbPrintVoucher" class="voucherLink" title="Print">
+                        <i class="fa fa-print"></i>
+                    </a>
+                </li>
+            }
+            <li class="blue">
+                <a data-ajax="true" data-ajax-success="PostSPsuccess" data-ajax-failure="OnFailure" data-ajax-begin="OnBegin" href="/AM/Purchase/CreateModifySupplierPaymentVoucher?SupplierPaymentId=@Model.SupplierPayment.SupplierPaymentId&isPosted=true"><i class="fa fa-check"></i></a>
+            </li>
+
+            <li class="red">
+                <a href="#" id="deleteSupplierPayment" data-SupplierPayment="@Model.SupplierPayment.SupplierPaymentId"><i class="fa fa-trash"></i></a>
+            </li>
+        }
+
+    </ul>
+
+
+
+}
+
+@if (Model.SupplierPayment != null && Model.SupplierPayment.SupplierPaymentId > 0)
+{
+    ViewBag.Title = "Payment # " + Model.SupplierPayment.SupplierPaymentId;
+}
+
+
+@using (Ajax.BeginForm("MakePayment", "Purchase", FormMethod.Post,
+     new AjaxOptions() { OnBegin = "OnBegin", OnFailure = "OnFailure", OnSuccess = "CustomResponseFromServer" }))
+{
+    Html.EnableClientValidation(false);
+    @Html.AntiForgeryToken()
+
+    <div id="mainsection">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-success" id="messageDiv" style="display: none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+                    <div class="help-block" id="messagelabel"></div>
+                </div>
+                <div class="vbox">
+                    <table class="table table-condensed borderless">
+                        <tr>
+                            <td><b>Supplier</b></td>
+                            <td>
+                                @Html.DropDownListFor(m => m.SupplierPayment.SupplierId, new SelectList(ViewBag.Suppliers, "ClientId", "Name", Model.SupplierPayment.SupplierId), "=Select Supplier=", new { @class = "form-control chosen-select", @style = "width:100%" })
+                            </td>
+                            <td><strong>Payment Mode</strong></td>
+                            <td>
+                                @Html.DropDownListFor(m => m.SupplierPayment.PaymentType, new SelectList(ViewBag.PaymentMode, "Value", "Text"), "--Select Payment Mode", new { @class = "PaymentMode form-control chosen-select", @style = "width:90%" })
+                                @if (Model.SupplierPayment.SupplierPaymentId > 0)
+                                {
+                                    <a id="updatePayment" data-paymentType="@Html.DisplayFor(m => m.SupplierPayment.PaymentType)" data-PaymentId="@Html.DisplayFor(m => m.SupplierPayment.SupplierPaymentId)">
+                                        <i class="fa fa-check"></i>
+                                    </a>
+                                }
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="cash" style="display:none;"><b>Cash Account</b></td>
+                            <td class="cash" style="display:none;">
+                                @Html.HiddenFor(m => m.SupplierPayment.SupplierPaymentId)
+                                @Html.DropDownListFor(m => m.CashAccountId, new SelectList(ViewBag.CashAccount, "autoKey", "TITLES"), "--Select Cash Account", new { @class = "form-control chosen-select", @style = "width:100%" })
+                            </td>
+                            <td class="bank" style="display:none;"><b>Bank Account</b></td>
+                            <td class="bank" style="display:none;">
+                                @Html.DropDownListFor(m => m.BankAccountId, new SelectList(ViewBag.BankAccount, "autoKey", "TITLES"), "--Select Bank Account", new { @class = "form-control chosen-select", @style = "width:100%" })
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="bank" style="display:none;"><b>Cheque No</b></td>
+                            <td class="bank" style="display:none;">
+                                @Html.TextBoxFor(m => m.SupplierPayment.ChequeNo, null, new { @placeholder = "ChequeNo", @class = "form-control ", })
+                            </td>
+                            <td class="bank" style="display:none;"><b>Cheque Date</b></td>
+                            <td class="bank" style="display:none;">
+                                @Html.TextBoxFor(m => m.SupplierPayment.ChequeDate, null, new { @placeholder = "ChequeDate", @class = "datepicker form-control ", })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Amount</strong></td>
+                            <td>
+                                @Html.TextBoxFor(u => u.SupplierPayment.Amount, new { @placeholder = "Amount", @onkeypress = "return isNumber(event)", })
+                            </td>
+
+                            <td><strong>Payment Date</strong></td>
+                            <td>
+                                @Html.TextBoxFor(u => u.SupplierPayment.PaymentDate, null, new { @class = "form-control datepicker", })
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <td><strong>Description</strong></td>
+                            <td colspan="4">
+                                @Html.TextBoxFor(u => u.SupplierPayment.Description, null, new { @placeholder = "Description", @class = "form-control " })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                @if (!ViewBag.InvoiceDetailExists)
+                                {
+                                    <button type="submit" class="btn btn-success" onclick="return IsValidForSave();" name="Command" value="SavePayment" title="Save">Save Payment</button>
+                                }
+                                else
+                                {
+                                    @*<button type="submit" class="btn btn-blue" onclick="return IsValidForLoad();" name="Command" value="LoadInvoices">Load Invoices</button>*@
+                                    <button type="submit" class="btn btn-success" onclick="return IsValidForSave();" name="Command" value="updatePayment" title="Save">Update</button>
+
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            @if (ViewBag.InvoiceExists)
+            {
+                <div class="col-sm-12" id="adjustableAmountSection">
+                    @Html.Partial("_PartialMakePaymentAdujstableAmount", Model)
+
+                </div>
+                <div class="col-sm-12 marginTop5">
+
+                    <div class="row">
+                        <div class="col-sm-6" id="InvoicePayments">
+                            @*<p style="padding:5px;background:#f4f4f4"><i class="fa fa-check"></i> Matched Payments </p>*@
+                            @Html.Partial("_PartialMakePaymentMatchedInvoices")
+                        </div>
+                        <div class="col-sm-6" id="invoicesSection">
+                            @*<p style="padding:5px;background:#f4f4f4"><i class="fa fa-"></i>Unpaid Bills</p>*@
+                            @Html.Partial("_PartialMakePaymentUnPaidInvoices")
+                        </div>
+                    </div>
+
+                    @*<table id="trans" class="gv nm table table-hover no-head-border table-responsive table-striped">
+                            <thead class="vd_bg-green vd_white">
+                                <tr>
+                                    <th>Sr</th>
+                                    <th>Invoice</th>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Total Amount</th>
+                                    <th>Balance</th>
+                                    <th>Check</th>
+                                    <th style="width:10%;">Paid</th>
+                                    <th style="width:10%;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @if (Model != null)
+                                {
+                                    var count = 0;
+                                    if (Model.SupplierInvoicePaymentList != null)
+                                    {
+                                        for (int i = 0; i < Model.SupplierInvoicePaymentList.Count(); i++)
+                                        {
+                                            <tr class="tr_row">
+                                                <td>@(++count)</td>
+                                                <td>
+                                                    @Html.HiddenFor(u => u.SupplierInvoicePaymentList[i].PurchaseInvoiceId)
+                                                    @Model.SupplierInvoicePaymentList[i].PurchaseInvoiceId
+                                                </td>
+                                                <td>@(Model.SupplierInvoicePaymentList[i].SupplierPayment.Client.Name)</td>
+                                                <td>@(Model.SupplierInvoicePaymentList[i].PurchaseInvoice == null ? "" : Model.SupplierInvoicePaymentList[i].PurchaseInvoice.PurchaseInvoiceDate.ToString("dd MMM yyyy"))</td>
+                                                <td>@(Model.SupplierInvoicePaymentList[i].Description)</td>
+                                                <td>@(Model.SupplierInvoicePaymentList[i].PurchaseInvoice == null ? 0 : Model.SupplierInvoicePaymentList[i].PurchaseInvoice.NetTotal)</td>
+                                                <td class="balance">@(Model.SupplierInvoicePaymentList[i].PurchaseInvoice == null ? 0 : Model.SupplierInvoicePaymentList[i].PurchaseInvoice.NetTotal - Model.SupplierInvoicePaymentList[i].Amount)</td>
+                                                <td></td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m.SupplierInvoicePaymentList[i].Amount, new { @class = "Paid", @onkeypress = "return isNumber(event)" })
+                                                </td>
+                                                <td>
+                                                    @if (ViewBag.CanDelete)
+                                                    {
+                                                        <input type="button" value="Delete" class="btn btn-red delete" data-url="@Url.Action("DeleteInvoicePayment")" data-action="Delete" data-id="@Model.SupplierInvoicePaymentList[i].SupplierInvoicePaymentId" />
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    if (Model.v_mnl_PurchaseInvoiceList != null)
+                                    {
+                                        for (int i = 0; i < Model.v_mnl_PurchaseInvoiceList.Count(); i++)
+                                        {
+                                            <tr class="tr_row">
+                                                <td>@(++count)</td>
+                                                <td>
+                                                    @Html.HiddenFor(u => u.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceId)
+                                                    @Model.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceId
+                                                </td>
+                                                <td>@(Model.v_mnl_PurchaseInvoiceList[i].ClientName)</td>
+                                                <td>@(Model.v_mnl_PurchaseInvoiceList[i].PurchaseInvoiceDate.ToString("dd MMM yyyy"))</td>
+                                                <td>@(Model.v_mnl_PurchaseInvoiceList[i].Description)</td>
+                                                <td>@(Model.v_mnl_PurchaseInvoiceList[i].NetTotal)</td>
+                                                <td class="balance">@(Model.v_mnl_PurchaseInvoiceList[i].NetTotal - Model.v_mnl_PurchaseInvoiceList[i].ReceivedAmount)</td>
+                                                <td>
+                                                    @Html.CheckBox("v_mnl_PurchaseInvoiceList[" + i + "].IsCheked", Convert.ToBoolean(Model.v_mnl_PurchaseInvoiceList[i].IsCheked), new { @data_name = "checkbox" })
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m.v_mnl_PurchaseInvoiceList[i].Paid, new { @class = "Paid", @onkeypress = "return isNumber(event)" })
+                                                    <div class="help-block" style="display:none;" id="v_mnl_PurchaseInvoiceList_0__item_no_lbl"></div>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    }
+
+                                }
+                            </tbody>
+                            <tfoot class="vbox">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        @Html.TextBox("ftPaidTotal", null, new { @class = "bold cloneable", @readonly = "readonly", @placeholder = "0" })
+                                    </td>
+                                    <td>
+                                        @if (ViewBag.InvoiceDetailExists)
+                                        {
+                                            <button type="submit" class="btn btn-success" onclick="return IsValidForSaveDetail();" name="Command" value="SavePaymentInvoice" title="Save">Save matched invoices</button>
+                                        }
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>*@
+                </div>
+            }
+        </div>
+    </div>
+
+    if (Model.SupplierPayment.VoucherId.HasValue)
+    {
+        <div id="printsection" style="display:none">
+            @Html.Partial("_PartialMakePaymentPrintSection", Model)
+        </div>
+    }
+}
+
+
+@section scripts{
+
+    <script>
+         $(document).ready(function () {
+             $('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+                  @if (Model.SupplierPayment != null && Model.SupplierPayment.SupplierPaymentId > 0) {
+                      if (Model.SupplierPayment.IsPosted == true)
+                      {
+                          <label class="label label-blue Posted-Status">Posted</label>
+                      }
+                      else {
+                          <label class="label label-blue Posted-Status">Unposted</label>
+                      }
+
+                          <label class="label label-lime " id='voucherRedirect'>@Model.SupplierPayment.VoucherId</label>
+
+                  } else {
+                      <label class="label label-blue">New</label>
+
+                  }</p> `);
+             $("#pageTitle").css('margin', "3px 0px");
+
+             $('#voucherRedirect').on('click',function (e) {
+                 var win = window.open('/Finance/VoucherAndReceipt/ViewVoucher/@(Model.SupplierPayment.VoucherId!=null ? Model.SupplierPayment.VoucherId.ToString() : "0")', '_blank');
+                 win.focus();
+             })
+
+             $('#deleteSupplierPayment').on("dblclick", function (e) {
+                 var id = $(this).attr('data-SupplierPayment');
+                 console.log(id);
+                 ConfirmBox(deleteSupplierPayment, "Delete Supplier Payment", "Are you sure you want to proceed ?", id);
+             });
+
+             $(".datepicker").each(function () {
+                 $(this).val(RemoveTimeFromDate($(this).val()));
+             });
+
+
+
+             $('#updatePayment').on("dblclick", function (e) {
+                 let paymentType = $(this).attr('data-paymentType');
+                 let id = $(this).attr('data-PaymentId');
+
+                 $.ajax({
+                     url: '/AM/Purchase/updatePaymentMethod/',
+                     method: 'POST',
+                     data: { id: id, paymentType: paymentType },
+                     success: function (resp) {
+                         if (resp.status == true) {
+                             toastr.success(resp.msg == '' ? "Updated Successfully" : resp.msg, "Success !");
+                             setTimeout(function () {
+                                 window.location.reload();
+                             }, 1000);
+
+
+                         }
+                         else {
+                             toastr.error(resp.msg == '' ? "Deletion failed" : resp.msg, "Failed !");
+                         }
+                     },
+                     fail: function (resp) {
+                         toastr.error("Something went wrong.....", "Failed !");
+                     }
+
+                 });
+
+
+             });
+
+
+        })
+
+        function deleteSupplierPayment(id) {
+            $.ajax({
+                url: '/AM/Purchase/DeleteSupplierPayment/' + id,
+                method: 'POST',
+                success: function (resp) {
+                    if (resp.status == true) {
+                        toastr.success(resp.msg, "Success !");
+                        window.location.href = "/AM/Purchase/ManageInvoicePayments";
+                    }
+                    else {
+                        toastr.error(resp.msg, "Failed !");
+                    }
+                },
+                fail: function (resp) {
+                    toastr.error("Something went wrong.....", "Failed !");
+                }
+
+            });
+        }
+
+        function PostSPsuccess(response) {
+            if (response.status == true) {
+                toastr.success("Operation Performed Successfully.. ", 'Success')
+                $('.Posted-Status').text('Posted');
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000)
+            }
+            else {
+                toastr.error("Something went wrong", 'Failed')
+            }
+        }
+
+    </script>
+
+
+
+    <script>
+        var success = @Html.Raw(Json.Encode(ViewBag.success));
+            if (success) {
+                DisplayMessage('', success);
+                }
+            showhide($('.PaymentMode').val());
+            CalculateTotal();
+        function IsValidForLoad() {
+            var validated = true;
+            if (!$('#SupplierPayment_SupplierId').val()) {
+                DisplayMessage('error', 'Select Supplier')
+                return false;
+            }
+            return validated;
+        }
+
+        function IsValidForSave() {
+            var validated = true;
+            if (!$('#SupplierPayment_SupplierId').val()) {
+                DisplayMessage('error', 'Select Supplier')
+                return false;
+            }
+
+            if (!$('#SupplierPayment_Amount').val()) {
+                DisplayMessage('error', 'Payment amount is required')
+                $('#SupplierPayment_Amount').focus();
+                return false;
+            }
+            if (!$('#SupplierPayment_PaymentType').val()) {
+                DisplayMessage('error', 'Select Payment mode')
+                $('#SupplierPayment_Amount').focus();
+                return false;
+            }
+
+            if (!$('#SupplierPayment_PaymentDate').val()) {
+                DisplayMessage('error', 'Payment Date must be specified')
+                $('#SupplierPayment_PaymentDate').focus();
+                return false;
+            }
+
+            if ($('#SupplierPayment_PaymentType').val() == "Cash") {
+                if (!$('#CashAccountId').val()) {
+                    DisplayMessage('error', 'Select Cash Account')
+                    $('#CashAccountId').focus();
+                    return false;
+                }
+            }
+            if ($('#SupplierPayment_PaymentType').val() == "Bank") {
+                if (!$('#BankAccountId').val()) {
+                    DisplayMessage('error', 'Select Bank Account')
+                    $('#BankAccountId').focus();
+                    return false;
+                }
+            }
+            return validated;
+        }
+
+        function IsValidForSaveDetail() {
+            var validated = true;
+            if (!$('#SupplierPayment_Amount').val()) {
+                DisplayMessage('error', 'Payment amount is required')
+                $('#SupplierPayment_Amount').focus();
+                return false;
+            }
+            if (!$('#SupplierPayment_PaymentType').val()) {
+                DisplayMessage('error', 'Select Payment mode')
+                $('#SupplierPayment_Amount').focus();
+                return false;
+            }
+            if ($('#SupplierPayment_PaymentType').val() == "Cash") {
+                if (!$('#CashAccountId').val()) {
+                    DisplayMessage('error', 'Select Cash Account')
+                    $('#CashAccountId').focus();
+                    return false;
+                }
+            }
+            if ($('#SupplierPayment_PaymentType').val() == "Bank") {
+                if (!$('#BankAccountId').val()) {
+                    DisplayMessage('error', 'Select Bank Account')
+                    $('#BankAccountId').focus();
+                    return false;
+                }
+            }
+            $rows = $('#trans tbody tr:visible');
+            var amount = 0;
+            $rows.each(function (index, value) {
+                amount += StringToFloat($(this).find('[id $= Paid]').val());
+            });
+
+            if (amount > StringToFloat($('#SupplierPayment_Amount').val())) {
+                DisplayMessage('error', 'Paid amount must be equal to payment amount');
+                return false;
+            }
+
+            return validated;
+        }
+
+
+        $('[data-name="checkbox"]').change(function () {
+            var that = this;
+            var paymentamount = StringToFloat($('#SupplierPayment_Amount').val());
+            var row = $(that).closest('tr');
+            var balance = StringToFloat($(row).find('.balance').text());
+            if (paymentamount > 0) {
+                if ($(this).prop("checked") == true) {
+                    $rows = $('#trans tbody tr:visible');
+                    var amount = 0;
+                    $rows.each(function (index, value) {
+                        amount += StringToFloat($(this).find('[id $= Paid]').val());
+                    });
+                    if (paymentamount > amount) {
+                        if ((paymentamount - amount) > balance) {
+                            $(row).find('[id $= Paid]').val(balance);
+                        }
+                        else {
+                            $(row).find('[id $= Paid]').val((paymentamount - amount));
+                            //$(that).prop('checked', false);
+                            //$(row).find('[id $= item_no_lbl]').css('color', 'red');
+                            //$(row).find('[id $= item_no_lbl]').show().text('Remaining amount is ' + (paymentamount - amount)).delay(2000).fadeOut();
+                        }
+                    } else {
+                        $(that).prop('checked', false);
+                        $(row).find('[id $= item_no_lbl]').css('color', 'red');
+                        $(row).find('[id $= item_no_lbl]').show().text('Remaining amount is ' + (paymentamount - amount)).delay(2000).fadeOut();
+                    }
+                } else {
+                    $(row).find('[id $= Paid]').val('0.00');
+                }
+            } else {
+                $(that).prop('checked', false);
+                DisplayMessage('error', 'Payment amount is required')
+            }
+            CalculateTotal();
+        })
+
+        $("#PaymentAmount").bind("change keyup", function (event) {
+            $('.Paid').val('0.00');
+            $('[data-name="checkbox"]').prop("checked", false);
+        })
+        $('.PaymentMode').change(function () {
+            showhide($(this).val());
+            showhide($(this).val());
+            $("#updatePayment").attr('data-paymentType', $(this).val());
+            console.log($("#updatePayment").attr('data-paymentType'));
+        })
+
+        function showhide(val) {
+            if (val == "Cash") {
+                $('.cash').show();
+                $('.bank').hide();
+            }
+            if (val == "Bank") {
+                $('.cash').hide();
+                $('.bank').show();
+            }
+        }
+        $(".Paid").bind("change keyup", function (event) {
+            CalculateTotal();
+        })
+
+        function CalculateTotal() {
+            $rows = $('#trans tbody tr:visible');
+            var amount = 0;
+            $rows.each(function (index, value) {
+                amount += StringToFloat($(this).find('.Paid').val());
+            });
+            $('#ftPaidTotal').val(amount.toFixed(2));
+        }
+    </script>
+
+
+    <script>
+        jQuery('.voucherLink').click(function (event) {
+            var id = $(this).attr("id");
+
+
+            if (id === "lbPrintVoucher") {
+
+                $('#mainsection').hide();
+                $('#printsection').show();
+                $('#lbUnPrintVoucher').show();
+
+                window.print();
+                setTimeout(function () {
+                    $('#mainsection').show();
+                    $('#printsection').hide();
+                    $('#lbUnPrintVoucher').hide();
+                    HideTopControls(false);
+                }, 0);
+
+            }
+
+            return false;
+        });
+    </script>
+}

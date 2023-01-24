@@ -1,0 +1,126 @@
+﻿@model FAPP.Areas.AM.ViewModels.WarehouseViewModel
+
+
+@{
+    ViewBag.Title = "Warehouse Log";
+}
+@section topRightMenu{
+    <ul class="minitiles">
+        <li class="orange">
+            <a title="Print" onclick="printGV();">
+                <i class="fa fa-print"></i>
+            </a>
+        </li>
+    </ul>
+}
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="vbox singleBoxPadding form-vertical">
+                <div class="">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            @Html.TextBoxFor(model => model.Search, new { @class = "form-control", @placeholder = "Invoice No", @style = "width:100px;" })
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(model => model.FromDate, new { @class = "datepicker form-control", @placeholder = "From Date", @style = "width:90px;" })
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(model => model.ToDate, new { @class = "datepicker form-control", @placeholder = "From Date", @style = "width:90px;" })
+                        </div>
+                        <div class="form-group">
+                            @Html.DropDownListFor(m => m.WarehouseId, new SelectList(ViewBag.Warehouses, "WarehouseId", "WarehouseName", Model.WarehouseId), "=All Warehouses=", new { @class = "form-control chosen-select", @style = "width:150px;" })
+                        </div>
+                        <div class="form-group">
+                            @Html.DropDownListFor(m => m.TransferMethod, new SelectList(ViewBag.TransferMethods, "TransferMethod", "TransferMethod", Model.TransferMethod), "=All Methods=", new { @class = "form-control chosen-select", @style = "width:120px;" })
+                        </div>
+                        <div class="form-group">
+                            @Html.DropDownListFor(m => m.TransferType, new SelectList(ViewBag.TransferTypes, "TransferType", "TransferType", Model.TransferType), "=All Types=", new { @class = "form-control chosen-select", @style = "width:100px;" })
+                        </div>
+                        <div class="form-group">
+                            @Html.DropDownListFor(m => m.ProductId, new SelectList(ViewBag.Products, "ItemId", "ItemName", Model.ProductId), "=All Products=", new { @class = "form-control chosen-select", @style = "width:150px;" })
+                        </div>
+
+                        <input type="submit" class="btn" value="Search" title="Search" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table cellspacing="0" id="gv" class="gv nm table table-hover no-head-border table-responsive table-striped">
+        <thead class="vd_bg-green vd_white">
+            <tr>
+                <th>Sr</th>
+                <th>Warehouse</th>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Transfer Date</th>
+                <th>Transfer Type</th>
+                <th>Cost Price</th>
+                <th>Sale Price</th>
+                <th>Transfer Method</th>
+                <th>Invoice No</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model != null)
+            {
+                var count = 0;
+                foreach (var item in Model.WarehouseProductList)
+                {
+                    <tr class="tr_row">
+                        <td>@(++count)</td>
+                        <td>@(item.Warehouse == null ? "" : item.Warehouse.WarehouseName)</td>
+                        <td>@(item.Item == null ? "" : item.Item.ItemName)</td>
+                        <td class="textsummarize">@(item.Quantity)</td>
+                        <td>@(item.TransferDate.Value.ToString("dd MMM yyyy"))</td>
+                        <td>@(item.TransferType)</td>
+                        <td class="textsummarize">@(item.StockPrice ?? 0)</td>
+                        <td class="textsummarize">@(item.StockValue ?? 0)</td>
+                        <td>@(item.TransferMethod)</td>
+                        <td>@(item.InvoiceId)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    if (Model.WarehouseProductList == null || Model.WarehouseProductList.Count == 0)
+                {
+        <div style="text-align: center">
+            No data found
+        </div>
+    }
+
+    <iframe id="myIframe" style="display: none;" seamless="seamless"></iframe>
+}
+@section scripts{
+    <script>
+        function printGV() {
+            var  title = @Html.Raw(Json.Encode(ViewBag.title));
+            printData('gv', title, '', '');
+        }
+
+         $('#extendedPageHeader').html(`<p style="margin:12px 0px">
+        @{
+             <label class="label label-darkblue" title="Total Logs">Total Logs: @(Model?.WarehouseProductList?.Count)</label>
+            
+        } </p>`);
+    </script>
+}

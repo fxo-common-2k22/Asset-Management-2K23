@@ -1,0 +1,25 @@
+﻿@model List<FAPP.Model.Form>
+@using FAPP.Model
+<ul class="dropdown-menu pull-right setup">
+    @foreach (var item in Model)
+    {
+        <li>
+            <a href="@item.FormURL" title="@item.FormName">
+                @if (item.FormName == "Dashboard")
+                {
+                    <span>
+                        <strong>
+                            Dashboard
+                        </strong>
+                    </span>
+                }
+                else
+                {
+                    <span>
+                       @item.FormName
+                    </span>
+                }
+            </a>
+        </li>
+    }
+</ul>

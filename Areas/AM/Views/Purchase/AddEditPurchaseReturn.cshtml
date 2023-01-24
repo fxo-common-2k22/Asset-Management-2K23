@@ -1,0 +1,496 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseReturnModelViewModel
+@{
+    ViewBag.Title = "Purchase Invoice Return";
+}
+
+<style>
+    .Noline {
+        border-top: none !important;
+    }
+
+    hr {
+        display: block;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        margin-left: auto;
+        margin-right: auto;
+        border-style: dashed;
+        border-width: 1px;
+    }
+
+    .AllBorder {
+        padding: inherit;
+        margin: auto;
+        border-top: solid !important;
+        border-bottom: solid !important;
+        border-left: solid !important;
+        border-right: solid !important;
+        border-style: solid !important;
+        border-width: medium;
+        /*text-align: center;
+        font-weight: bold;*/
+    }
+
+    .topbottomBorder {
+        padding: inherit;
+        margin: auto;
+        border-top: solid !important;
+        border-bottom: solid !important;
+        border-style: solid !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-width: medium;
+        /*text-align: center;*/
+        /*font-weight: bold;*/
+    }
+
+    .noLeftBottomBorder {
+        /*border-left: none !important;*/
+        border-bottom: none !important;
+    }
+
+    .rightborder {
+        border-right: solid !important;
+    }
+
+    .style5 {
+        text-align: right;
+        font-family: Vivaldi;
+        font-size: x-large;
+    }
+
+    .Dottedline {
+        border-bottom: dotted !important;
+        border-width: thick;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+    /*#main .page-header {
+    margin:15px 0px 11px 0px !important;
+    }*/
+</style>
+@section topRightMenu{
+
+
+<ul class="minitiles">
+    <li hidden>
+        <input style="display:none" type="button" class="voucherLink btn btn-success" value="Go back to invoice" id="lbUnPrintVoucher" />
+    </li>
+
+    <li class="orange topLi nodisplay">
+        <a id="lbPrintVoucher" class="voucherLink" title="Print (Ctrl+P)">
+            <i class="fa fa-print"></i>
+        </a>
+    </li>
+    <li class="grey topLi nodisplay @(ViewBag.IsCancelled == true ? " " : "hidden")">
+        <a id="lbUnCancelVoucher" title="Uncancel Voucher" class="voucherLink">
+            <i class="fa fa-check"></i>
+        </a>
+    </li>
+    <li class="grey topLi nodisplay @(ViewBag.IsCancelled == false ? " " : "hidden")">
+        <a id="lbCancelVoucher" title="Cancel Voucher" class="voucherLink">
+            <i class="fa fa-times"></i>
+        </a>
+    </li>
+    <li class="blue topLi nodisplay">
+        <a id="lbReceivePayment" title="Make Payment (Ctrl+R)" class="voucherLink">
+            <i class="i i-48 i-48-receive_cash"></i>
+        </a>
+    </li>
+    <li class="green">
+        <a id="submitButton" class="voucherLink" title="Save (Ctrl+S)">
+            <i class="fa fa-floppy-o"></i>
+        </a>
+    </li>
+</ul>
+    
+}
+@using (Html.BeginForm("AddEditPurchaseReturn", "Purchase", FormMethod.Post, new { id = "invoiceform" }))
+{
+    Html.EnableClientValidation(false);
+
+    <div id="mainsection">
+        <div class="alert alert-success" id="messageDiv" style="display: none;">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+            <div class="help-block" id="messagelabel"></div>
+        </div>
+        <div id="head" class="vbox">
+            <table class="fv fw">
+                <tr>
+                    <td hidden>Purchase Invoice No</td>
+                    <td hidden>
+                        @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control headfirstchildforfocus" })
+                    </td>
+                    <td>Purchase Invoice Date</td>
+                    <td>
+                        @Html.HiddenFor(m => m.PurchaseReturn.PurchaseReturnId)
+                        @Html.TextBoxFor(model => model.PurchaseReturn.PurchaseReturnDate, new { @class = "form-control datepicker" })
+                    </td>
+                    <td>Supplier</td>
+                    <td>
+                        @Html.DropDownListFor(m => m.PurchaseReturn.SupplierId, new SelectList(ViewBag.Suppliers, "ClientId", "Name", Model.PurchaseReturn.SupplierId), new { @class = "form-control chosen-select", @style = "width:300px;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td colspan="3">
+                        @Html.TextBoxFor(model => model.PurchaseReturn.Description, new { @class = "form-control " })
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="voucherdetails" class="">
+            <div id="detail">
+                <table id="trans_details" class="table no-head-border table-responsive">
+                    <thead>
+                        <tr class="gvheader">
+                            <th>Barcode</th>
+                            <th width="23%">Product</th>
+                            <th class="numeric">Qty</th>
+                            <th class="numeric">Unit Price</th>
+                            <th class="numeric">Line Total</th>
+                            <th class="numeric hidden">Discount</th>
+                            <th class="numeric">Tax</th>
+                            <th style="width: 100px;" class="numeric">Net Total</th>
+                            <th width="14%"></th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="tr_clone" class="tr_row" style="display:none;">
+                            <td>
+                                @Html.Hidden("PurchaseReturnProduct[-1].PurchaseReturnProductId")
+                                @Html.TextBox("PurchaseReturnProduct[-1].Barcode", null, new { @class = "Barcode cloneable detailfirstchildforfocus", @placeholder = "Barcode" })
+                            </td>
+                            <td style="width:200px;">
+                                @Html.DropDownList("PurchaseReturnProduct[-1].ItemId", new SelectList(ViewBag.Products, "ItemId", "ItemName"), "--Select Product--", new { @class = "ProductId form-control nochosen chosenafterclone cloneable", @style = "width:100%;" })
+                                <div class="help-block" id="PurchaseReturnProduct_0__item_no_lbl"></div>
+                            </td>
+                            <td>
+                                @Html.TextBox("PurchaseReturnProduct[-1].Quantity", null, new { @class = "numeric cloneable Quantity", @placeholder = "Qty" })
+                            </td>
+                            <td>
+                                @Html.TextBox("PurchaseReturnProduct[-1].UnitPrice", null, new { @class = "numeric cloneable UnitPrice", @placeholder = "Unit Price" })
+                            </td>
+                            <td>
+                                @Html.TextBox("PurchaseReturnProduct[-1].LineTotal", null, new { @class = "numeric cloneable", @placeholder = "Line Total", @readonly = "readonly" })
+                            </td>
+                            <td class="hidden">
+                                <div class="input-group">
+                                    @Html.TextBox("PurchaseReturnProduct[-1].Discount", null, new { @class = "discount numeric cloneable", @placeholder = "Discount" })
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </td>
+                            <td>
+                                @Html.TextBox("PurchaseReturnProduct[-1].Tax", null, new { @class = "tax numeric cloneable", @placeholder = "Tax" })
+                            </td>
+                            <td>
+                                @Html.TextBox("PurchaseReturnProduct[-1].NetTotal", null, new { @class = "numeric cloneable", @placeholder = "Net Total", @readonly = "readonly" })
+                            </td>
+                            <td>
+                                @Html.DropDownList("PurchaseReturnProduct[-1].WareHouseId", new SelectList(ViewBag.Warehouses, "WarehouseId", "WarehouseName"), new { @class = "WareHouseId form-control nochosen chosenafterclone cloneable", @style = "width:100%;" })
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-danger" data-action="Delete" data-id="-1">Delete</a>
+                            </td>
+                        </tr>
+                        @if (Model != null)
+                        {
+                            if (Model.PurchaseReturnProduct != null)
+                            {
+                                for (int i = 0; i < Model.PurchaseReturnProduct.Count(); i++)
+                                {
+                                    <tr class="tr_row">
+                                        <td>
+                                            @Html.HiddenFor(m => m.PurchaseReturnProduct[i].PurchaseReturnProductId)
+                                            @Html.TextBox("PurchaseReturnProduct[" + i + "].Barcode", null, new { @class = "Barcode cloneable detailfirstchildforfocus", @placeholder = "Barcode" })
+                                        </td>
+                                        <td style="width:200px;">
+                                            @Html.DropDownListFor(m => m.PurchaseReturnProduct[i].ItemId, new SelectList(ViewBag.Products, "ItemId", "ItemNameWithPrice", Model.PurchaseReturnProduct[i].ItemId), "--Select Product--", new { @class = "ProductId form-control cloneable", @style = "width:100%;" })
+                                            <div class="help-block" style="display:none;" id="PurchaseReturnProduct_0__item_no_lbl"></div>
+                                        </td>
+
+                                        <td>
+                                            @Html.TextBoxFor(m => m.PurchaseReturnProduct[i].Quantity, null, new { @class = "numeric cloneable Quantity", @placeholder = "Qty" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.PurchaseReturnProduct[i].UnitPrice, null, new { @class = "numeric cloneable UnitPrice", @placeholder = "Unit Price" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.PurchaseReturnProduct[i].LineTotal, null, new { @class = "numeric cloneable", @placeholder = "Line Total", @readonly = "readonly" })
+                                        </td>
+                                        <td class="hidden">
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(m => m.PurchaseReturnProduct[i].Discount, null, new { @class = "discount numeric cloneable", @placeholder = "Discount" })
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.PurchaseReturnProduct[i].Tax, null, new { @class = "tax numeric cloneable", @placeholder = "Tax" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.PurchaseReturnProduct[i].NetTotal, null, new { @class = "numeric cloneable", @placeholder = "Net Total", @readonly = "readonly" })
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(m => m.PurchaseReturnProduct[i].WareHouseId, new SelectList(ViewBag.Warehouses, "WarehouseId", "WarehouseName", Model.PurchaseReturnProduct[i].WareHouseId), new { @class = "WareHouseId form-control cloneable", @style = "width:100%;" })
+                                        </td>
+
+                                        <td>
+                                            <a href="#" class="btn btn-danger" data-action="Delete" data-id="@Model.PurchaseReturnProduct[i].PurchaseReturnProductId">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="vbox">
+                            <td id="tdCreation" colspan="2">
+                                @(ViewBag.CreatedBy == null ? "" : "Created By: " + ViewBag.CreatedBy) &nbsp;
+                                @(ViewBag.ModifiedBy == null ? "" : "Modified By: " + ViewBag.ModifiedBy)
+                            </td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="hidden">
+                                @Html.TextBox("ftDiscount", null, new { @class = "numeric bold cloneable", @readonly = "readonly", @placeholder = "0" })
+                            </td>
+                            <td>
+                                @Html.TextBox("ftTax", null, new { @class = "numeric bold cloneable", @readonly = "readonly", @placeholder = "0" })
+                            </td>
+                            <td>
+                                @Html.TextBox("ftNetTotal", null, new { @class = "numeric bold cloneable", @readonly = "readonly", @placeholder = "0" })
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="vbox" id="footerdiv">
+                <table>
+                    <tr>
+
+                        <td>Net Total</td>
+                        <td>
+                            @Html.TextBoxFor(model => model.PurchaseReturn.NetTotal, new { @class = "form-control", @placeholder = "0", @readonly = "readonly" })
+                        </td>
+                        <td>Received</td>
+                        <td>
+                            @Html.TextBoxFor(model => model.PurchaseReturn.Received, new { @class = "received form-control", @placeholder = "0", @readonly = "readonly" })
+                        </td>
+                        <td>Balance</td>
+                        <td>
+                            @Html.TextBox("PurchaseReturn.Balance", null, new { @class = "balance form-control", @placeholder = "0", @readonly = "readonly" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <div id="printsection" style="display:none">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="">
+                    <table class="table">
+                        <tr>
+                            <td class="Noline text-center" style="vertical-align: top;">
+                                <img src="~/uploads/Logos/BranchLogo@(FAPP.DAL.SessionHelper.BranchId).png" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="Noline text-center">@FAPP.DAL.SessionHelper.BranchAddress</td>
+                        </tr>
+                        <tr>
+                            <td class="Noline text-center">@FAPP.DAL.SessionHelper.BranchPhone</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="clearfix"></div>
+                <div class="invoice-info">
+                    <table class="table">
+                        <tr class="AllBorder">
+                            <td class="text-center" colspan="7" id="tInvoiceNo"><b>Purchase Return Invoice # @(Model.PurchaseReturn == null ? 0 : Model.PurchaseReturn.PurchaseReturnId)</b></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left" id="tClientName"><b>To</b>&nbsp;&nbsp;@(Model.PurchaseReturn == null || Model.PurchaseReturn.Client == null ? "" : Model.PurchaseReturn.Client.Name)</td>
+                            <td class="text-right"><b>Date</b>&nbsp;&nbsp;@(Model.PurchaseReturn == null ? "" : Model.PurchaseReturn.PurchaseReturnDate.ToString("dd MMM yyyy"))</td>
+                        </tr>
+                    </table>
+                    <table class="table  table-bordered" id="maintable">
+                        <tr class="topbottomBorder">
+                            <td><b>Sr</b></td>
+                            <td><b>Description</b></td>
+                            <td><b>Length</b></td>
+                            <td><b>Height</b></td>
+                            <td><b>Pcs</b></td>
+                            <td><b>Qty/Sqft</b></td>
+                            <td><b>Rates/Sq Ft</b></td>
+                            <td><b>Net Amount</b></td>
+                        </tr>
+                        <tr class="reAssignable"></tr>
+                        @if (Model.PurchaseReturnProduct != null)
+                        {
+                            var count = 0;
+                            foreach (var item in Model.PurchaseReturnProduct)
+                            {
+                                <tr class="reAssignable">
+                                    <td>@(++count)</td>
+                                    <td>@(item.Item == null ? "" : item.Item.ItemName)</td>
+                                    <td>@item.CalLength</td>
+                                    <td>@item.CalWidth</td>
+                                    <td>@item.Sheets</td>
+                                    <td>@item.SqFeet</td>
+                                    <td>@item.UnitPrice</td>
+                                    <td>@item.LineTotal</td>
+                                </tr>
+                            }
+                        }
+                        <tr class="" id="invoiceFooter">
+                            <td colspan="5" class="noLeftBottomBorder Noline">@Model.PurchaseReturn.Description</td>
+                            <td id="tSqFeet">@(Model.PurchaseReturnProduct == null ? 0 : Model.PurchaseReturnProduct.Sum(u => u.SqFeet))</td>
+                            <td><b>Grand Total</b></td>
+                            <td id="tGrandTotal">@(Model.PurchaseReturnProduct == null ? 0 : Model.PurchaseReturnProduct.Sum(u => u.LineTotal))</td>
+                        </tr>
+                        <tr class="">
+                            <td colspan="6" rowspan="6" class="noLeftBottomBorder Noline"></td>
+                            <td>Other Charges</td>
+                            <td id="tOthercharges">@(Model.PurchaseReturn.OtherCharges ?? 0)</td>
+                        </tr>
+                        <tr class="">
+                            <td>Labour</td>
+                            <td id="tLabourCharges">@(Model.PurchaseReturn.LabourCharges ?? 0)</td>
+                        </tr>
+                        <tr class="">
+                            <td>Flat Discount</td>
+                            <td id="tDiscount">@Model.PurchaseReturn.Discount</td>
+                        </tr>
+                        <tr class="">
+                            <td><b>Bill Total</b></td>
+                            <td id="tNetTotal">@(Model.PurchaseReturn.NetTotal ?? 0)</td>
+                        </tr>
+                        <tr class="">
+                            <td>Received</td>
+                            <td id="tReceived">@(Model.PurchaseReturn.Received ?? 0)</td>
+                        </tr>
+                        <tr class="">
+                            <td>Net Balance</td>
+                            <td id="tNetBalance">@(Convert.ToDecimal(Model.PurchaseReturn.NetTotal) - Convert.ToDecimal(Model.PurchaseReturn.Received))</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="AddPaymentModal" tabindex="-1" role="dialog" aria-labelledby="AddPaymentModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header HeaderColor">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                    <h4 class="modal-title" id="myModalLabel">Make Payment</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal" id="form_account">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Bill Total</label>
+                            <div class="col-md-8">
+                                @Html.HiddenFor(model => model.SupplierRefundInvoice.PurchaseReturnId)
+                                @Html.TextBox("SupplierRefundInvoice.BillTotal", null, new { @class = "form-control", @placeholder = "Bill Total", @disabled = "disabled" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Receive</label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.SupplierRefundInvoice.Amount, new { @class = "form-control", @placeholder = "Amount" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Description</label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.SupplierRefundInvoice.Description, new { @class = "form-control", @placeholder = "Description" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer background-login">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success voucherLink inputenabledisable" id="btnSavePayment">Save</button>
+                    <div class="help-block" id="ServicesList_0__item_no_lbl"></div>
+                </div>
+                <div class="form-horizontal">
+                    <div class="modalTable">
+                        <div class="bold text-center Underline marginBottom15">Invoice Payment History</div>
+                        <table class="table table-striped">
+                            <thead class="HeaderColor">
+                                <tr class="bold">
+                                    <td>Voucher</td>
+                                    <td>Amount</td>
+                                    <td>Date</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+@section scripts{
+    <script src="~/Areas/AM/Scripts/purchasereturn.js"></script>
+    <script src="~/Areas/AM/Scripts/shortkeys.js"></script>
+
+    <script>
+        jQuery(document).ready(function () {
+            $(".datepicker").each(function () {
+                $(this).val(RemoveTimeFromDate($(this).val()));
+            });
+            var EditMode = @Html.Raw(Json.Encode(@ViewBag.EditMode));
+            var IsPosted = @Html.Raw(Json.Encode(@ViewBag.IsPosted));
+            var IsCancelled = @Html.Raw(Json.Encode(@ViewBag.IsCancelled));
+            var success = @Html.Raw(Json.Encode(@ViewBag.success));
+            var Cancelled = @Html.Raw(Json.Encode(@ViewBag.Cancelled));
+        if (success) {
+            DisplayMessage('', success);
+            }
+        if (Cancelled) {
+            DisplayMessage('error', Cancelled);
+        }
+
+            if (!EditMode) {
+                HideTopControls(true);
+                //LoadCurrencyVal($('#PurchaseReturn_CurrencyId').val());
+            } else {
+                changeHref(@Model.PurchaseReturn.PurchaseReturnId);
+                HideTopControls(false);
+            }
+            if (IsPosted || IsCancelled ){
+                HideButtons(true);
+            }
+            CalculateTotal();
+        });
+
+        $('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+        @{
+            if(Model.InvoiceNo>0)
+            {
+        <label class="label label-darkblue" title="Purchase Invoice Number">@Model.InvoiceNo</label>
+            }
+            else
+            {
+        <label id="PurchaseInvoiceLabel" class="label label-darkblue" title="Purchase Invoice Number">Draft</label>
+            }
+        } </p>`);
+    </script>
+}

@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Asset Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model  FAPP.Areas.AM.ViewModels.GraphsModel
+
+<div id="feeDashboardGrid">
+    @if (Model != null)
+    {
+        @Html.Partial("~/Areas/AM/Views/Asset/_PartialAssetDashboard.cshtml", _model)
+
+    }
+</div>

@@ -1,0 +1,70 @@
+﻿@model  FAPP.ViewModel.Common.GraphsModel
+<style>
+    .itag {
+        font-size: 36px;
+        color: #FFF;
+        float: left;
+        margin: 0;
+    }
+
+    .details {
+        margin-left: 55px;
+    }
+
+        .details span.big {
+            font-size: 16px;
+        }
+
+        .details span {
+            color: #FFF;
+            display: block;
+            font-size: 12px;
+        }
+</style>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="box box-color box-bordered green">
+            <div class="box-title">
+                <i class="itag fa fa-check"></i>
+                <div class="details ">
+                    <span class="big" id="valuespan1">@Model.AttendanceStatus.Present</span>
+                    <span id="textspan1">Present Today</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="box box-color box-bordered lightred">
+            <div class="box-title">
+                <i class="itag fa fa-close"></i>
+                <div class="details ">
+                    <span class="big" id="valuespan2">@Model.AttendanceStatus.Absent</span>
+                    <span id="textspan2">Absent Today</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="box box-color box-bordered blue">
+            <div class="box-title">
+                <i class="itag fa fa-fax"></i>
+                <div class="details ">
+                    <span class="big" id="valuespan3">@Model.AttendanceStatus.Leave</span>
+                    <span id="textspan3">Leaves</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="box box-color box-bordered orange">
+            <div class="box-title">
+                <i class="itag fa fa-"></i>
+                <div class="details ">
+                    <span class="big" id="valuespan4">@Model.AttendanceStatus.Holiday</span>
+                    <span id="textspan4">Holidays</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>

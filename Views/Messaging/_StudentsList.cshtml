@@ -1,0 +1,96 @@
+﻿@model FAPP.Areas.Academics.ViewModels.StudentNumUpdateToolViewModel
+<style>
+    .input-group > .input-group-addon > .valmsg {
+        margin-left: 10px;
+    }
+</style>
+<table class="table table-hover table-responsive">
+    <thead>
+    <tr>
+        <th width="3%">Sr.</th>
+        <th width="33%" class="text-left">Father Mobile No</th>
+        <th width="22%" >Name</th>
+        <th width="20%">Registration No</th>
+        <th width="22%">Father Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for (int i = 0; i < Model.Students.Count(); i++)
+    {
+        var item = Model.Students[i];
+        var fa = "fa fa-times";
+        if (!string.IsNullOrWhiteSpace(Model.Students[i].FatherMobileNo))
+        {
+            if (Model.Students[i].FatherMobileNo.Length == 12)
+            {
+                fa = "fa fa-check";
+            }
+        }
+
+        <tr>
+            <td>
+                @(i + 1)
+            </td>
+            <td class="form-inline">
+                @Html.HiddenFor(model => item.StudentId)
+
+                <div class="input-group " >
+                    <span id="isNumOk_@item.StudentId" class="input-group-addon "><i class="@fa"></i></span>
+                    
+                    @Html.EditorFor(model => model.Students[i].FatherMobileNo, new {htmlAttributes = new {@onblur = $"savestudent({item.StudentId},this)",@style="width:120px;", @class = "input-xs form-control maskNum", @placeholder = "92XXXXXXXXXX" } })
+
+                </div>
+                <span class=" valmsg" id="vmsg_@item.StudentId" style="margin-bottom: 0px;"></span>
+                
+            </td>
+            <td>@Html.DisplayFor(m => item.FullName)</td>
+            <td>@Html.DisplayFor(m => item.RegistrationNumber)</td>
+            <td>@Html.DisplayFor(m => item.FatherName)</td>
+
+        </tr>
+    }
+
+    </tbody>
+</table>
+<script src="~/Scripts/plugins/maskedinput/jquery.maskedinput.min.js"></script>
+<script>
+     $('input').keyup(function (e)
+    {
+       if (e.which === 40) { // down arrow
+            //$(this).closest('tr').next().children().eq($(this).closest('td').index()).find('input').focus();
+            $(this).closest('tr').next().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+           // $(this).closest('tr').next().find('td:eq(' + $(this).closest('td').index() + ')').find('input').select();
+
+        } else if (e.which === 38) { // up arrow
+           // $(this).closest('tr').prev().children().eq($(this).closest('td').index()).find('input').focus();
+            $(this).closest('tr').prev().find('td:eq(' + $(this).closest('td').index() + ')').find('input').focus();
+            //$(this).closest('tr').prev().find('td:eq(' + $(this).closest('td').index() + ')').find('input').select();
+        }
+    });
+    $(".maskNum").mask("999999999999");
+    function savestudent(studentId, e) {
+        var isnum = /^\d+$/.test(e.value);
+        if (isnum === true) {
+            $.ajax({
+                url: '@Url.Action("NumCorrectionTool")',
+                method: "POST",
+                global:false,
+                data: { studentId: studentId, mobNo: e.value },
+                success: function (data) {
+                    //DisplayMessage('Success', data.Message);
+                    $("#isNumOk_" + studentId).html("<i class='fa fa-check'></i>");
+                    fadeInOutText($("#vmsg_" + studentId), data.Message, data.Status);
+                },
+                error: function (jqXHR, exception) {
+                    $("#isNumOk_" + studentId).html("<i class='fa fa-times'></i>");
+                    fadeInOutText($("#vmsg_" + studentId), 'Failed', 'error');
+                }
+            });
+        } else {
+            $("#isNumOk_" + studentId).html("<i class='fa fa-times'></i>");
+            fadeInOutText($("#vmsg_" + studentId), 'Failed! enter valid number..', 'error');
+        }
+    }
+</script>
+
+

@@ -1,0 +1,103 @@
+﻿@model FAPP.Areas.AM.ViewModels.DepreciationMainViewModel
+@using PagedList.Mvc;
+@using FAPP.Model;
+
+<div class="downpadding">
+    <table class="table table-hover table-condensed table-striped">
+        <thead>
+            <tr>
+                <th width="20p">Sr.</th>
+                <th>Product</th>
+                <th>Old Value</th>
+                <th>Current Value</th>
+                <th>Dep Percentage</th>
+                <th>Amount</th>
+                <th>New Value</th>
+                <th width="100px">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int count = 0;// (25 * (Model.DepreciationDetails.PageNumber - 1)) + 1;
+                count = (Model.pagesize * Model.DepreciationDetails.PageNumber) - (Model.pagesize);
+
+            }
+            @foreach (var item in Model.DepreciationDetails)
+            {
+                <tr>
+                    <td width="20px"><span class="label label-default current-theme">@(++count)</span></td>
+                    <td>@item.ItemRegister.Product.ProductName</td>
+                    <td>@(item.ItemOldValue)</td>
+                    <td>@(item.CurrentValue)</td>
+                    <td>@(item.DepPercentage)</td>
+                    <td>@(item.Amount)</td>
+                    <td>@(item.ItemNewValue)</td>
+                    <td>
+                        @*@Ajax.ActionLink("View", "", new { id = item.DepreciationMainId }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "onEditSuccess", OnFailure = "OnFailure", }, new { @class = "btn btn-darkblue btn-xs " })*@
+                        <button class="btn btn-danger btn-sm" type="button" onclick="DeleteRow('@item.DepreciationMainId', '/AM/Issue/RemoveItemRegister', 'divStudents', 'Delete Detail :   (@item.DepreciationMainId)?')">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="targetContainer">
+        <div class="col-md-12">
+            <div id='Paging' style="text-align: center">
+                Page @(Model.DepreciationDetails.PageCount < Model.DepreciationDetails.PageNumber ? 0 : Model.DepreciationDetails.PageNumber)
+                of @Model.DepreciationDetails.PageCount
+                @Html.PagedListPager(Model.DepreciationDetails, page => Url.Action("Manage", new { page = page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+           {
+               HttpMethod = "GET",
+               InsertionMode = InsertionMode.Replace,
+               OnSuccess = "OnCreateUpdateSuccess",
+               UpdateTargetId = "divStudents"
+           }))
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<script>
+    var message = @Html.Raw(Json.Encode(ViewBag.message));
+    var ReturnIssueId = @Html.Raw(Json.Encode(ViewBag.ReturnIssueId));
+    var IssueItemId = @Html.Raw(Json.Encode(ViewBag.IssueItemId));
+
+    if (message) {
+        DisplayMessage('', message);
+    }
+    if (ReturnIssueId) {
+        window.location.href="/AM/ReturnIssue/AddEditReturnIssue/"+ReturnIssueId;
+    }
+    if (IssueItemId) {
+        window.location.href="/AM/Issue/AddEditIssuedItem/"+IssueItemId;
+    }
+
+    //$(document).on('keyup', '#RoomDoorNo', function () {
+    //    $('#RoomCode').val($('#RoomDoorNo').val());
+    //})
+    $('#ItemRegisterItem_ProductId').change(function () {
+        try {
+            var txt = $('#ItemRegisterItem_ProductId option:selected').text();
+            if (txt) {
+                if (txt.length > 2) {
+                    var splittedCode = txt.slice(0, 2);
+                    $('#ItemRegisterItem_ItemCode').val(splittedCode.toLocaleUpperCase()+"-");
+                }
+            }
+        } catch (e) {
+
+        }
+    });
+    var topTotal = @Html.Raw(Json.Encode(Model.DepreciationDetails?.TotalItemCount));
+    $('#topTotal').text(topTotal);
+    setTimeout(function () {
+        var text = $('.pagingalign').text();
+        $('.pagingalign').html('');
+    }, 1000);
+</script>

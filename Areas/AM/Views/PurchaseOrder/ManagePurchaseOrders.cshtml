@@ -1,0 +1,81 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageOrderPurchaseViewModel
+
+@section topRightMenu{
+    @if (ViewBag.CanCreate)
+    {
+        <ul class="minitiles link">
+            <li class="green" data-toggle="tooltip" title="Add New Purchase Order">
+                <a href="@Url.Action("AddEditPurchaseOrder", "PurchaseOrder")">
+                    <i class="fa fa-plus">
+                    </i>
+                </a>
+            </li>
+        </ul>
+    }
+}
+
+@using (Ajax.BeginForm("ManagePurchaseOrders", "PurchaseOrder", new AjaxOptions
+{
+    OnBegin = "OnSearchBegin",
+    OnSuccess = "OnSearchSuccess",
+    OnFailure = "OnSearchFailure",
+    UpdateTargetId = "updateTarget",
+}))
+{
+    <div class="vbox row">
+        <div class="col-md-2" style="padding-left:0px">
+            <div class="col-md-3 text-center" style="padding-top:5px;padding-left:0px;padding-right:0px">
+                Code
+            </div>
+            <div class="col-md-9" style="padding-left:0px;padding-right:0px">
+                @Html.EditorFor(x => x.PurchaseOrderCode, new { htmlAttributes = new { @class = "form-control", @placeholder = "Order Code" } })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="col-md-2" style="padding-top:5px;padding-left:0px;padding-right:0px">
+                From
+            </div>
+            <div class="col-md-10" style="padding-left:0px;padding-right:0px">
+                @Html.EditorFor(x => x.OrderFrom, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "From" } })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="col-md-2" style="padding-top:5px;padding-left:0px;padding-right:0px">
+                To
+            </div>
+            <div class="col-md-10" style="padding-left:0px;padding-right:0px">
+                @Html.EditorFor(x => x.OrderTo, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "To" } })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="col-md-3" style="padding-top:5px;padding-left:0px;padding-right:0px">
+                Supplier
+            </div>
+            <div class="col-md-9" style="padding-left:0px;padding-right:0px">
+                @Html.DropDownListFor(model => model.SupplierId, new SelectList(Model.SuppliersDD, "Value", "Text", Model.SupplierId), "--Select Supplier--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <input type="submit" name="name" value="Search" class="btn btn-green" />
+        </div>
+    </div>
+}
+<div id="updateTarget">
+    @Html.Partial("_PartialManageOrderPurchases", Model)
+</div>
+@section scripts{
+    <script>
+        function OnSearchBegin(request) {
+        }
+        function OnSearchSuccess(response) {
+        }
+        function OnSearchFailure(response) {
+        }
+
+
+        $('#extendedPageHeader').html(`<p style="margin:12px 0px">
+        @{
+        <label class="label label-darkblue" title="Total Purchase Order">Total: @(Model?.PurchaseOrders?.Count()??0)</label>
+        } </p>`);
+    </script>
+}

@@ -1,0 +1,63 @@
+﻿@model FAPP.Areas.AM.ViewModels.ReturnIssueModel
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="">
+                <table class="gv nm table">
+                    <tr>
+                        <td class="Noline text-center" style="vertical-align: top;">
+                            <img src="~/uploads/Logos/BranchLogo@(FAPP.DAL.SessionHelper.BranchId).png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Noline text-center">@FAPP.DAL.SessionHelper.BranchAddress</td>
+                    </tr>
+                    <tr>
+                        <td class="Noline text-center">@FAPP.DAL.SessionHelper.BranchPhone</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="clearfix"></div>
+            <div class="invoice-info">
+                <table class="gv nm table">
+                    <tr>
+                        <td class="Noline text-left" id="tInvoiceNo"><b>Return Issue Id </b># @(Model.ReturnIssue?.ReturnIssueId)</td>
+                    @*</tr>
+                    <tr>*@
+                        @*<td class="text-left" id="tSupplierName"><b>Department :</b>&nbsp;&nbsp;@(Model.ReturnIssue?.Department?.DepartmentName)</td>*@
+                        <td class="text-left"><b>Date</b>&nbsp;&nbsp;@(Model.ReturnIssue?.ReturnIssueDate.ToString("dd MMM yyyy"))</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="" id="tDescription"><b>Description : </b>@(Model.ReturnIssue?.Description)</td>
+                    </tr>
+                </table>
+                <table class="gv nm table table-bordered" id="maintable">
+                    <tr class="topbottomBorder">
+                        <td><b>Sr</b></td>
+                        <td><b>Item</b></td>
+                        <td><b>Item Code</b></td>
+                        <td><b>Quantity</b></td>
+                        <td><b>Description</b></td>
+                        <td><b>Warehouse</b></td>
+                    </tr>
+                    <tr class="reAssignable"></tr>
+                    @if (Model?.ReturnIssueDetail != null)
+                    {
+                        var count = 0;
+                        foreach (var item in Model.ReturnIssueDetail)
+                        {
+                            <tr class="reAssignable">
+                                <td>@(++count)</td>
+                                <td>@(item.Item?.ItemName)</td>
+                                <td>@(item.PurchaseInvoiceProductDetail?.ItemCode)</td>                                
+                                <td>@item.Quantity</td>
+                                <td>@item.Description</td>
+                                <td>@(item.Warehouse?.WarehouseName)</td>
+                            </tr>
+                        }
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>

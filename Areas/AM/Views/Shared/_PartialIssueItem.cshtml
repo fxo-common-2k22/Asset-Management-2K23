@@ -1,0 +1,204 @@
+﻿@model FAPP.Areas.AM.ViewModels.AddIssuedItemViewModel
+<script>
+    @*$("#IssueDate").val('@String.Format("{0:yyyy/MM/dd}", Model.IssueDate)')
+    $("#IssuedItemId").val('@(Model.IssuedItemId == 0 ? "" : Model.IssuedItemId.ToString())')*@
+    if (@Json.Encode(Request.IsAjaxRequest()))
+        changeHref(@Model.TransferHistoryId);
+</script>
+<div class="vbox row">
+    <div class="row" style="padding:5px">
+        @*<div class="col-md-1" style="padding-right:0px !important">
+                Issue No.
+            </div>
+            <div class="col-md-3">
+                @Html.EditorFor(x => x.IssuedItemId, new { htmlAttributes = new { @class = "form-control", @placeholder = "Issue No" } })
+            </div>*@
+        <div class="col-md-1" style="padding-right:0px !important">
+            Date
+        </div>
+        <div class="col-md-3">
+            @Html.EditorFor(x => x.IssueDate, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "Issue Date" } })
+        </div>
+        <div class="col-md-1" style="padding-right:0px !important">
+            Department
+        </div>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.DepartmentsDD, "Value", "Text", Model.DepartmentId), "--Select Department--", htmlAttributes: new { @class = "form-control chosen-select", @style = "width:100%" })
+        </div>
+    </div>
+    <div class="row" style="padding:5px">
+        <div class="col-md-1">
+            Description
+        </div>
+        <div class="col-md-11">
+            @Html.EditorFor(x => x.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "Description" } })
+        </div>
+    </div>
+</div>
+<div style="display:none">
+    <input type="submit" name="name" value="" onclick="return IsValid();" id="IssueItemSubmitBtn" />
+    @Html.HiddenFor(s => s.TransferHistoryId)
+</div>
+<div class="table-responsive" style="overflow-y:scroll;">
+    <table class="table table-hover table-responsive" id="trans_details">
+        <thead>
+            <tr>
+                <th hidden>Barcode</th>
+                <th>Item</th>
+                <th>Item Code</th>
+                <th width="7%">Qty</th>
+                <th>Description</th>
+                <th>Condition</th>
+                <th>Employee</th>
+                <th width="">Room</th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tr id="tr_clone" style="display: none;">
+            <td hidden class="move">
+                @Html.TextBox("Details[-1].Barcode", null, new { @class = "barcodeField form-control cloneable .barcodeField", @placeholder = "BarCode" })
+            </td>
+            <td class="move">
+                @Html.DropDownList("Details[-1].ProductId", new SelectList(Model.ItemsDD, "Value", "Text"), "--Select Item--", new { @class = "form-control getItemCodes cloneable nochosen chosenafterclone", @style = "width:100%" })
+            </td>
+            <td class="move">
+                @Html.DropDownList("Details[-1].ItemCode", new SelectList(string.Empty, "Value", "Text"), "--Select Item Code--", new { @class = "getSelectedValue form-control cloneable nochosen chosenafterclone", @style = "width:100%" })
+            </td>
+            <td class="move">
+                @Html.TextBox("Details[-1].Quantity", null, new { @value = "1", @class = "form-control cloneable ", @placeholder = "Qty" })
+            </td>
+            <td class="move">
+                @Html.TextBox("Details[-1].Description", null, new { @class = "form-control cloneable ", @placeholder = "Description" })
+            </td>
+            <td class="move">
+                @Html.DropDownList("Details[-1].ConditionTypeId", new SelectList(Model.ConditionTypesDD, "Value", "Text"), "--Select Condition--", new { @class = "form-control cloneable nochosen chosenafterclone", @style = "width:100%" })
+            </td>
+            <td class="move">
+                @Html.DropDownList("Details[-1].EmployeeId", new SelectList(Model.EmployeesDD, "Value", "Text"), "--Select Employee--", new { @class = "form-control cloneable nochosen chosenafterclone", @style = "width:100%" })
+            </td>
+            <td class="move">
+                @Html.DropDownList("Details[-1].RoomId", new SelectList(Model.RoomsDD, "Value", "Text"), "--Select Room--", new { @class = "form-control cloneable nochosen chosenafterclone", @style = "width:100%" })
+            </td>
+            <td>
+                <a href="#" class="btn btn-danger" data-action="DeleteAccount" data-id="0">Delete</a>
+            </td>
+        </tr>
+
+        @if (Model != null)
+        {
+            if (Model.Details != null)
+            {
+
+                for (int i = 0; i < Model.Details.Count(); i++)
+                {
+                    var item = Model.Details[i];
+                    <tr>
+                        <td hidden style="border-top:none !important " class="move">
+                            <div class="displayNone">
+                                <input type="hidden" name="Details[@i].TransferHistoryId" value="@Model.Details[i].TransferHistoryId" />
+                            </div>
+                            @Html.EditorFor(x => x.Details[i].Barcode, new { htmlAttributes = new { @class = "barcodeField form-control cloneable", @placeholder = "Barcode" } })
+                        </td>
+                        <td style="border-top:none !important " class="move">
+                            @Html.DropDownListFor(model => model.Details[i].ProductId, new SelectList(Model.ItemsDD, "Value", "Text", Model.Details[i].ProductId), "--Select Item--", htmlAttributes: new { @class = "form-control getItemCodes cloneable chosen-select", @style = "width:100%;-webkit-appearance: textfield;" })
+                        </td>
+                        <td style="border-top:none !important " class="move">
+                            @if (item.ItemCode != null && item.ItemCode != "")
+                            {
+                                var aho = Model.ItemCodes.Where(s => s.Id == item.ProductId);
+                                @Html.DropDownListFor(m => m.Details[i].ItemCode,
+                                                             new SelectList(aho, "Value", "Text", Model.Details[i].ItemCode),
+                                                         "--Select Item Code--",
+                                                        new { @class = "form-control chosen-select getSelectedValue", @style = "width:100%;" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(m => m.Details[i].ItemCode,
+                                                                        new SelectList(string.Empty, "Value", "Text", Model.Details[i].ItemCode),
+                                                                         "--Select Item Code--",
+                                                                             new { @class = "form-control chosen-select getSelectedValue", @readonly = "readonly", @disabled = "disabled", @style = "width:100%;" })
+                            }
+                        </td>
+                        <td style="border-top:none !important " class="move">
+                            @if (item.ItemCode != null)
+                            {
+                                @Html.EditorFor(x => x.Details[i].Quantity, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Qty", @readonly = "readonly" } })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(x => x.Details[i].Quantity, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Qty" } })
+                            }
+                        </td>
+                        <td style="border-top:none !important " class="move">
+                            @Html.EditorFor(x => x.Details[i].Description, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Description" } })
+                        </td>
+
+                        <td style="border-top:none !important " class="move">
+                            @Html.DropDownListFor(model => model.Details[i].ConditionTypeId, new SelectList(Model.ConditionTypesDD, "Value", "Text", Model.Details[i].ConditionTypeId), "--Select Condition--", htmlAttributes: new { @class = "form-control cloneable chosen-select", @style = "width:100%;" })
+                        </td>
+                        <td style="border-top:none !important " class="move">
+                            @Html.DropDownListFor(model => model.Details[i].EmployeeId, new SelectList(Model.EmployeesDD, "Value", "Text", Model.Details[i].EmployeeId), "--Select Employee--", htmlAttributes: new { @class = "form-control cloneable chosen-select", @style = "width:100%;" })
+                        </td>
+                        <td style="border-top:none !important " class="move">
+                            @Html.DropDownListFor(model => model.Details[i].RoomId, new SelectList(Model.RoomsDD, "Value", "Text", Model.Details[i].RoomId), "--Select Room--", htmlAttributes: new { @class = "form-control cloneable chosen-select", @style = "width:100%" })
+                        </td>
+                        <td>
+                            <a href="#" data-url="@Url.Action("DeleteIssuanceDetail")" class="btn btn-danger" data-action="DeleteAccount" data-id="@Model.Details[i].TransferHistoryId">Delete</a>
+                            @*@if (Model?.IssuedItems?.IsPosted == false)
+                                {
+                                }*@
+                        </td>
+                    </tr>
+                }
+            }
+        }
+
+    </table>
+</div>
+<script>
+    RefreshAllScripts();
+    jQuery(document).ready(function () {
+        $(".datepicker").each(function () {
+            $(this).val(RemoveTimeFromDate($(this).val()));
+        });
+
+        @*$(document).on('keydown', '.barcodeField', function (e) {
+            if (e.which == 13) {//Enter key pressed
+                e.preventDefault();
+                $this = this;
+                var value = $this.value;
+                var id = $this.id;
+                var re = new RegExp("\\w{2}-\\w{2}-\\d{2}");
+                var splits = id.split(/(\d+)/);
+                var newId = splits[1];
+                var targetId = 'Details_' + newId + '__ItemId';
+                var array =@Html.Raw(Json.Encode(Model.ItemsDD));
+                if (re.test($this.value)) {
+                    AjaxCallForItemCodes(value,targetId,newId,array);
+                } else {
+                    AjaxCallForItemId(value,targetId,newId,array);
+                }
+                $(".barcodeField").val("");
+            }
+        });*@
+        var IssuedItemId = @Html.Raw(Json.Encode(Model.TransferHistoryId));
+        if(StringToFloat(IssuedItemId) > 0){
+            $('#pageHeading').text('Issue Voucher');
+            $('#lblissuevoucherid').text('Voucher No: '+IssuedItemId);
+            $('#tabtitle').text($('#pageHeading').text());
+            HideTopControls(false);
+        }
+        @*var EditMode = @Html.Raw(Json.Encode(Model.IssuedItemId));
+        var IsPosted = @Html.Raw(Json.Encode(@ViewBag.IsPosted));
+        var IsCancelled = @Html.Raw(Json.Encode(@ViewBag.IsCancelled));
+        var success = @Html.Raw(Json.Encode(@ViewBag.success));
+        var Cancelled = @Html.Raw(Json.Encode(@ViewBag.Cancelled));
+        if (success) {
+            DisplayMessage('', success);
+        }
+        if (Cancelled) {
+            DisplayMessage('error', Cancelled);
+        }*@
+    });
+</script>

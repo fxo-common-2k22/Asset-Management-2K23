@@ -1,0 +1,29 @@
+﻿@model FAPP.Models.TemplateFilter
+<div class="row">
+    <div class="col-sm-4">@Model.FilterName</div>
+    <div class="col-sm-6">
+        @Html.TextBox(Model.FilterName, new
+        {
+
+            id = Model.FilterName + "_1",
+            @Value = true,
+            type = "radio",
+            @class = "icheck-me",
+            @data_skin = "square",
+            @data_color = "blue",
+            @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+        })
+        <label class="inline"  style="padding-left: 2px">Yes</label>
+        @Html.TextBox(Model.FilterName, new
+        {
+            @Value = false,
+            id = Model.FilterName + "_2",
+            type = "radio",
+            @class = "icheck-me",
+            @data_skin = "square",
+            @data_color = "blue",
+            @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+        })
+        <label class="inline"  style="padding-left: 2px">No</label>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+﻿Remove Identity From Following:
+	Transport.Drivers at DriverId
+	Hostel.Buildings at BuildingId
+	Hostel.Floors	 at FloorId
+	Hostel.Rooms	 at RoomId
+	Hostel.Beds		 at BedId
+
+
+	Alter Table dbo.ImportWizard
+	Add HostelImported bit not null
+
+
+	
+	Alter Table Hostel.Buildings
+	Add OldBuildingId uniqueidentifier null
+
+	Alter Table Hostel.Floors
+	Add OldFloorId uniqueidentifier null
+
+		Alter Table Hostel.Rooms
+	Add OldRoomId uniqueidentifier null		
+	
+	Alter Table Hostel.Beds
+	Add OldBedId uniqueidentifier null
+	
+	Alter Table Academics.HostelStudent
+	Add TillDate datetime null
+

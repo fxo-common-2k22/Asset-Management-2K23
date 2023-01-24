@@ -1,0 +1,38 @@
+﻿USE [ezBIZ_PRO]
+GO
+
+/****** Object:  Table [Company].[Regions]    Script Date: 12/3/2018 6:56:35 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [Company].[Regions](
+	[RegionId] [int] IDENTITY(1,1) NOT NULL,
+	[RegionName] [nvarchar](max) NULL,
+	[CreatedOn] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedOn] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[IP] [nvarchar](50) NULL,
+ CONSTRAINT [PK_Company.Regions] PRIMARY KEY CLUSTERED 
+(
+	[RegionId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [Company].[Regions]  WITH CHECK ADD  CONSTRAINT [FK_Company.Regions_Membership.Users_CreatedBy] FOREIGN KEY([CreatedBy])
+REFERENCES [Membership].[Users] ([UserID])
+GO
+
+ALTER TABLE [Company].[Regions] CHECK CONSTRAINT [FK_Company.Regions_Membership.Users_CreatedBy]
+GO
+
+ALTER TABLE [Company].[Regions]  WITH CHECK ADD  CONSTRAINT [FK_Company.Regions_Membership.Users_ModifiedBy] FOREIGN KEY([ModifiedBy])
+REFERENCES [Membership].[Users] ([UserID])
+GO
+
+ALTER TABLE [Company].[Regions] CHECK CONSTRAINT [FK_Company.Regions_Membership.Users_ModifiedBy]
+GO

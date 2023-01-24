@@ -1,0 +1,114 @@
+﻿@model FAPP.ViewModel.MediaTemplatesViewModel
+@using FAPP.DAL
+@{
+    if (Model.Certificate != null)
+    {
+        ViewBag.Title = $"Issue";
+    }
+    else
+    {
+        ViewBag.Title = $"Issue Certificate";
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section TopRightMenu{
+    <div id="topRightBtns">
+        <ul class="minitiles">
+            <li class="red">
+                <a href="@FAPP.DAL.SessionHelper.ReturnUrl" data-toggle="tooltip" title="Back to Dashboard">
+                    <i class="fa fa-mail-reply"></i>
+                </a>
+            </li>
+            <li class="green">
+                <a href="/CustomReporting/Setting/@Model.TemplateType.Module.ModuleName.Trim().Replace(" ", String.Empty).Replace("&", String.Empty)/@Model.TemplateType.TemplateTypeName" data-toggle="tooltip" title="@Model.TemplateType.TemplateTypeName Settings">
+                    <i class="fa fa-gears"></i>
+                </a>
+            </li>
+            <li class="blue">
+                <a href="/Certificates/Issued/@Model.TemplateType.Module.ModuleName.Trim().Replace(" ", String.Empty).Replace("&", String.Empty)/@Model.TemplateType.TemplateTypeName/@Model.Certificate.CertificateId" data-toggle="tooltip" title="Issued @Model.Certificate.Title">
+                    <i class="fa fa-check"></i>
+                </a>
+            </li>
+            <li class="grey" id="editbtn" style="margin-right:0">
+                <a href="/Certificates/AddEdit/@Model.TemplateType.Module.ModuleName.Trim().Replace(" ", String.Empty).Replace("&", String.Empty)/@Model.TemplateType.TemplateTypeName/@Model.Certificate.CertificateId" data-toggle="tooltip" title="Edit @Model.Certificate.Title">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            </li>
+            @*<li class="blue">
+                    <a href="@Url.Action("Manage","Certificates")" data-toggle="tooltip" title="Templates List">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                </li>*@
+        </ul>
+    </div>
+
+}
+<div class="alert alert-success alert-dismissable cannotAutoClose  displayNone" id="alrtIssuedCerticateSuccess" style="margin-bottom:0px !important">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong>Success!</strong> <p> Certificates are issued. <a class="btn btn-primary btn-xs" href="/Certificates/Issued/@Model.TemplateType.Module.ModuleName.Trim().Replace(" ", String.Empty).Replace("&", String.Empty)/@Model.TemplateType.TemplateTypeName/@Model.Certificate.CertificateId">click here</a> to view Issued Certificates.</p>
+</div>
+<div class="vbox">
+    @using (Ajax.BeginForm("SearchStudents", "Certificates",
+                 new AjaxOptions { HttpMethod = "POST", OnSuccess = "onSearchSuccess", OnFailure = "OnSearchFailure" },
+                 new { @class = "form-inline" }))
+    {
+        <table style="width:45%;">
+            <tbody>
+                <tr>
+                    <td style="padding:6px;width:50%;">
+                        @if (Model.ModuleId == 1 || Model.ModuleId == 7)
+                        {
+
+                            @Html.DropDownListFor(model => model.IssueCertificate.GroupId, new SelectList(ViewBag.GroupsDD, "Value", "Text"), "--Select Group--", new { @style = "width:100%", @class = "" })
+                            @Html.ValidationMessageFor(model => model.IssueCertificate.GroupId, "", new { @class = "text-danger" })
+
+                        }
+                        @if (Model.ModuleId == 9)
+                        {
+
+                            @Html.DropDownListFor(model => model.IssueCertificate.DepartmentId, new SelectList(ViewBag.DepartmentsDD, "Value", "Text"), "--Select Department--", new { @required = "required", @style = "width:90%;", @class = "" })
+                            @Html.ValidationMessageFor(model => model.IssueCertificate.DepartmentId, "", new { @class = "text-danger" })
+
+                        }
+
+                    </td>
+                    @*@if (Model.IssueCertificate == null)
+                        {
+                            <td width="5%">
+                                @Html.DropDownListFor(model => model.IssueCertificate.CertificateId, new SelectList(ViewBag.CertsDD, "Value", "Text"), "--Select Certificate--", new { @style = "width:100%", @class = "" })
+                                @Html.ValidationMessageFor(model => model.IssueCertificate.CertificateId, "", new { @class = "text-danger" })
+                            </td>
+                        }
+                        else*@
+
+                    @Html.HiddenFor(m => m.IssueCertificate.CertificateId)
+                    @Html.HiddenFor(m => m.ModuleId)
+                    <td class="form-group" style="padding:5%;">
+                        @Html.CheckBoxFor(m => m.IssueCertificate.IncludeInactive) Include Inactive
+                    </td>
+
+                    <td width="10%" style="padding:6px">
+                        <button type="submit" class="btn btn-success">Load</button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    }
+</div>
+<div id="certsGrid">
+    @if (Model.IssueCertificate != null && Model.IssueCertificate.Students != null)
+    {
+        @Html.Partial("~/Views/Certificates/_PartialIssueCertificate.cshtml", Model)
+    }
+</div>
+
+
+<script>
+     $('#extendedPageHeader').html(`<p style="margin:13px 0px">
+                @{
+                      <label class="label label-darkblue" title="Template Type Name">@(Model.TemplateType.TemplateTypeName)</label>
+                      <label class="label label-green" title="Certificate Name">@(Model.Certificate.Title)</label>
+                } </p>`);
+</script>

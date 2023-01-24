@@ -1,0 +1,64 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageIssuedItemsViewModel
+@{
+    ViewBag.Title = "Manage Issued Items";
+}
+
+@section topRightMenu{
+    @if (ViewBag.CanCreate)
+    {
+        <ul class="minitiles link">
+            <li class="green" data-toggle="tooltip" title="Issue Items">
+                <a href="@Url.Action("AddEditIssuedItem", "Issue")">
+                    <i class=" fa fa-plus">
+                    </i>
+                </a>
+            </li>
+        </ul>
+    }
+}
+@using (Ajax.BeginForm("ManageIssuedItems", "Issue", new AjaxOptions
+{
+    OnBegin = "OnSearchBegin",
+    OnSuccess = "OnSearchSuccess",
+    OnFailure = "OnSearchFailure",
+    UpdateTargetId = "updateTarget",
+}))
+{
+<div class="vbox row">
+    <div class="col-md-1">
+        Issue No
+    </div>
+    <div class="col-md-2">
+        @Html.EditorFor(x => x.IssuedItemId, new { htmlAttributes = new { @class = "form-control", @placeholder = "Issue No" } })
+    </div>
+    <div class="col-md-1">
+        Issue Date
+    </div>
+    <div class="col-md-2">
+        @Html.EditorFor(x => x.IssueDate, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "Issue Date" } })
+    </div>
+    <div class="col-md-1">
+        Department
+    </div>
+    <div class="col-md-2">
+        @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.DepartmentsDD, "Value", "Text", Model.DepartmentId), "--Select Department--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+    </div>
+    <div class="col-md-1">
+        <input type="submit" name="name" value="Search" class="btn btn-green" />
+    </div>
+</div>
+}
+<div id="updateTarget">
+    @Html.Partial("_PartialManageIssuedItem",Model)
+</div>
+
+@section scripts{
+    <script>
+        function OnSearchBegin(request) {
+        }
+        function OnSearchSuccess(response) {
+        }
+        function OnSearchFailure(response) {
+        }
+    </script>
+}

@@ -1,0 +1,123 @@
+﻿@using FAPP.DAL;
+@model FAPP.ViewModel.MediaTemplatesViewModel
+@{
+    ViewBag.Title = "Issued Certificates";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section TopRightMenu{
+    <div id="topRightBtns">
+        <ul class="minitiles">
+            <li class="red" id="editbtn">
+                <a href="@FAPP.DAL.SessionHelper.ReturnUrl" data-toggle="tooltip" title="Back to Dashboard">
+                    <i class="fa fa-mail-reply"></i>
+                </a>
+            </li>
+
+            <li class="blue">
+                <a href="/Certificates/Issue/@Model.TemplateType.Module.ModuleName.Trim().Replace(" ", String.Empty).Replace("&", String.Empty)/@Model.TemplateType.TemplateTypeName/@Model.Certificate.CertificateId" data-toggle="tooltip" title="Issue @Model.Certificate.Title">
+                    <i class="fa fa-paper-plane-o"></i>
+                </a>
+            </li>
+            <li class="grey" id="editbtn">
+                <a href="/Certificates/AddEdit/@Model.TemplateType.Module.ModuleName.Trim().Replace(" ", String.Empty).Replace("&", String.Empty)/@Model.TemplateType.TemplateTypeName/@Model.Certificate.CertificateId" data-toggle="tooltip" title="Edit @Model.Certificate.Title">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            </li>
+            @*<li class="darkblue" data-toggle="tooltip" title="" data-original-title="Save Result">
+                    <a href="javascript:" id="getPrintBtn" style="display: none" onclick="$('#printCertBtn').click();">
+                        <i class="fa fa-id-card"></i>
+                    </a>
+                </li>*@
+        </ul>
+    </div>
+}
+@*<div id="resultFrm">
+
+    </div>*@
+<div class="vbox">
+    @using (Ajax.BeginForm("SearchIssued", "Certificates", new AjaxOptions { HttpMethod = "POST", OnSuccess = "onSearchSuccess", OnFailure = "OnSearchFailure" }, new { @class = "form-inline" }))
+    {
+        @Html.HiddenFor(m => m.ModuleId)
+        <table style="width:70%;">
+            <tbody>
+                <tr>
+                    @if (Model.ModuleId == 1 || Model.ModuleId == 7)
+                    {
+                        <td width="40%" style="padding:6px">
+
+
+                            @Html.DropDownListFor(model => model.SearchIssuedCertificates.GroupId, new SelectList(ViewBag.GroupsDD, "Value", "Text"), "--Select Group--", new { @style = "width:100%;padding-left: 2px !important;", @class = "" })
+                            @Html.ValidationMessageFor(model => model.SearchIssuedCertificates.GroupId, "", new { @class = "text-danger" })
+
+                        </td>
+                        <td width="40%" style="padding:6px">
+                            @Html.EditorFor(model => model.SearchIssuedCertificates.SearchStudent, new { htmlAttributes = new { @class = "form-control", @placeholder = "Name/RegNo/RollNo/IssueNo", @style = "padding-bottom: 2px !important;padding-top: 2px !important;padding-left: 2px !important;height: 31px; width: 100%;" } })
+                            @Html.ValidationMessageFor(model => model.SearchIssuedCertificates.SearchStudent, "", new { @class = "text-danger" })
+                        </td>
+                    }
+                    @if (Model.ModuleId == 9)
+                    {
+                        <td width="40%" style="padding:6px">
+                            @Html.DropDownListFor(model => model.SearchIssuedCertificates.DepartmentId, new SelectList(ViewBag.DepartmentsDD, "Value", "Text"), "--Select Department--", new { @style = "width:90%;", @class = "" })
+                            @Html.ValidationMessageFor(model => model.SearchIssuedCertificates.DepartmentId, "", new { @class = "text-danger" })
+                        </td>
+                        <td width="40%" style="padding:6px">
+                            @Html.EditorFor(model => model.SearchIssuedCertificates.SearchEmployee, new { htmlAttributes = new { @class = "form-control", @placeholder = "Name/RegNo/EmpNo/IssueNo", @style = "padding-bottom: 2px !important;padding-top: 2px !important;padding-left: 2px !important;height: 31px; width: 100%;" } })
+                            @Html.ValidationMessageFor(model => model.SearchIssuedCertificates.SearchEmployee, "", new { @class = "text-danger" })
+                        </td>
+                    }
+                    @if (Model.SearchIssuedCertificates.CertificateTypeId == 0)
+                    {
+                        <td width="30%" style="padding:6px">
+                            @Html.DropDownListFor(model => model.SearchIssuedCertificates.CertificateTypeId, new SelectList(ViewBag.CertsDD, "Value", "Text"), "Select Certificate Type", new { @style = "padding-bottom: 2px !important ;padding-top: 2px !important;height: 31px; width:100%", @class = "" })
+                            @Html.ValidationMessageFor(model => model.SearchIssuedCertificates.CertificateTypeId, "", new { @class = "text-danger" })
+                        </td>
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(m => m.Certificate.Title)
+                        @Html.HiddenFor(m => m.SearchIssuedCertificates.CertificateTypeId)
+                    }
+
+                    @*<td width="5%" style="padding:6px">
+                        @Html.EditorFor(model => model.SearchIssuedCertificates.StudentName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Student Name", @style = "padding-bottom: 2px !important;padding-top: 2px !important;padding-left: 2px !important;height: 31px; width: 100%;" } })
+                        @Html.ValidationMessageFor(model => model.SearchIssuedCertificates.StudentName, "", new { @class = "text-danger" })
+                    </td>
+                    <td width="5%" style="padding:6px">
+                        @Html.EditorFor(model => model.SearchIssuedCertificates.IssueNo, new { htmlAttributes = new { @class = "form-control", @placeholder = "Issue No", @style = "padding-bottom: 2px !important;padding-top: 2px !important;height: 31px; width: 100%;" } })
+                        @Html.ValidationMessageFor(model => model.SearchIssuedCertificates.IssueNo, "", new { @class = "text-danger" })
+                    </td>
+                    <td width="5%" style="padding:6px">
+                        @Html.EditorFor(model => model.SearchIssuedCertificates.RollNo, new { htmlAttributes = new { @class = "form-control", @placeholder = "Roll No", @style = "padding-bottom: 2px !important;padding-top: 2px !important;height: 31px; width: 100%;" } })
+                        @Html.ValidationMessageFor(model => model.SearchIssuedCertificates.RollNo, "", new { @class = "text-danger" })
+                    </td>*@
+                    <td width="10%" style="padding:6px">
+                        <button type="submit" class="btn btn-success">Search</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        }
+                </div>
+                <div id="certGrid">
+
+                    @if (Model.IssuedCertificatesList != null)
+                    {
+                        @Html.Partial("_IssuedCertificatesGrid", Model)
+                    }
+                    @if (Model.IssuedEmployeeCertificatesList != null)
+                    {
+                        @Html.Partial("_IssuedCertificatesGrid", Model)
+                    }
+                </div>
+                <script type="text/javascript">
+    if($("#Certificate_Title").val()!=="")
+    {
+        $("#pageHeading").html("Issued "+$("#Certificate_Title").val());
+    }
+
+     $('#extendedPageHeader').html(`<p style="margin:13px 0px">
+                @{
+                      <label class="label label-darkblue" title="Template Type Name">@(Model.TemplateType.TemplateTypeName)</label>
+                } </p>`);
+                </script>

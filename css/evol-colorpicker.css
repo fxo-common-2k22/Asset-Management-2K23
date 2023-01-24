@@ -1,0 +1,198 @@
+/*
+   evol-colorpicker 3.3.1
+   (c) 2017 Olivier Giulieri
+   http://evoluteur.github.io/colorpicker/
+*/
+.evo-pop {
+    z-index: 10000 !important;
+    width: 204px !important;
+    padding: 3px 3px 0 !important;
+}
+
+.evo-pop-ie {
+    z-index: 10000 !important;
+    width: 212px !important;
+    padding: 3px !important;
+}
+
+.evo-palette td {
+    font-size: 1px !important;
+    border: solid 1px #c0c0c0 !important;
+    padding: 7px !important;
+    cursor: pointer !important;
+}
+
+.evo-palette tr.top > td {
+    border-bottom: 0 !important;
+}
+
+.evo-palette tr.in > td {
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+}
+
+.evo-palette tr.bottom > td {
+    border-top: 0 !important;
+}
+
+.evo-palette div.sep {
+    height: 3px !important;
+}
+
+.evo-palette,
+.evo-palette-ie {
+    border-collapse: separate !important;
+    border-spacing: 4px 0px !important;
+    *border-collapse: expression('separate', cellSpacing='2px') !important;
+}
+
+    .evo-palette th,
+    .evo-palette-ie th {
+        border: 0 !important;
+        padding: 5px 3px !important;
+        text-align: left !important;
+        font-weight: normal !important;
+        background: transparent !important;
+        !important;
+    }
+
+    .evo-palette-ie td {
+        font-size: 1px !important;
+        border: solid 1px #c0c0c0 !important;
+        padding: 7px !important;
+        cursor: pointer !important;
+    }
+
+.evo-palette2,
+.evo-palette2-ie {
+    margin: auto !important;
+    border-collapse: collapse !important;
+}
+
+    .evo-palette2 td,
+    .evo-palette2-ie td {
+        font-size: 1px !important;
+        cursor: pointer !important;
+    }
+
+    .evo-palette2 td {
+        padding: 6px 7px !important;
+    }
+
+    .evo-palette2-ie td {
+        padding: 5px !important;
+    }
+
+.evo-palcenter {
+    padding: 5px !important;
+    text-align: center !important;
+}
+
+.evo-colorind,
+.evo-colorind-ie,
+.evo-colorind-ff {
+    border: solid 1px #c3c3c3 !important;
+    width: 18px !important;
+    height: 18px !important;
+    float: right !important;
+}
+
+.evo-colorind-ie {
+    position: relative !important;
+    top: -23px !important;
+}
+
+.evo-colorbox-ie {
+    font-size: 8px !important;
+    padding: 3px 9px !important;
+    !important;
+}
+
+.evo-pop:after,
+.evo-pop-ie:after,
+.evo-colorind:after,
+.evo-colorind-ie:after,
+.evo-colorind-ff:after,
+.evo-color span:after,
+.evo-cHist:after {
+    content: "." !important;
+    display: block !important;
+    height: 0 !important;
+    clear: both !important;
+    visibility: hidden !important;
+    font-size: 0 !important;
+}
+
+.evo-color {
+    width: 94px !important;
+    padding: 1px 3px 0 4px !important;
+}
+
+    .evo-color div {
+        border: solid 1px #808080 !important;
+        border-right: solid 1px #c0c0c0 !important;
+        border-bottom: solid 1px #c0c0c0 !important;
+        padding: 3px !important;
+        margin-bottom: 5px !important;
+        width: 10px !important;
+        height: 10px !important;
+        float: left !important;
+    }
+
+    .evo-color span {
+        font-size: 15px !important;
+        margin: 1px 0 4px 3px !important;
+        float: left !important;
+    }
+
+.evo-sep {
+    height: 10px !important;
+    font-size: 0 !important;
+}
+
+.evo-more {
+    padding: 4px 5px 4px !important;
+    font-size: smaller !important;
+}
+
+.evo-cHist {
+    padding: 3px !important;
+}
+
+    .evo-cHist div {
+        cursor: pointer !important;
+        border: solid 1px #c0c0c0 !important;
+        padding: 3px !important;
+        margin: 5px !important;
+        width: 10px !important;
+        height: 10px !important;
+        float: left !important;
+    }
+
+.evo-transparent {
+    background-image: repeating-linear-gradient(135deg, black, black 1px, white 1px, white 3px) !important;
+}
+
+.evo-tr-box {
+    cursor: pointer !important;
+    border: solid 1px #c0c0c0 !important;
+    padding: 3px !important;
+    width: 7px !important;
+    height: 7px !important;
+    float: right !important;
+    position: relative !important;
+    right: -3px !important;
+    top: 2px !important;
+}
+
+a.evo-hist {
+    margin-left: 6px !important;
+}
+
+.evo-pointer {
+    cursor: pointer !important;
+}
+
+.evo-hidden-button {
+    display: none !important;
+}

@@ -1,0 +1,83 @@
+﻿@model FAPP.Areas.AM.ViewModels.SetupModelViewModel
+
+
+@{
+    ViewBag.Title = "Opening Stock";
+}
+@using (Ajax.BeginForm("OpeningStock", "Setup", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divStudents", LoadingElementId = "loader" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="vbox singleBoxPadding form-vertical marginTop15" style="margin-bottom: 10px;">
+                <div class="row">
+                    <div class="">
+                        <div class="col-sm-3">
+                            @Html.DropDownListFor(m => m.WareHouseId, new SelectList(ViewBag.WareHouses, "WareHouseId", "WareHouseName", Model.WareHouseId), "=Select Warehouse=", new { @class = "form-control chosen-select", @style = "width:100%;" })
+                        </div>
+                        <div class="col-sm-3">
+                            @Html.TextBoxFor(model => model.Search, new { @class = "form-control", @placeholder = "Search here" })
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="submit" class="btn" value="Search" title="Search" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="divStudents">
+        @Html.Partial("_PartialOpeningStockList", Model)
+    </div>
+
+}
+<div class="modal fade" id="PIPDModal" role="dialog" style="">
+    <div class="modal-dialog" id="UpdatePIPD">
+        <!-- Modal content-->
+    </div>
+</div>
+@section scripts{
+    <script>
+        function SetStockValue(id, value) {
+            $(id).find('input').val(value);
+        }
+        function OnDeleteItemBegin(request) {
+        }
+        function OnDeleteItemSuccess(request) {
+            DisplayMessage('', '<strong>Deleted</strong> Items has been deleted...');
+        }
+        function OnBegin(request) {
+        }
+        function OnFetchFAItemsSuccess(response) {
+            $("#PIPDModal").modal('show');
+        }
+        function OnFailure(response) {
+            DisplayMessage('error', 'Something went wrong while Processing your request ...!');
+        }
+    $(function () {
+            var isChanged = false;
+            $(document).on('blur', '.numeric', function (e) {
+                if (isChanged) {
+                    isChanged = false;
+                    IsvalidforUpdate($(this).closest('tr'));
+                }
+            });
+            $(document).on('keydown', '.numeric', function (e) {
+                isChanged = true;
+            });
+            function IsvalidforUpdate(that) {
+                var stock = $(that).find('.stock').val();
+                var OpeningStockId = $(that).find('[id $= OpeningStockId]').val();
+                if (OpeningStockId && stock) {
+                    UpdateStock(that, OpeningStockId, stock);
+                }
+            }
+            function UpdateStock(row, OpeningStockId, stock) {
+                $.get('@Url.Action("UpdateOpenningStock")', { Id: OpeningStockId, stock: stock}, function (d) {
+                $(row).find('[id $= item_no_lbl]').css('color', 'green');
+                $(row).find('[id $= item_no_lbl]').text('Updated').delay(3000).fadeOut();
+                });
+                }
+    });
+    </script>
+}

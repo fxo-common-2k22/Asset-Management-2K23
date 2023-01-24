@@ -1,0 +1,112 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseReturnModelViewModel
+@using PagedList.Mvc;
+
+<div class="row">
+    <div class="col-sm-12 downpadding">
+        <table cellspacing="0" class="gv nm table table-hover no-head-border table-responsive table-striped">
+            <thead class="vd_bg-green vd_white">
+                <tr>
+                    <th width="20px">Sr.</th>
+                    <th>Id</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    @*<th>Description</th>*@
+                    <th>Total Amount</th>
+                    <th>Balance</th>
+                    <th>Discount</th>
+                    <th>Posted</th>
+                    @*<th>Posted By</th>*@
+                    <th>Modified</th>
+                    @*<th>Modified On</th>*@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int count = 0; }
+                @if (Model != null)
+                {
+                    foreach (var item in Model.PurchaseReturnPagedList)
+                    {
+                        <tr class="tr_row">
+                            <td width="20px"><span class="label label-default current-theme ">@(count++)</span></td>
+                            <td>@item.PurchaseReturnId</td>
+                            <td>@(item.Client == null ? "" : item.Client.Name)</td>
+                            <td>@(item.PurchaseReturnDate.ToString("dd MMM yyyy"))</td>
+                            <td>@(item.NetTotal)</td>
+                            <td>@(Convert.ToDecimal(item.NetTotal) - Convert.ToDecimal(item.Received))</td>
+                            <td>@(item.Discount)</td>
+                            @* <td>@(item.Description)</td>*@
+
+
+                            @*<td>@(item.IsPosted == true ? "Yes" : "No")</td>
+                                <td>@(item.PostedByUser == null ? "" : item.PostedByUser.Username)</td>*@
+
+                            <td>
+                                @if ((item.IsPosted == true))
+                                {
+                                    <span style="color:#1bce32;" title="Posted By @(item.PostedByUser?.Username)"><i class="fa fa-check"></i></span>
+                                }
+                                else
+                                {
+                                    <span style="color:#ff2b2b;" title="Not Posted"><i class="fa fa-close"></i></span>
+                                }
+
+                            </td>
+
+
+                            @*<td>@(item.ModifiedBy == null ? "" : item.ModifiedByUser.Username)</td>
+                                <td>@(item.ModifiedOn == null ? "" : item.ModifiedOn.Value.ToString("dd MMM yyyy"))</td>*@
+
+
+                            <td>
+                                @{
+                                    if (item.ModifiedByUser != null)
+                                    {
+                                        <span class="label label-default colored-span Status-span user-span" title="@(item.ModifiedOn == null ? "" : item.ModifiedOn.Value.ToString("dd MMM yyyy"))">
+                                            @(item.ModifiedByUser?.Username)
+                                        </span>
+                                    }
+
+                                    else
+                                    {
+
+                                        
+                                    }
+
+                                }
+
+                            </td>
+
+
+                            <td>
+                                @if (ViewBag.CanUpdate)
+                                {
+                                    @Html.ActionLink("View", "AddEditPurchaseReturn", new { id = item.PurchaseReturnId }, new { @class = "btn btn-primary btn-xs" })
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+        @if (Model.PurchaseReturnPagedList == null || Model.PurchaseReturnPagedList.Count == 0)
+        {
+            <div style="text-align: center">
+                No data found
+            </div>
+        }
+        <div id="targetContainer">
+            <div id='Paging' style="text-align: center">
+                Page @(Model.PurchaseReturnPagedList.PageCount < Model.PurchaseReturnPagedList.PageNumber ? 0 : Model.PurchaseReturnPagedList.PageNumber)
+                of @Model.PurchaseReturnPagedList.PageCount
+                @Html.PagedListPager(Model.PurchaseReturnPagedList, page => Url.Action("ManagePurchaseReturns", new { page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+                {
+                    HttpMethod = "POST",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "divStudents"
+                }))
+            </div>
+        </div>
+    </div>
+</div>

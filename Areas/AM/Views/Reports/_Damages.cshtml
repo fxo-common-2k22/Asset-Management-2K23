@@ -1,0 +1,74 @@
+﻿@model FAPP.Areas.AM.ViewModels.ReportModel
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-hover no-head-border table-responsive table-striped" id="gv">
+            <thead>
+                <tr>
+                    <th>Sr</th>
+                    <th>Item Code</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Issue Date</th>
+                    <th>Department</th>
+                    <th>Employee</th>
+                    <th>Location</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.IssuanceList != null)
+                    {
+                        var count = 0;
+                        foreach (var item in Model.IssuanceList)
+                        {
+
+
+                            <tr>
+                                <td>@(++count)</td>
+                                <td>@item.ItemCode</td>
+                                <td>@item.ProductName</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.IssueDate.ToddMMMyyyyString()</td>
+                                <td>@item.DepartmentName</td>
+                                <td>@item.EmployeeName</td>
+                                <td>@item.LocationName</td>
+                                <td>@item.Description</td>
+
+                            </tr>
+                        }
+
+
+
+                    }
+                }
+
+
+            </tbody>
+        </table>
+
+        @if (Model.IssuanceList == null || Model.IssuanceList.Count == 0)
+        {
+            <div style="text-align: center">
+                No data found
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+         @*function printGV() {
+            var  title = @Html.Raw(Json.Encode(ViewBag.title));
+            printData('gv', title, '', '');
+        }*@
+
+$('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+@{
+<label class="label label-darkblue" title="">Total: @(Model?.IssuanceList?.Count)</label>
+} </p>`);
+
+    });
+
+</script>

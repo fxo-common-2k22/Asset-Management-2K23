@@ -1,0 +1,60 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageIssuedItemsViewModel
+@using PagedList.Mvc;
+
+<div class="row">
+    <div class="col-sm-12 downpadding">
+        <table cellspacing="0" class="gv nm table table-hover no-head-border table-responsive table-striped">
+            <thead class="vd_bg-green vd_white">
+                <tr>
+                    <th>Id</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null)
+                {
+                    foreach (var item in Model.ReturnIssuePagedList)
+                    {
+                        <tr class="tr_row">
+                            <td>@item.ReturnIssueId</td>
+                            <td>@(item.ReturnIssueDate.ToString("dd MMM yyyy"))</td>
+                            <td>@item.Description</td>
+                            <td>
+                                @Html.ActionLink("View", "AddEditReturnIssue", new { id = item.ReturnIssueId }, new { @class = "btn btn-primary btn-xs" })
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+        @if (Model.ReturnIssuePagedList == null || Model.ReturnIssuePagedList.Count == 0)
+        {
+            <div style="text-align: center">
+                No data found
+            </div>
+        }
+        <div id="targetContainer">
+            <div id='Paging' style="text-align: center">
+                Page @(Model.ReturnIssuePagedList.PageCount < Model.ReturnIssuePagedList.PageNumber ? 0 : Model.ReturnIssuePagedList.PageNumber)
+                of @Model.ReturnIssuePagedList.PageCount
+                @Html.PagedListPager(Model.ReturnIssuePagedList, page => Url.Action("ReturnIssuedItems", new { page, Model.FromDate, Model.ToDate }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+           {
+               HttpMethod = "POST",
+               InsertionMode = InsertionMode.Replace,
+               UpdateTargetId = "divStudents"
+           }))
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+@{
+<label class="label label-darkblue" title="Total Return Voucher">Total: @(Model?.ReturnIssuePagedList?.TotalItemCount??0)</label>
+} </p>`);
+</script>

@@ -1,0 +1,94 @@
+﻿<div class="box box-color box-bordered orange" id="CurrentMonthFeeStatsGraphId">
+    <div class="box-title">
+        <h3>
+            <i class="fa fa-calendar"></i>
+            <span id="LabelTitle">Current Month Fee Stats</span>
+        </h3>
+        <a href="/Fee/Students/Index" style="margin-right: 2%;" target="_blank" class="btn btn-darkblue pull-right">Details</a>
+
+    </div>
+    <div class="box-content" style="min-height: 155px;">
+        <div class="row">
+            <div class="col-lg-12" id="CurrentMonthFeeStatsContainer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(window).on('load', function () {
+         ;
+        var d;
+        $.ajax({
+            url: "/Dashboard/FeeStatsChartData",
+            type: "GET",
+            global: false,
+            success: function (data) {
+                 ;
+                if (data != null) {
+                    DrawFeeStatsGraph(data);
+                }
+            }, error: function (jqXHR, exception) {
+                console.log(jqXHR);
+                toastr.error("Some Error Occured while loading Fee Stats");
+            }
+        }).fail(function (jqXHR, textStatus) {
+            toastr.error("Some Error Occured while loading Fee Stats");
+            });
+        $(".highcharts-credits").hide();
+    });
+    function DrawFeeStatsGraph(d) {
+         ;
+
+        console.log(d.FeeStatsSlices);
+        if ($('#CurrentMonthFeeStatsContainer').length) {
+            Highcharts.chart('CurrentMonthFeeStatsContainer', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Fee Stats'
+                },
+                subtitle: {
+                    text: 'Fee Stats for Current Month'
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Amount'
+                    }
+
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f}'
+                        }
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+                },
+                series: [
+                    {
+                        name: "Fee Stats",
+                        colorByPoint: true,
+                        data: d.FeeStatsColoumns
+                    }
+                ],
+                drilldown: {
+                    series: null
+                }
+            });
+        }
+    }
+</script>

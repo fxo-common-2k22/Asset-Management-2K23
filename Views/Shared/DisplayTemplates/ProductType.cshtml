@@ -1,0 +1,13 @@
+﻿@model FAPP.Model.OneDbContext.ProductType
+@if (Model == FAPP.Model.OneDbContext.ProductType.None)
+{
+    <text>None</text>
+}
+else if (Model == FAPP.Model.OneDbContext.ProductType.RawMaterial)
+{
+    <text>Raw Material</text>
+}
+else
+{
+    <text>Finished Good</text>
+}

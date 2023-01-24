@@ -1,0 +1,40 @@
+﻿@model  FAPP.ViewModel.MessagingVM
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th width="3%">Sr.</th>
+            <th><input name="SelectAll" id="SelectAll" type="checkbox" style="cursor:pointer" title="Select All" onclick="$('.checkBoxes').prop('checked', $(this).prop('checked')).change();" /> User</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+
+        @for (int i = 0; i < Model.NotificationSettingAdminUsers.Count(); i++)
+        {
+            var item = Model.NotificationSettingAdminUsers[i];
+           @Html.HiddenFor(s => s.NotificationSettingAdminUsers[i].UserId)
+           @Html.HiddenFor(s => s.NotificationSettingAdminUsers[i].UserName)
+            <tr>
+                <td><span class="label label-default current-theme">@(i + 1)</span></td>
+                <td>
+                    <label for="NotificationSettingAdminUsers_@(i)__IsSelected" class="control-label">
+                        @Html.EditorFor(model => model.NotificationSettingAdminUsers[i].IsSelected, new { htmlAttributes = new { @class = "checkBoxes" } })
+                        @Html.ValidationMessageFor(model => model.NotificationSettingAdminUsers[i].IsSelected, null, new { @class = "text-danger" })
+                        @Html.DisplayFor(m => item.UserName)
+                    </label>
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+
+</table>
+<script>
+    //$('.chooseSessions').click(function () {
+    //    $('.chooseSessions').not(this).attr('checked', false);
+    //    if ($(this).is(':checked') == true) {
+    //        let i = $(this).data('index');
+    //        $('#UserSessions_' + i + '__Assigned').attr('checked', true);
+    //    }
+    //})
+</script>

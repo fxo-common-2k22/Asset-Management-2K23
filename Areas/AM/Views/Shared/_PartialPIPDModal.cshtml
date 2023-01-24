@@ -1,0 +1,87 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+<style>
+    /* Important part */
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        max-height: calc(100vh - 200px);
+        height: 250px;
+        overflow-y: auto;
+    }
+</style>
+<div class="modal-content">
+    <div class="modal-header" style="background-color: #368ee0; color:white;">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Purchase Invoice Product details</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box-content nopadding">
+                    <table class="table table-hover table-condensed table-responsive">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Item Code</th>
+                                <th>Item</th>
+                                <th>Qty</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.PIPDs != null && Model.PIPDs.Count() > 0)
+                            {
+                                var count = 1;
+                                foreach (var item in Model.PIPDs)
+                                {
+                                    <tr>
+                                        <td><span class="label label-default current-theme">@(count++)</span></td>
+                                        <td>@Html.DisplayFor(s => item.ItemCode)</td>
+                                        <td>@Html.DisplayFor(s => item.ItemName)</td>
+                                        <td>@Html.DisplayFor(s => item.Qty)</td>
+                                        <td>
+                                            @Ajax.ActionLink("Delete", "DeletePIPDItem", "Setup", new { id = item.PIPDId },
+                                            new AjaxOptions
+                                            {
+                                                OnSuccess = "OnResponceBackFromServer",
+                                                HttpMethod = "GET"
+                                            }, new { @class = "btn btn-danger" })
+
+                                            @if (item.OpeningStockId != null)
+                                            {
+                                                <script>
+                                                    SetStockValue(td_@item.OpeningStockId,@Model.PIPDs.Count())
+                                                </script>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="text-center" colspan="5">
+                                        No Records Found....Item should display after posting
+                                        @if ((int?)ViewBag.openingStockId != null)
+                                        {
+                                            <script>
+                                                SetStockValue(td_@ViewBag.openingStockId,@Model.PIPDs.Count())
+                                            </script>
+                                        }
+
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div>

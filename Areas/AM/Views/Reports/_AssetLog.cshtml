@@ -1,0 +1,76 @@
+﻿
+@model FAPP.Areas.AM.ViewModels.ReportModel
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-hover no-head-border table-responsive table-striped" id="gv">
+            <thead>
+                <tr>
+
+                    <th>Sr</th>
+                    <th>Item Code</th>
+                    <th>Product Name</th>
+                    <th>Issue Date</th>
+                    <th>Department</th>
+                    <th>Employee</th>
+                    <th>Location</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.TransferHistory != null)
+                    {
+                        var count = 0;
+                        foreach (var item in Model.TransferHistory)
+                        {
+
+
+                            <tr>
+                                <td>@(++count)</td>
+                                <td>@(item.ItemRegister?.ItemCode ?? "")</td>
+                                <td>@(item.ItemRegister?.Product?.ProductName ?? "")</td>
+                                <td>@item.Date.ToddMMMyyyyString()</td>
+                                <td>@(item?.Department?.DepartmentName)</td>
+                                <td>@(item?.Employee?.EmpName ?? "")</td>
+                                <td>@(item?.CompanyRoom?.RoomDoorNo ?? "")</td>
+                                <td>@(item.TransferType.ToString())</td>
+                                <td>@item.Description</td>
+
+                            </tr>
+                        }
+
+
+
+                    }
+                }
+
+
+            </tbody>
+        </table>
+
+        @if (Model.TransferHistory == null || Model.TransferHistory.Count == 0)
+        {
+            <div style="text-align: center">
+                No data found
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+         @*function printGV() {
+            var  title = @Html.Raw(Json.Encode(ViewBag.title));
+            printData('gv', title, '', '');
+        }*@
+
+$('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+@{
+<label class="label label-darkblue" title="">Total: @(Model?.TransferHistory?.Count)</label>
+} </p>`);
+
+    });
+
+</script>

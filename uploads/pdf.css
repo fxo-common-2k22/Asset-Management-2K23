@@ -1,0 +1,176 @@
+﻿@charset "UTF-8";
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300);
+/*!
+ *
+ *  Project:  GLYPHICONS
+ *  Author:   Jan Kovarik - www.glyphicons.com
+ *  Twitter:  @jankovarik
+ *
+ */
+html, html .halflings {
+    -webkit-font-smoothing: antialiased !important;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif !important;
+    font-size: 12px;
+}
+
+.screenonly {
+    display: none;
+}
+
+h1 {
+    font-size: 30px;
+    color: #2a2a2a;
+    line-height: 24px;
+    font-weight: 400;
+    margin: 20px 0;
+}
+
+.nm {
+    margin: 0;
+}
+
+.col {
+    border: 1px solid #333;
+    margin: 10px;
+}
+
+    .col table {
+        margin: 0;
+    }
+
+        .col table tbody tr th {
+            background-color: transparent;
+        }
+/*New s
+*/
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    /*margin-bottom: 20px;*/
+}
+
+    .table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > th, .table > caption + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > td, .table > thead:first-child > tr:first-child > td {
+        border-top: 0;
+    }
+
+.table-bordered td {
+    border: 1px solid #000 !important;
+}
+
+.table > thead > tr > th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #000;
+}
+
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #000;
+}
+
+.table tr th {
+    vertical-align: middle;
+    background: #eee;
+}
+
+.table tr th, .table tr td {
+    padding: 10px;
+    border-top: 1px solid #000;
+}
+
+th {
+    text-align: left;
+}
+
+td, th {
+    padding: 0;
+}
+
+.title {
+    text-align: center;
+    padding: 6px;
+    background: #EEE;
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+    font-size: 15px;
+}
+
+.amount {
+    text-align: center;
+    padding: 6px;
+    font-size: 15px;
+}
+
+.row.show-grid [class^=col-] {
+    padding: 0;
+    border: 1px solid #000;
+    margin-right: -1px;
+    margin-bottom: -1px;
+}
+
+.fw {
+    width: 100%;
+}
+
+.screen-only {
+    display: none;
+}
+
+/*Book*/
+
+div.chapter, div.appendix {
+    page-break-after: always;
+}
+
+div.titlepage {
+    page: blank;
+}
+
+@page :left {
+    @bottom-left {
+        content: counter(page);
+    }
+}
+
+.bold {
+    font-weight: bold;
+}
+
+@media print {
+    /*table th, table td {
+        border: 1px solid #000;
+        padding: 0.5em;
+    }*/
+    .divToHide {
+        display: none;
+    }
+}
+.borderless {
+    border: 0 solid transparent;
+}
+
+.borderLessTable {
+    border: 0px !important;
+}
+
+    .borderLessTable td {
+        border: 0px solid !important;
+    }
+
+.displayNone {
+    display: none;
+}
+
+.table tr th.pvtRowLabel {
+    white-space: nowrap;
+}

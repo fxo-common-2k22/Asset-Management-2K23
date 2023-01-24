@@ -1,0 +1,209 @@
+﻿@model FAPP.Areas.AM.ViewModels.AddEditRequestViewModel
+@{
+    var status = Model.Status.FirstOrDefault(s => s.Value == Model.StatusId.ToString());
+}
+<script>
+    $("#ReqId").val(@Model.RequestId)
+    $("#RequestId").val(@Model.RequestId)
+    $("#StatusText").text('@(status != null ? status.Text: "")');
+</script>
+@if (Model.EditMode)
+{
+    
+<div id="PrintSection" class="displayNone">
+    <div class="row align-items-start">
+        <div class="col-md-12">
+            <div class="row" style="margin-bottom:50px">
+                <div class="col-md-12">
+                    <div class="Noline text-center" style="vertical-align: top;">
+                        <img src="~/uploads/Logos/BranchLogo@(FAPP.DAL.SessionHelper.BranchId).png" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        @FAPP.DAL.SessionHelper.BranchAddress
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        @FAPP.DAL.SessionHelper.BranchPhone
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-hover table-condensed table-responsive table-bordered">
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                Request # @Model.RequestId
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="50%">Status : @status.Text</td>
+                            <td width="50%">Date : @Model.RequestDate.ToLongDateString()</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Department : @Model.DepartmentsDD.FirstOrDefault(s => s.Value == Model.DepartmentId.ToString()).Text
+                            </td>
+                            <td>
+                                @{
+    var empName = "";
+    if (Model.EmployeeId > 0)
+    {
+        empName = Model.EmployeeDD.FirstOrDefault(s => s.Value == Model.EmployeeId.ToString()).Text;
+    }
+                                }
+                                Requested By : @empName
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Description : @Model.Description</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-hover table-condensed table-responsive table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="5%">Sr.</th>
+                                <th width="35%">Item Name</th>
+                                <th width="5%">Quantity</th>
+                                <th width="45%">Description</th>
+                                <th width="15%"> Room</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Details != null)
+                            {
+                                var count = 1;
+                                foreach (var item in Model.Details)
+                                {
+                                    <tr>
+                                        <td><span class="label label-default current-theme">@(count++)</span></td>
+                                        @{var itemName = Model.ItemsDD.FirstOrDefault(s => s.Value == item.ItemId.ToString()).Text + " (" + +item.ItemId + ")";}
+                                        <td>@Html.DisplayFor(m => itemName)</td>
+                                        <td>@Html.DisplayFor(m => item.Quantity)</td>
+                                        <td>@Html.DisplayFor(m => item.Description)</td>
+                                        <td>@Html.DisplayFor(m => item.RoomId)</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+}
+<div class="vbox row">
+    <div class="row" style="padding:5px">
+        <div class="col-md-1" style="padding-right:0px !important">
+            Req No.
+        </div>
+        <div class="col-md-3">
+            @Html.EditorFor(x => x.RequestId, new { htmlAttributes = new { @class = "form-control", @placeholder = "Request No" } })
+        </div>
+        <div class="col-md-1" style="padding-right:0px !important">
+            Date
+        </div>
+        <div class="col-md-3">
+            @Html.EditorFor(x => x.RequestDate, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "Request Date" } })
+        </div>
+        <div class="col-md-1" style="padding-right:0px !important">
+            Status
+        </div>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.Status, "Value", "Text", Model.Status), "--Select Status--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+        </div>
+    </div>
+    <div class="row" style="padding:5px">
+        <div class="col-md-1">
+            Departments
+        </div>
+        <div class="col-md-5">
+            @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.DepartmentsDD, "Value", "Text", Model.DepartmentId), "--Select Department--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+        </div>
+        <div class="col-md-1" >
+            Employees
+        </div>
+        <div class="col-md-5">
+            @Html.DropDownListFor(model => model.EmployeeId, new SelectList(Model.EmployeeDD, "Value", "Text", Model.EmployeeId), "--Select Employee--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+        </div>
+    </div>
+    <div class="row" style="padding:5px">
+        <div class="col-md-1">
+            Description
+        </div>
+        <div class="col-md-11">
+            @Html.EditorFor(x => x.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "Description" } })
+        </div>
+    </div>
+  
+</div>
+<div style="display:none">
+    <input type="submit" name="name" value="" id="SaveRequestSubmitBtn" />
+    @Html.HiddenFor(s => s.RequestId)
+    @Html.HiddenFor(s => Model.RequestNo)
+    <input type="hidden" name="RequestId" id="ReqId" value="@Model.RequestNo" />
+</div>
+<table class="table table-hover" id="trans_details">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Description</th>
+            <th>Room</th>
+        </tr>
+
+    </thead>
+    <tr id="tr_clone" style="display: none;">
+        <td style="width:20% ; border-top:none !important " class="move">
+            @*@Html.Hidden("Details[-1].RequestDetailId")*@
+            @Html.DropDownList("Details[-1].ItemId", new SelectList(Model.ItemsDD, "Value", "Text"), "--Select Item--", new {  @class = "form-control cloneable nochosen chosenafterclone", @style = "width:100%" })
+        </td>
+        <td style="width:10%; border-top:none !important " class="move">
+            @Html.TextBox("Details[-1].Quantity", null, new {@class = "form-control cloneable", @placeholder = "Quantity" })
+        </td>
+        <td style="width:25%; border-top:none !important" class="move">
+            @Html.TextBox("Details[-1].Description", null, new { @class = "form-control cloneable ", @placeholder = "Description" })
+        </td>
+        <td style="width:10%; border-top:none !important" class="move">
+            @Html.DropDownList("Details[-1].RoomNumber", new SelectList(Model.RoomDD, "Value", "Text"), "--Select Room--", new { @class = "form-control cloneable nochosen chosenafterclone", @style = "width:100%" })
+        </td>
+    </tr>
+
+    @if (Model != null)
+    {
+        if (Model.Details != null)
+        {
+
+            for (int i = 0; i < Model.Details.Count(); i++)
+            {
+                <tr>
+                    <td style="border-top:none !important " class="move">
+                        <div class="displayNone">
+                            <input type="hidden" name="Details[@i].RequestDetailId" value="@Model.Details[i].RequestDetailId" />
+                        </div>
+                        @*@Html.HiddenFor(x => x.Details[i].RequestDetailId)*@
+                        @Html.DropDownListFor(model => model.Details[i].ItemId, new SelectList(Model.ItemsDD, "Value", "Text", Model.Details[i].ItemId), "--Select Item--", htmlAttributes: new { @class = "form-control cloneable nochosen chosenafterclone", @style = "width:100%;-webkit-appearance: textfield;" })
+                    </td>
+                    <td style="border-top:none !important " class="move">
+                        @Html.EditorFor(x => x.Details[i].Quantity, new { htmlAttributes = new {  @class = "form-control cloneable", @placeholder = "Quantity" } })
+                    </td>
+                    <td style="border-top:none !important " class="move">
+                        @Html.EditorFor(x => x.Details[i].Description, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Description" } })
+                    </td>
+                    <td style="border-top:none !important " class="move">
+                        @Html.DropDownListFor(model => model.Details[i].RoomNumber, new SelectList(Model.RoomDD, "Value", "Text", Model.Details[i].RoomNumber), "--Select Ropm--", htmlAttributes: new { @class = "form-control cloneable nochosen chosenafterclone", @style = "width:100%" })
+                    </td>
+                </tr>
+            }
+        }
+    }
+
+</table>

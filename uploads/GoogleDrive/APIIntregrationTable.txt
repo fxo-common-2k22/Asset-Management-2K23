@@ -1,0 +1,22 @@
+--AuthenticatedSessionId (Family, User)   leave this for now
+
+
+just chec kif message is sent then dont send again in family case. OK
+
+
+New Table
+Company.ApiIntegrationSettings
+SettingId
+SettingName
+AuthToken
+userName
+secretKey
+Password
+url
+branchId
+
+call utha
+NMAZ.
+
+now try vimeo and google upload
+call me

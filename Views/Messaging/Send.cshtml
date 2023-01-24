@@ -1,0 +1,82 @@
+﻿@model FAPP.ViewModel.MessagingVM
+@{
+    ViewBag.Title = $"Send Message";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<link href="~/Scripts/plugins/datetimepicker/bootstrap.min.css" rel="stylesheet" />*@
+@*<link href="~/Scripts/plugins/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" />*@
+@*<script src="~/Scripts/plugins/datetimepicker/moment.min.js"></script>*@
+@*<script src="~/Scripts/plugins/datetimepicker/bootstrap-datetimepicker.min.js"></script>*@
+
+@section TopRightMenu{
+    <div id="topRightBtns">
+        <ul class="minitiles">
+            <li class="red">
+                <a href="@FAPP.DAL.SessionHelper.ReturnUrl" data-toggle="tooltip" title="Back to Dashboard">
+                    <i class="fa fa-mail-reply"></i>
+                </a>
+            </li>
+            <li class="grey" id="editbtn">
+                <a href="/Messaging/AddEdit/@Model.TemplateType.Module.ModuleName.Trim().Replace(" ", String.Empty).Replace("&", String.Empty)/@Model.TemplateType.TemplateTypeName/@Model.Template.TemplateId" data-toggle="tooltip" title="Edit @Model.Template.Title">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            </li>
+            <li class="darkblue" data-toggle="tooltip" title="" data-original-title="Send" id="addBtn" style="display: none; margin-right:0">
+                <a href="javascript:" id="fsendbtn" onclick="sendmsg('SMS')">
+                    <i class="fa fa-send-o"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+}
+
+<div id="alertDivId"></div>
+<div class="alert alert-success h3 alert-dismissable cannotAutoClose" id="alrtOnSuccessBatch" style="margin-bottom:5px !important; display:none;"><button type="button" class="close " data-dismiss="alert">×</button><a id="btnViewBatch" href="/Messaging/Index/@Model.ModuleId?batch=" class="btn btn-xs btn-primary">View Batch</a></div>
+@using (Ajax.BeginForm("SendBulkSMS", "Messaging",
+    new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnSuccess = "OnCreateUpdateSuccessSendBulkSMS", OnFailure = "OnFailure" },
+    new { @class = "new-task-form form-horizontal form-bordered", @id = "frmsendsms" }))
+{
+    <div id="msgGrid">
+        @Html.Partial("_SendMessage", Model)
+    </div>
+}
+
+<script>
+                 $('#extendedPageHeader').html(`<p style="margin:12px 0px">
+                @{
+                <label class="label label-green" title=" Selected Template Name">  @(@Model.Template.Title)</label>
+                } </p>`);
+    function OnCreateUpdateSuccessSendBulkSMS(response) {
+     
+    if (response !== '')
+    {
+        if(response.BatchNo > 0){
+        $("#alrtOnSuccessBatch").css("display","block");
+        $("#msgGrid").css("display","none");
+        $("#btnViewBatch").attr("href","/Messaging/Index/@Model.ModuleId?batch="+response.BatchNo);
+        }
+        if (typeof (response.ShowAlerts) != 'undefined' && response.ShowAlerts != undefined && response.ShowAlerts == true) {
+            DisplayAlerts(response);
+        }
+
+        if (typeof (response.ShowNotDismissableAlerts) != 'undefined' && response.ShowNotDismissableAlerts != undefined && response.ShowNotDismissableAlerts == true) {
+            DisplayNotDismissableAlerts(response);
+        }
+
+        if (typeof response.Url != 'undefined') {
+            HistoryPush(response.Url);
+        }
+        if (response.ModalId != undefined) {
+            $("#" + response.ModalId).modal('hide');
+        }
+        ErrorSuccess(response);
+    } else {
+        OnFailure(response);
+    }
+    if (response.Reset !== "false") {
+        $('form').find('input[type=datetime],input[type=text], input[type=password], input[type=number], input[type=email], textarea, select').val('');
+    }
+    //$.getScript("/scripts/eakroko.min.js");
+}
+</script>

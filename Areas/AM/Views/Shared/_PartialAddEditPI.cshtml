@@ -1,0 +1,498 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+<style>
+    .displayNone1 {
+        display: none !important;
+    }
+</style>
+<div id="mainsection">
+    <div class="alert alert-success" id="messageDiv" style="display:none;">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+        <div class="help-block" id="messagelabel"></div>
+    </div>
+    <div id="head" class="vbox">
+        <table class="fv fw">
+            <tr>
+                @Html.HiddenFor(m => m.InvoiceNo)
+                @*<td>Purchase Invoice No</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.InvoiceNo, new { @class = "form-control headfirstchildforfocus" })
+                    </td>*@
+
+                <td>Supplier</td>
+                <td>
+                    @Html.DropDownListFor(m => m.PurchaseInvoice.SupplierId, new SelectList(ViewBag.Suppliers, "ClientId", "Name", Model.PurchaseInvoice.SupplierId), new { @class = "form-control chosen-select", @style = "width:300px;" })
+                    @Html.ValidationMessageFor(model => model.PurchaseInvoice.SupplierId, "", new { @class = "text-danger" })
+                    <a id="" title="Add Supplier" target="_blank" href="@Url.Action("AddEditClient","Clients", new { area = "Contact"  })">
+                        <i class="fa fa-plus hidden"></i>
+                    </a>
+                </td>
+                <td>Purchase Invoice Date</td>
+                <td>
+                    @Html.HiddenFor(m => m.PurchaseInvoice.PurchaseInvoiceId)
+                    @Html.TextBoxFor(model => model.PurchaseInvoice.PurchaseInvoiceDate, new { @class = "form-control datepicker" })
+                </td>
+
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td colspan="3">
+                    @Html.TextBoxFor(model => model.PurchaseInvoice.Description, new { @class = "form-control " })
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="voucherdetails" class="">
+        <div id="detail">
+            <table id="trans_details" class="table no-head-border table-responsive">
+                <thead>
+                    <tr class="gvheader">
+                        <th>Barcode</th>
+                        <th width="24%">
+                            Product
+                            <a id="" class="hidden" title="Add Product" target="_blank" href="@Url.Action("AddEditProduct","Setup", new { area = "POS"  })">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </th>
+                        <th>Description</th>
+                        <th>Batch</th>
+                        <th width="55px" class="numeric">Qty</th>
+                        <th class="numeric"><span title="Unit Price">U.Price</span></th>
+                        <th class="numeric"><span title="Line Total">L.Total</span></th>
+                        <th class="numeric hidden"><span title="Discount">Disc.</span></th>
+                        <th width="45px" class="numeric">Tax</th>
+                        <th style="width: 100px;" class="numeric">Net Total</th>
+                        <th>Condition</th>
+                        <th>Warehouse</th>
+                        <th width="14%" class="hidden">
+                            <a id="" title="Add Warehouse" target="_blank" href="@Url.Action("ManageWarehouses","Setup", new { area = "AM"  })">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </th>
+                        <th width="70px">
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="tr_clone" class="tr_row" style="display:none;">
+                        <td>
+                            @Html.Hidden("PurchaseInvoiceProduct[-1].PurchaseInvoiceProductId")
+                            @Html.TextBox("PurchaseInvoiceProduct[-1].Barcode", null, new { @class = "Barcode cloneable detailfirstchildforfocus form-control", @placeholder = "Barcode" })
+                        </td>
+                        <td>
+                            @Html.DropDownList("PurchaseInvoiceProduct[-1].ItemId", new SelectList(ViewBag.Products, "ItemId", "ItemName"), "--Select Product--", new { @class = "ProductId form-control nochosen chosenafterclone cloneable", @style = "width:100%" })
+                            <div class="help-block" id="PurchaseInvoiceProduct_0__item_no_lbl"></div>
+                        </td>
+                        <td>
+                            @Html.TextBox("PurchaseInvoiceProduct[-1].Description", null, new { @class = "numeric cloneable Description form-control", @placeholder = "Description" })
+                        </td>
+                        <td>
+                            @Html.TextBox("PurchaseInvoiceProduct[-1].ManufacturerProductNo", null, new { @class = "numeric cloneable ManufacturerProductNo form-control", @placeholder = "Batch no." })
+                        </td>
+                        <td>
+                            @Html.TextBox("PurchaseInvoiceProduct[-1].Quantity", null, new { @class = "numeric cloneable Quantity form-control", @placeholder = "Qty" })
+                        </td>
+                        <td>
+                            @Html.TextBox("PurchaseInvoiceProduct[-1].UnitPrice", null, new { @class = "numeric unitprice cloneable form-control", @placeholder = "Unit Price" })
+                        </td>
+                        <td>
+                            @Html.TextBox("PurchaseInvoiceProduct[-1].LineTotal", null, new { @class = "numeric cloneable form-control", @placeholder = "Line Total", @readonly = "readonly" })
+                        </td>
+                        <td class="hidden">
+                            <div class="input-group">
+                                @Html.TextBox("PurchaseInvoiceProduct[-1].Discount", null, new { @class = "discount numeric cloneable form-control", @placeholder = "Discount" })
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                        <td>
+                            @Html.TextBox("PurchaseInvoiceProduct[-1].Tax", null, new { @class = "tax numeric cloneable form-control", @placeholder = "Tax" })
+                        </td>
+                        <td>
+                            @Html.TextBox("PurchaseInvoiceProduct[-1].NetTotal", null, new { @class = "numeric cloneable form-control", @placeholder = "Net Total", @readonly = "readonly" })
+                        </td>
+                        <td class="move">
+                            @Html.DropDownList("PurchaseInvoiceProduct[-1].ConditionTypeId", new SelectList(ViewBag.ConditionTypesDD, "Value", "Text"), "--Select Condition--", new { @class = "form-control cloneable nochosen chosenafterclone", @style = "width:100%" })
+                        </td>
+                        <td>
+                            @Html.DropDownList("PurchaseInvoiceProduct[-1].WareHouseId", new SelectList(ViewBag.Warehouses, "WarehouseId", "WarehouseName"), "Please Select", new { @class = "WareHouseId form-control nochosen chosenafterclone cloneable", @style = "width:100%;", @required = "required" })
+                            <div class="help-block" id="PurchaseInvoiceProduct_0__WarehouseId_no_lbl"></div>
+                        </td>
+                        <td style="padding-top: 9px !important;">
+                            <a href="#" class="btn btn-danger btn-xs" data-action="Delete" data-id="-1"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    @if (Model != null)
+                    {
+                        if (Model.PurchaseInvoiceProduct != null)
+                        {
+                            for (int i = 0; i < Model.PurchaseInvoiceProduct.Count(); i++)
+                            {
+                                <tr class="tr_row">
+                                    <td>
+                                        @Html.HiddenFor(m => m.PurchaseInvoiceProduct[i].PurchaseInvoiceProductId)
+                                        @Html.TextBox("PurchaseInvoiceProduct[" + i + "].Barcode", null, new { @class = "form-control Barcode cloneable detailfirstchildforfocus", @placeholder = "Barcode" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m.PurchaseInvoiceProduct[i].ItemId, new SelectList(ViewBag.Products, "ItemId", "ItemName", Model.PurchaseInvoiceProduct[i].ItemId), "--Select Product--", new { @class = "ProductId form-control chosen-select cloneable", @style = "width:100%;" })
+                                        <div class="help-block" style="display:none;" id="PurchaseInvoiceProduct_0__item_no_lbl"></div>
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.PurchaseInvoiceProduct[i].Description, null, new { @class = "form-control numeric cloneable Description", @placeholder = "Description" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.PurchaseInvoiceProduct[i].ManufacturerProductNo, null, new { @class = "form-control numeric cloneable ManufacturerProductNo", @placeholder = "Batch no." })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.PurchaseInvoiceProduct[i].Quantity, null, new { @class = "form-control numeric cloneable Quantity", @placeholder = "Qty" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.PurchaseInvoiceProduct[i].UnitPrice, null, new { @class = "unitprice form-control numeric cloneable", @placeholder = "Unit Price" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.PurchaseInvoiceProduct[i].LineTotal, null, new { @class = "form-control numeric cloneable", @placeholder = "Line Total", @readonly = "readonly" })
+                                    </td>
+                                    <td class="hidden">
+                                        <div class="input-group">
+                                            @Html.TextBoxFor(m => m.PurchaseInvoiceProduct[i].Discount, null, new { @class = "form-control discount numeric cloneable", @placeholder = "Discount" })
+                                            <span class="input-group-addon">%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.PurchaseInvoiceProduct[i].Tax, null, new { @class = "form-control tax numeric cloneable", @placeholder = "Tax" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.PurchaseInvoiceProduct[i].NetTotal, null, new { @class = "form-control numeric cloneable", @placeholder = "Net Total", @readonly = "readonly" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m.PurchaseInvoiceProduct[i].ConditionTypeId, new SelectList(ViewBag.ConditionTypesDD, "Value", "Text", Model.PurchaseInvoiceProduct[i].ConditionTypeId), "--Select Condition--", new { @class = "cloneable", @style = "width:100%" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m.PurchaseInvoiceProduct[i].WareHouseId, new SelectList(ViewBag.Warehouses, "WarehouseId", "WarehouseName", Model.PurchaseInvoiceProduct[i].WareHouseId), "Please Select", new { @class = "WareHouseId chosen-select form-control cloneable", @style = "width:100%;", @required = "required" })
+                                        <div class="help-block" id="PurchaseInvoiceProduct_0__WarehouseId_no_lbl"></div>
+                                    </td>
+                                    <td style="padding-top: 9px !important;">
+                                        <a href="#" class="btn btn-danger btn-xs" data-action="Delete" data-id="@Model.PurchaseInvoiceProduct[i].PurchaseInvoiceProductId"><i class="fa fa-trash"></i></a>
+                                        @Ajax.ActionLink("View", "FetchPIPD", "Purchase",
+                                                new { id = Model.PurchaseInvoiceProduct[i].PurchaseInvoiceProductId },
+                                                new AjaxOptions
+                                                {
+                                                    OnSuccess = "OnFetchSuccess",
+                                                    OnFailure = "OnFetchFailure",
+                                                    UpdateTargetId = "UpdatePIPD",
+                                                    InsertionMode = InsertionMode.Replace,
+                                                    HttpMethod = "GET"
+                                                },
+                                                new { @class = "btn btn-info btn-xs" }
+                                            )
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+                <tfoot>
+                    <tr class="vbox">
+                        <td></td>
+                        <td id="tdPtype" class="bold" colspan="5"></td>
+                        <td></td>
+                        <td class="hidden">
+                            @Html.TextBox("ftDiscount", null, new { @class = "numeric bold cloneable form-control", @readonly = "readonly", @placeholder = "0" })
+                        </td>
+                        <td style="padding-left: 0px;padding-right: 0px;">
+                            @Html.TextBox("ftTax", null, new { @class = "numeric bold cloneable form-control", @readonly = "readonly", @placeholder = "0" })
+                        </td>
+                        <td>
+                            @Html.TextBox("ftNetTotal", null, new { @class = "numeric bold cloneable form-control", @readonly = "readonly", @placeholder = "0" })
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="vbox" id="footerdiv">
+            <table>
+                <tr>
+                    <td>Net Total</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.PurchaseInvoice.NetTotal, new { @class = "form-control", @placeholder = "0", @readonly = "readonly" })
+                    </td>
+                    <td>Paid</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.PurchaseInvoice.Received, new { @class = "received form-control", @placeholder = "0", @readonly = "readonly" })
+                    </td>
+                    <td>Balance</td>
+                    <td>
+                        @Html.TextBox("PurchaseInvoice.Balance", null, new { @class = "balance form-control", @placeholder = "0", @readonly = "readonly" })
+                    </td>
+                </tr>
+                <tr>
+                    <td id="tdCreation" class="bold" colspan="5">
+                        @(ViewBag.CreatedBy == null ? "" : "Created By: " + ViewBag.CreatedBy)
+                        @(ViewBag.ModifiedBy == null ? "" : "Modified By: " + ViewBag.ModifiedBy)
+                    </td>
+                </tr>
+            </table>
+        </div>
+        @if (Model?.PurchaseInvoice != null && Model.PurchaseInvoice.VoucherId.HasValue)
+        {
+            <table class="no-head-border" id="linkTable">
+                <tr>
+
+                    <td>
+                        @*<strong>Voucher: </strong>*@
+                        <a title="Purchase Invoice Voucher" href="/Finance/VoucherAndReceipt/ViewVoucher/@Model.PurchaseInvoice.VoucherId">
+                            @Model.PurchaseInvoice.VoucherId.ToString()
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>
+
+<div id="printsection" style="display:none">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="">
+                <table class="gv nm table">
+                    <tr>
+                        <td class="Noline text-center" style="vertical-align: top;">
+                            <img src="~/uploads/Logos/BranchLogo@(FAPP.DAL.SessionHelper.BranchId).png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Noline text-center">@FAPP.DAL.SessionHelper.BranchAddress</td>
+                    </tr>
+                    <tr>
+                        <td class="Noline text-center">@FAPP.DAL.SessionHelper.BranchPhone</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="clearfix"></div>
+            <div class="invoice-info">
+                <table class="gv nm table">
+                    <tr class="AllBorder">
+                        <td class="text-center" colspan="7" id="tInvoiceNo"><b>Purchase Invoice # @(Model.PurchaseInvoice == null ? 0 : Model.PurchaseInvoice.PurchaseInvoiceId)</b></td>
+                    </tr>
+                    <tr>
+                        <td class="text-left" id="tClientName"><b>To</b>&nbsp;&nbsp;@(Model.PurchaseInvoice == null || Model.PurchaseInvoice.Client == null ? "" : Model.PurchaseInvoice.Client.Name)</td>
+                        <td class="text-right"><b>Date</b>&nbsp;&nbsp;@(Model.PurchaseInvoice == null ? "" : Model.PurchaseInvoice.PurchaseInvoiceDate.ToString("dd MMM yyyy"))</td>
+                    </tr>
+                </table>
+                <table class="gv nm table table-bordered" id="maintable">
+                    <tr class="topbottomBorder">
+                        <td><b>Sr</b></td>
+                        <td><b>Description</b></td>
+                        <td><b>Quantity</b></td>
+                        <td><b>Unit Price</b></td>
+                        <td><b>Net Amount</b></td>
+                    </tr>
+                    <tr class="reAssignable"></tr>
+                    @if (Model.PurchaseInvoiceProduct != null)
+                    {
+                        var count = 0;
+                        foreach (var item in Model.PurchaseInvoiceProduct)
+                        {
+                            <tr class="reAssignable">
+                                <td>@(++count)</td>
+                                <td>
+                                    @(item.Item == null ? "" : item.Item.ItemName)
+                                    <br />
+                                    <span style="font-size:11px !important;padding-right:5px !important;">
+                                        @(item.Description)
+                                    </span>
+                                </td>
+                                <td>@item.Quantity</td>
+                                <td>@item.UnitPrice</td>
+                                <td>@item.LineTotal</td>
+                            </tr>
+                        }
+                    }
+
+                    <tr class="" id="invoiceFooter">
+                        <td colspan="2" class="noLeftBottomBorder Noline"></td>
+                        <td id="tSqFeet">@(Model.PurchaseInvoiceProduct == null ? 0 : Model.PurchaseInvoiceProduct.Sum(u => u.Quantity))</td>
+                        <td><b>Grand Total</b></td>
+                        <td id="tGrandTotal">@(Model.PurchaseInvoiceProduct == null ? 0 : Model.PurchaseInvoiceProduct.Sum(u => u.LineTotal))</td>
+                    </tr>
+                    <tr class="">
+                        @*<td colspan="4" rowspan="4" class="noLeftBottomBorder Noline">@Html.Raw(HttpUtility.HtmlDecode(Model.InvoiceNotes))</td>*@
+                        <td colspan="3" rowspan="4" class="noLeftBottomBorder Noline"></td>
+                        <td>Discount</td>
+                        <td id="tDiscount">@Model.PurchaseInvoice.Discount</td>
+                    </tr>
+                    <tr class="">
+                        <td><b>Bill Total</b></td>
+                        <td id="tNetTotal">@(Model.PurchaseInvoice.NetTotal ?? 0)</td>
+                    </tr>
+                    <tr class="">
+                        <td>Paid</td>
+                        <td id="tReceived">@(Model.PurchaseInvoice.Received ?? 0)</td>
+                    </tr>
+                    <tr class="">
+                        <td>Net Balance</td>
+                        <td id="tNetBalance">@(Convert.ToDecimal(Model.PurchaseInvoice.NetTotal) - Convert.ToDecimal(Model.PurchaseInvoice.Received))</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AddPaymentModal" tabindex="-1" role="dialog" aria-labelledby="AddPaymentModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header HeaderColor">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                <h4 class="modal-title" id="myModalLabel">Make Payment</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal" id="form_account">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Payment Type</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("PaymentType", new SelectList(ViewBag.PaymentMode, "Value", "Text"), new { @class = "PaymentMode form-control chosen-select", @style = "width:100%;" })
+                        </div>
+                    </div>
+                    <div class="form-group cash">
+                        <label class="control-label col-md-4">Cash Account</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("CashAccountId", new SelectList(ViewBag.CashAccount, "autoKey", "TITLES"), "--Select Cash Account", new { @class = "form-control chosen-select", @style = "width:100%;" })
+                        </div>
+                    </div>
+                    <div class="form-group bank" style="display:none;">
+                        <label class="control-label col-md-4">Bank Account</label>
+                        <div class="col-md-8">
+                            @Html.DropDownList("BankAccountId", new SelectList(ViewBag.BankAccount, "autoKey", "TITLES"), "--Select Bank Account", new { @class = "form-control chosen-select", @style = "width:100%;" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Payment Date</label>
+                        <div class="col-md-8">
+                            @*@Html.TextBox("SupplierInvoicePayment.CreatedOn", null, new { @class = "form-control datepicker", @placeholder = "Payment Date" })*@
+                            @Html.TextBoxFor(m => m.SupplierInvoicePayment.PaymentDate, new { @class = "form-control datepicker", @placeholder = "Payment Date" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Bill Total</label>
+                        <div class="col-md-8">
+                            @Html.HiddenFor(model => model.SupplierInvoicePayment.PurchaseInvoiceId)
+                            @Html.TextBox("SupplierInvoicePayment.BillTotal", null, new { @class = "form-control", @placeholder = "Bill Total", @disabled = "disabled" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Pay</label>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.SupplierInvoicePayment.Amount, new { @class = "form-control", @placeholder = "Amount" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Description</label>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.SupplierInvoicePayment.Description, new { @class = "form-control", @placeholder = "Description" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer background-login">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success voucherLink inputenabledisable" id="btnSavePayment">Save</button>
+                <div class="help-block" id="ServicesList_0__item_no_lbl"></div>
+            </div>
+            <div class="form-horizontal">
+                <div class="modalTable">
+                    <div class="bold text-center Underline marginBottom15">Invoice Payment History</div>
+                    <table class="table table-striped">
+                        <thead class="HeaderColor">
+                            <tr class="bold">
+                                <td>Id</td>
+                                <td>Amount</td>
+                                <td>Date</td>
+                                <td>Description</td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    RefreshAllScripts();
+    changeHref(@Model.PurchaseInvoice.PurchaseInvoiceId);
+    jQuery(document).ready(function () {
+        $(".datepicker").each(function () {
+            $(this).val(RemoveTimeFromDate($(this).val()));
+        });
+        var EditMode = @Html.Raw(Json.Encode(@ViewBag.EditMode));
+        var IsPosted = @Html.Raw(Json.Encode(@ViewBag.IsPosted));
+        var IsCancelled = @Html.Raw(Json.Encode(@ViewBag.IsCancelled));
+        var success = @Html.Raw(Json.Encode(@ViewBag.success));
+        var Cancelled = @Html.Raw(Json.Encode(@ViewBag.Cancelled));
+        var Case = @Html.Raw(Json.Encode(@ViewBag.Case));
+        var error = @Html.Raw(Json.Encode(ViewBag.error));
+        if (success) {
+            DisplayMessage('', success);
+        }
+        if (Cancelled) {
+            DisplayMessage('error', Cancelled);
+        }
+        if (error) {
+            DisplayMessage('error', error);
+        }
+
+        if (!EditMode) {
+            HideTopControls(true);
+        } else {
+            changeHref(@Model.PurchaseInvoice.PurchaseInvoiceId);
+            HideTopControls(false);
+            //$('#convertIssueItem').closest('li').removeClass('hidden');
+        }
+        if (IsPosted || IsCancelled ){
+            HideButtons(true);
+        }
+        CalculateTotal();
+        SetTopliIcons(Case);
+
+        function SetTopliIcons(Case){
+            if(Case){
+                if (Case === "CancelVoucher") {
+                    if (IsCancelled) {
+                        HideButtons(true);
+                        $('#lbUnPostVoucher').closest('li').addClass('hidden');
+                        $('#lbPostVoucher').closest('li').removeClass('hidden');
+                        $('#lbUnCancelVoucher').closest('li').removeClass('hidden');
+                        $('#lbCancelVoucher').closest('li').addClass('hidden');
+                        //DisplayMessage('success', 'Invoice Cancelled Successfully');
+                    }
+                }
+                else if (Case === "UnCancelVoucher") {
+                    if (!IsCancelled) {
+                        HideButtons(false);
+                        $('#lbUnCancelVoucher').closest('li').addClass('hidden');
+                        $('#lbCancelVoucher').closest('li').removeClass('hidden');
+                        //DisplayMessage('success', 'Invoice Uncancelled Successfully');
+                    }
+                }
+                else {
+                    if (!IsPosted) {
+                        $('#lbUnPostVoucher').closest('li').addClass('hidden');
+                        $('#lbPostVoucher').closest('li').removeClass('hidden');
+                    }
+                    if (!IsCancelled) {
+                        $('#lbUnCancelVoucher').closest('li').addClass('hidden');
+                        $('#lbCancelVoucher').closest('li').removeClass('hidden');
+                    }
+                    //DisplayMessage('success', 'Successfully updated');
+                }
+            }
+        }
+    });
+</script>

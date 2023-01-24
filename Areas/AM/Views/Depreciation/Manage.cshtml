@@ -1,0 +1,64 @@
+﻿@model FAPP.Areas.AM.ViewModels.DepreciationMainViewModel
+@using FAPP.DAL;
+@section topRightMenu
+{
+    <ul class="minitiles">
+        <li class="blue">
+            <a href="#new-Depreciation" data-toggle="modal" title="Create Depreciation">
+                <i class="fa fa-cog"></i>
+            </a>
+        </li>
+    </ul>
+}
+@using (Ajax.BeginForm("Manage", "Depreciation", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divStudents", LoadingElementId = "loader" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="vbox col-md-12 form-inline ">
+        <table class="col-md-12">
+            <tr>
+                <td width="120px"> @Html.TextBoxFor(model => model.FromDate, new { @class = "datepicker form-control", @placeholder = "From Date", @style = "width:100%" })</td>
+                <td width="120px"> @Html.TextBoxFor(model => model.ToDate, new { @class = "datepicker form-control", @placeholder = "From Date", @style = "width:100%" })</td>
+                <td width="200px"> @Html.DropDownListFor(model => model.DepreciationTypeId, new SelectList(ViewBag.DepreciationTypes, "Value", "Text", Model.DepreciationTypeId), "--All Depreciaton Types--", htmlAttributes: new { @class = "form-control" })</td>
+                <td><input type="submit" class="btn btn-primary" value="Search" title="Search" /></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="divStudents">
+        @Html.Partial("_PartialDepreciations", Model)
+    </div>
+
+}
+<div id="new-Depreciation" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #368ee0 !important;color:white;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Process Depreciations</h4>
+            </div>
+            @using (Ajax.BeginForm("CreateItemRegister", "Issue",
+                new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnComplete = "OnComplete('new-itemRegister')", OnSuccess = "OnCreateUpdateSuccess", OnFailure = "OnFailure" },
+                new { @class = "new-task-form form-horizontal form-bordered" }))
+            {
+                Html.EnableClientValidation(true);
+                <div class="modal-body nopadding">
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            Are you sure you want to process
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-orange" data-dismiss="modal" value="Cancel">
+                    <input type="button" class="btn btn-primary" data-dismiss="modal" value="Process">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+         $(document).ready(function () {
+             $('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px"><label class="label label-green">@SessionHelper.FiscalYearName</label>
+                <label class="label label-blue">Total: @(Model.Depreciations.Count) </label></p>`);
+         })
+</script>

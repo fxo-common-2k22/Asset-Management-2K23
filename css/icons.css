@@ -1,0 +1,935 @@
+.desktop-icons {
+    margin: 1em;
+}
+
+    .desktop-icons ul li {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .desktop-icons a {
+        border-radius: 4px;
+        border: 1px solid #FFFFFF;
+        cursor: pointer;
+        display: inline-block;
+        /*max-width: 85px;
+        min-width: 65px;*/
+        padding: 4px;
+        text-align: center;
+        vertical-align: top;
+        min-height: 66px;
+        overflow: hidden;
+        white-space: normal;
+        width:85px;
+    }
+
+        .desktop-icons a:hover, .desktop-icons a:focus, a.hb:hover {
+            background: url("../images/a_hover.jpg") repeat scroll 0 0 transparent;
+            border: 1px solid CadetBlue;
+        }
+
+        .desktop-icons a:hover, .desktop-icons a:focus, a.hb:hover {
+            background-image: linear-gradient(top, #F9FDFF 0%, #EAF7FF 100%);
+            background-image: -o-linear-gradient(top, #F9FDFF 0%, #EAF7FF 100%);
+            background-image: -moz-linear-gradient(top, #F9FDFF 0%, #EAF7FF 100%);
+            background-image: -webkit-linear-gradient(top, #F9FDFF 0%, #EAF7FF 100%);
+            background-image: -ms-linear-gradient(top, #F9FDFF 0%, #EAF7FF 100%);
+            background-image: -webkit-gradient( linear, left top, left top, color-stop(0, #EAF7FF), color-stop(1, #F9FDFF) );
+        }
+
+    .desktop-icons span {
+        display: block;
+        height: 48px;
+        margin: 0 auto;
+        width: 48px;
+    }
+
+    .desktop-icons em {
+        font-style: normal;
+        font-size: 11px;
+        display: block;
+        font-weight: bold;
+    }
+
+.i {
+    display: inline-block;
+    background-repeat: no-repeat;
+}
+
+.iC {
+    background-position: center center;
+}
+
+.i16 {
+    width: 16px;
+    height: 16px;
+}
+
+.i24 {
+    width: 24px;
+    height: 24px;
+    -moz-background-size: 24px 24px;
+    background-size: 24px 24px;
+}
+
+.i32 {
+    width: 32px;
+    height: 32px;
+    -moz-background-size: 32px 32px;
+    background-size: 32px 32px;
+}
+
+.i48 {
+    width: 48px;
+    height: 48px;
+    -moz-background-size: 48px 48px;
+    background-size: 48px 48px;
+}
+
+.i40 {
+    width: 40px;
+    height: 40px;
+}
+/*x24*/
+.i-24-search {
+    background-image: url("../images/icons/x24/search.png");
+}
+/*x32*/
+.i-32-help {
+    background-image: url('../images/icons/x32/help.png');
+}
+
+.i-32-acad {
+    background-image: url("../images/icons/x32/acad.png");
+}
+
+.i-32-cp {
+    background-image: url("../images/icons/x32/cp.png");
+}
+
+.i-32-hr {
+    background-image: url("../images/icons/x32/users.png");
+}
+
+.i-32-accounts {
+    background-image: url("../images/icons/x32/accounts.png");
+}
+
+.i-32-library {
+    background-image: url("../images/icons/x32/library.png");
+}
+
+.i-32-inventory {
+    background-image: url("../images/icons/x32/inventory.png");
+}
+
+.i-32-home {
+    background-image: url("../images/icons/x32/home.png");
+}
+
+.i-32-news {
+    background-image: url("../images/icons/x32/news.png");
+}
+
+.i-32-profile {
+    background-image: url('../images/icons/x32/profile.png');
+}
+
+.i-32-mail {
+    background-image: url('../images/icons/x32/mail_search.png');
+}
+
+.i-32-mail-new {
+    background-image: url('../images/icons/x32/mail_add.png');
+}
+
+.i-32-mail-hr {
+    background-image: url('../images/icons/x32/mail_hr.png');
+}
+
+.i-32-mail-stu {
+    background-image: url('../images/icons/x32/mail_students.png');
+}
+
+.i-32-hostel {
+    background-image: url('../images/icons/x32/hostel.png');
+}
+
+.i-32-elearning {
+    background-image: url('../images/icons/x32/elearning.png');
+}
+
+.i-32-setting {
+    background-image: url('../images/icons/x32/cog-32.png');
+}
+
+.i-32-report {
+    background-image: url('../images/icons/x32/report.png');
+}
+
+.i-32-catalog {
+    background-image: url("../images/icons/x48/catalog.png");
+}
+
+.i-32-form {
+    background-image: url('../images/icons/x48/form.png');
+}
+
+.i-32-fee {
+    background-image: url('../images/icons/x48/fee.png');
+}
+
+.i-32-stu-search {
+    background-image: url('../images/icons/x48/search_female_user.png');
+}
+
+/*x48*/
+.i-48-acad {
+    background-image: url("../images/icons/x48/course.png");
+}
+
+.i-48-cp {
+    background-image: url("../images/icons/x48/cp.png");
+}
+
+.i-48-rpt {
+    background-image: url("../images/icons/x48/reports.png");
+}
+
+.i-48-lib {
+    background-image: url("../images/icons/x48/books.png");
+}
+
+.i-48-inv {
+    background-image: url("../images/icons/x48/inv.png");
+}
+
+.i-48-home {
+    background-image: url("../images/icons/x48/Home-icon.png");
+}
+
+.i-48-donors {
+    background-image: url("../images/icons/x48/donors.png");
+}
+
+.i-48-ico {
+    background-image: url('../images/icons/x48/cal.png');
+}
+
+.i-48-cal {
+    background-image: url('../images/icons/x48/cal.png');
+}
+
+.i-48-fee {
+    background-image: url('../images/icons/x48/fee.png');
+}
+
+.i-48-defaulter {
+    background-image: url('../images/icons/x48/defaulter.png');
+}
+
+.i-48-emp-new {
+    background-image: url('../images/icons/x48/employee-new.png');
+}
+
+.i-48-emp-search {
+    background-image: url('../images/icons/x48/user_search.png');
+}
+
+.i-48-stu {
+    background-image: url('../images/icons/x48/female_user.png');
+}
+
+.i-48-eye {
+    background-image: url('../images/icons/x48/eye.png');
+}
+
+.i-48-stu-new {
+    background-image: url('../images/icons/x48/add_female_user.png');
+}
+
+.i-48-stu-search {
+    background-image: url('../images/icons/x48/search_female_user.png');
+}
+
+.i-48-stu-shift {
+    background-image: url('../images/icons/x48/student_shift.png');
+}
+
+.i-48-report {
+    background-image: url('../images/icons/x48/report.png');
+}
+
+.i-48-balance {
+    background-image: url('../images/icons/x48/balance.png');
+}
+
+.i-48-award {
+    background-image: url('../images/icons/x48/award.png');
+}
+
+.i-48-course {
+    background-image: url('../images/icons/x48/course.png');
+}
+
+.i-48-module {
+    background-image: url('../images/icons/x48/module.png');
+}
+
+.i-48-programs {
+    background-image: url('../images/icons/x48/programs.png');
+}
+
+.i-48-group {
+    background-image: url('../images/icons/x48/group.png');
+}
+
+.i-48-group-rights {
+    background-image: url('../images/icons/x48/group-rights.png');
+}
+
+.i-48-page {
+    background-image: url('../images/icons/x48/page.png');
+}
+
+.i-48-admin {
+    background-image: url('../images/icons/x48/administratorx48.png');
+}
+
+.i-48-attend {
+    background-image: url('../images/icons/x48/attendancex48.png');
+}
+
+.i-48-users {
+    background-image: url('../images/icons/x48/users.png');
+}
+
+.i-48-flag {
+    background-image: url('../images/icons/x48/flag.png');
+}
+
+.i-48-session {
+    background-image: url('../images/icons/x48/session.png');
+}
+
+.i-48-money {
+    background-image: url('../images/icons/x48/money.png');
+}
+
+.i-48-edit-group {
+    background-image: url('../images/icons/x48/edit-group.png');
+}
+
+.i-48-visa {
+    background-image: url('../images/icons/x48/visa.png');
+}
+
+.i-48-ethi {
+    background-image: url('../images/icons/x48/ethi.png');
+}
+
+.i-48-nation {
+    background-image: url('../images/icons/x48/green_flag.png');
+}
+
+.i-48-stu-mode {
+    background-image: url('../images/icons/x48/student-mode.png');
+}
+
+.i-48-grade {
+    background-image: url('../images/icons/x48/grade.png');
+}
+
+.i-48-test {
+    background-image: url('../images/icons/x48/test.png');
+}
+
+.i-48-app {
+    background-image: url('../images/icons/x48/app-form.png');
+}
+
+.i-48-fee-con {
+    background-image: url('../images/icons/x48/fee-con.png');
+}
+
+.i-48-college {
+    background-image: url('../images/icons/x48/college.png');
+}
+
+.i-48-college-new {
+    background-image: url('../images/icons/x48/college-new.png');
+}
+
+.i-48-result {
+    background-image: url('../images/icons/x48/history.png');
+}
+
+.i-48-mail {
+    background-image: url('../images/icons/x48/mail_search.png');
+}
+
+.i-48-mail-new {
+    background-image: url('../images/icons/x48/mail_add.png');
+}
+
+.i-48-mail-hr {
+    background-image: url('../images/icons/x48/mail_hr.png');
+}
+
+.i-48-mail-stu {
+    background-image: url('../images/icons/x48/mail_students.png');
+}
+
+.i-48-dept {
+    background-image: url('../images/icons/x48/department.png');
+}
+
+.i-48-rank {
+    background-image: url('../images/icons/x48/rank.png');
+}
+
+.i-48-accounts {
+    background-image: url('../images/icons/x48/briefcase.png');
+}
+
+.i-48-bank-accounts {
+    background-image: url('../images/icons/x48/cashbank.png');
+}
+
+.i-48-add {
+    background-image: url('../images/icons/x48/add.png');
+}
+
+
+.i-48-hr {
+    background-image: url('../images/icons/x48/hr.png');
+}
+
+.i-48-data {
+    background-image: url('../images/icons/x48/database.png');
+}
+
+.i-48-desktop {
+    background-image: url('../images/icons/x48/computer.png');
+}
+
+.i-48-religions {
+    background-image: url('../images/icons/x48/religions.png');
+}
+
+.i-48-tablet {
+    background-image: url('../images/icons/x48/tablet.png');
+}
+
+.i-48-pridata {
+    background-image: url('../images/icons/x48/data.png');
+}
+
+.i-48-stages {
+    background-image: url('../images/icons/x48/stages.png');
+}
+
+.i-48-terms {
+    background-image: url('../images/icons/x48/terms.png');
+}
+
+.i-48-sections {
+    background-image: url('../images/icons/x48/sections.png');
+}
+
+.i-48-classes {
+    background-image: url('../images/icons/x48/classes.png');
+}
+
+.i-48-search {
+    background-image: url('../images/icons/x48/search.png');
+}
+
+.i-48-profession {
+    background-image: url('../images/icons/x48/profession.png');
+}
+
+.i-48-salary {
+    background-image: url('../images/icons/x48/salary.png');
+}
+
+.i-48-video {
+    background-image: url('../images/icons/x48/video.png');
+}
+
+.i-48-log {
+    background-image: url('../images/icons/x48/log.png');
+}
+
+.i-48-help {
+    background-image: url('../images/icons/x48/help.png');
+}
+
+.i-48-sp {
+    background-image: url('../images/icons/x48/salaryPayment.png');
+}
+/*profile*/
+.i-48-profile {
+    background-image: url('../images/icons/x48/profile.png');
+}
+
+.i-48-lock {
+    background-image: url('../images/icons/x48/password.png');
+}
+
+.i-48-logout {
+    background-image: url('../images/icons/x48/logout.png');
+}
+
+/*employee*/
+.i-48-hr-search {
+    background-image: url('../images/icons/x48/employee_search.png');
+}
+
+.i-48-hr-add {
+    background-image: url('../images/icons/x48/employee_add.png');
+}
+
+.i-48-hr-subjects {
+    background-image: url('../images/icons/x48/employee_subjects.png');
+}
+
+.i-48-leave-types {
+    background-image: url('../images/icons/x48/student-mode.png');
+}
+
+.i-48-leave-quota {
+    background-image: url('../images/icons/x48/pie-chart-icon.png');
+}
+
+.i-48-del-emp {
+    background-image: url('../images/icons/x48/business_user_delete.png');
+}
+
+/*Inventory*/
+.i-48-inventory {
+    background-image: url('../images/icons/x48/inventory.png');
+}
+
+.i-48-supplier {
+    background-image: url('../images/icons/x48/supplier.png');
+}
+
+.i-48-supplier-add {
+    background-image: url('../images/icons/x48/supplier-add.png');
+}
+
+/*Transport*/
+.i-48-bus {
+    background-image: url('../images/icons/x48/bus.png');
+}
+
+/*elearning*/
+.i-48-lesson {
+    background-image: url('../images/icons/x48/lesson.png');
+}
+
+.i-48-calendar {
+    background-image: url('../images/icons/x48/acad_cal.png');
+}
+
+.i-48-event {
+    background-image: url('../images/icons/x48/event_cal.png');
+}
+
+.i-48-resource {
+    background-image: url('../images/icons/x48/file_cab.png');
+}
+
+.i-48-interaction {
+    background-image: url('../images/icons/x48/interaction.png');
+}
+
+.i-48-time-table {
+    background-image: url('../images/icons/x48/time_table.png');
+}
+
+.i-48-form {
+    background-image: url('../images/icons/x48/form.png');
+}
+
+
+.i-48-library {
+    background-image: url('../images/icons/x48/books.png');
+}
+
+/*.i-48-hr {
+    background-image: url('../images/icons/x48/hr.png');
+}*/
+
+.i-48-data {
+    background-image: url('../images/icons/x48/database.png');
+}
+
+.i-48-desktop {
+    background-image: url('../images/icons/x48/computer.png');
+}
+
+.i-48-religions {
+    background-image: url('../images/icons/x48/religions.png');
+}
+
+.i-48-tablet {
+    background-image: url('../images/icons/x48/tablet.png');
+}
+
+.i-48-pridata {
+    background-image: url('../images/icons/x48/data.png');
+}
+
+.i-48-stages {
+    background-image: url('../images/icons/x48/stages.png');
+}
+
+.i-48-terms {
+    background-image: url('../images/icons/x48/terms.png');
+}
+
+.i-48-sections {
+    background-image: url('../images/icons/x48/sections.png');
+}
+
+.i-48-classes {
+    background-image: url('../images/icons/x48/classes.png');
+}
+
+.i-48-search {
+    background-image: url('../images/icons/x48/search.png');
+}
+
+.i-48-profession {
+    background-image: url('../images/icons/x48/profession.png');
+}
+
+.i-48-salary {
+    background-image: url('../images/icons/x48/salary.png');
+}
+
+.i-48-map {
+    background-image: url('../images/icons/x48/maps.png');
+}
+
+/*profile*/
+.i-48-profile {
+    background-image: url('../images/icons/x48/profile.png');
+}
+
+.i-48-lock {
+    background-image: url('../images/icons/x48/password.png');
+}
+
+.i-48-logout {
+    background-image: url('../images/icons/x48/logout.png');
+}
+
+.i-48-key {
+    background-image: url('../images/icons/x48/key.png');
+}
+
+/*employee*/
+.i-48-hr-search {
+    background-image: url('../images/icons/x48/business_user_search.png');
+}
+
+.i-48-hr-add {
+    background-image: url('../images/icons/x48/business_user_add.png');
+}
+
+.i-48-hr-bubble {
+    background-image: url('../images/icons/x48/bubble.png');
+}
+
+/*Inventory*/
+.i-48-inventory {
+    background-image: url('../images/icons/x48/inventory.png');
+}
+
+.i-48-supplier {
+    background-image: url('../images/icons/x48/supplier.png');
+}
+
+.i-48-supplier-add {
+    background-image: url('../images/icons/x48/supplier-add.png');
+}
+
+.i-48-pending {
+    background-image: url("../images/icons/x48/pending.png");
+}
+
+.i-48-purchase {
+    background-image: url("../images/icons/x48/purchase.png");
+}
+
+.i-48-purchase-add {
+    background-image: url("../images/icons/x48/purchase-add.png");
+}
+
+.i-48-item {
+    background-image: url("../images/icons/x48/item.png");
+}
+
+.i-48-request {
+    background-image: url("../images/icons/x48/hand.png");
+}
+
+.i-48-request-add {
+    background-image: url("../images/icons/x48/hand-add.png");
+}
+
+/*Transport*/
+.i-48-bus {
+    background-image: url('../images/icons/x48/bus.png');
+}
+
+.i-48-list {
+    background-image: url("../images/icons/x48/list.png");
+}
+
+.i-48-cash-register {
+    background-image: url("http://icons.iconarchive.com/icons/ebiene/e-commerce/48/cash-register-icon.png");
+}
+
+.i-48-invoice {
+    background-image: url("../images/icons/x48/invoice.png");
+}
+
+.i-48-invoice-add {
+    background-image: url("../images/icons/x48/invoice-add.png");
+}
+
+/*.i-48-balance {
+    background-image: url("http://icons.iconarchive.com/icons/iconleak/or/48/justice-balance-icon.png");
+}*/
+
+.i-48-receipt {
+    background-image: url("../images/icons/x48/receipt.png");
+}
+
+.i-48-receipts {
+    background-image: url("../images/icons/x48/receipts.png");
+}
+
+.i-48-catalog {
+    background-image: url("../images/icons/x48/catalog.png");
+}
+
+.i-48-ad {
+    background-image: url("../images/icons/x48/ad.png");
+}
+
+.i-48-col-person {
+    background-image: url("../images/icons/x48/col-person.png");
+}
+
+.i-48-col-person-add {
+    background-image: url("../images/icons/x48/col-person-add.png");
+}
+
+.i-48-user-add {
+    background-image: url("../images/icons/x48/user-add.png");
+}
+
+.i-48-user-delete {
+    background-image: url("../images/icons/x48/user-delete.png");
+}
+
+.i-48-user-edit {
+    background-image: url("../images/icons/x48/user-edit.png");
+}
+
+.i-48-user-ok {
+    background-image: url("../images/icons/x48/user-ok.png");
+}
+
+.i-48-user-search {
+    background-image: url("../images/icons/x48/user-search.png");
+}
+
+.i-48-media-add {
+    background-image: url("../images/icons/x48/media-add.png");
+}
+
+.i-48-media-types {
+    background-image: url("../images/icons/x48/media-types.png");
+}
+
+.i-48-media-return {
+    background-image: url("../images/icons/x48/media-return.jpg");
+}
+
+.i-48-media-search {
+    background-image: url("../images/icons/x48/media-search.png");
+}
+
+.i-48-media-publisher {
+    background-image: url("../images/icons/x48/print.png");
+}
+
+.i-48-media-author {
+    background-image: url("../images/icons/x48/author.png");
+}
+
+.i-48-cats {
+    background-image: url("../images/icons/x48/cats.png");
+}
+
+.i-48-issued {
+    background-image: url("../images/icons/x48/issued.png");
+}
+
+.i-48-issued-add {
+    background-image: url("../images/icons/x48/issued-add.png");
+}
+
+.i-48-book {
+    background-image: url("../images/icons/x48/user-search.png");
+}
+
+.i-48-test-result {
+    background-image: url('../images/icons/x48/test-result.png');
+}
+
+.i-48-sms {
+    background-image: url('../images/icons/x48/mobile.png');
+}
+
+.i-48-sms-new {
+    background-image: url('../images/icons/x48/mobile.png');
+}
+
+.i-48-fields {
+    background-image: url('../images/icons/x48/fields.png');
+}
+
+.i-48-stock-icon {
+    background-image: url('../images/icons/x48/stock-icon.png');
+}
+
+.i-48-sale-icon {
+    background-image: url('../images/icons/x48/sale-icon.png');
+}
+
+.i-48-time {
+    background-image: url('../images/icons/x48/time.png');
+}
+
+.i-48-register {
+    background-image: url('../images/icons/x48/register.png');
+}
+
+.i-48-hostel {
+    background-image: url('../images/icons/x48/hostelx48.png');
+}
+
+.i-48-ledger {
+    background-image: url('../images/icons/x48/ledger.png');
+}
+
+.i-48-grid {
+    background-image: url('../images/icons/x48/grid.png');
+}
+
+.i-48-income {
+    background-image: url('../images/icons/x48/income.png');
+}
+
+.i-48-budget {
+    background-image: url('../images/icons/x48/budget.png');
+}
+
+.i-48-payment {
+    background-image: url('../images/icons/x48/payment.png');
+}
+
+.i-48-profit-loss {
+    background-image: url('../images/icons/x48/profit_loss.png');
+}
+
+.i-48-news {
+    background-image: url("../images/icons/x48/newspaper.png");
+}
+
+.i-48-elearning {
+    background-image: url('../images/icons/x48/elearning.png');
+}
+
+.i-48-setting {
+    background-image: url('../images/icons/x48/cog-48.png');
+}
+
+.i-48-coa {
+    background-image: url('../images/icons/x48/coa.png');
+}
+
+.i-48-barcode {
+    background-image: url('../images/icons/x48/barcode.png');
+}
+
+.i-48-clipboard-grade {
+    background-image: url('../images/icons/x48/clipboard-grade.png');
+}
+
+.i-48-down {
+    background-image: url('../images/icons/x48/down.png');
+}
+
+.i-48-sigma {
+    background-image: url('../images/icons/x48/sigma.png');
+}
+
+.i-48-workers {
+    background-image: url('../images/icons/x48/workers.png');
+}
+
+.i-48-worker {
+    background-image: url('../images/icons/x48/worker.png');
+}
+
+.i-48-receive_cash {
+    background-image: url('../images/icons/x48/receive_cash.png');
+}
+
+.i-48-give_coin {
+    background-image: url('../images/icons/x48/give_coin.png');
+}
+
+.i-48-check_book {
+    background-image: url('../images/icons/x48/check_book.png');
+}
+
+.i-48-check {
+    background-image: url('../images/icons/x48/check.png');
+}
+
+
+.i-48-suitcase {
+    background-image: url('../images/icons/x48/suitcase.png');
+}
+
+.i-48-hourglass {
+    background-image: url('../images/icons/x48/hourglass.png');
+}
+
+.i-48-bill_blue {
+    background-image: url('../images/icons/x48/bill_blue.png');
+}
+
+.i-48-agency {
+    background-image: url('../images/icons/x48/agency.png');
+}
+.i-48-zero {
+    background-image: url('../images/icons/x48/zero.png');
+}
+
+.i-48-sibling {
+    background-image: url('../images/icons/x48/sibling.png');
+}
+.i-48-driver {
+    background-image: url('../images/icons/x48/driver.png');
+}
+

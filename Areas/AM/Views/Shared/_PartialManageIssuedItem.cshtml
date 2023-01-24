@@ -1,0 +1,40 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageIssuedItemsViewModel
+<div class="row">
+    <div class="col-md-12">
+        <table class="table no-head-border table-responsive">
+            <thead>
+                <tr>
+                    <th>Sr.</th>
+                    <th>Id</th>
+                    <th>Issue Date</th>
+                    <th>Department</th>
+                    <th>Created On</th>
+                    <th>Created By</th>
+                    <th>Posted</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.IssuedItems.Count() > 0)
+                {
+                    var count = 0;
+                    foreach (var item in Model.IssuedItems)
+                    {
+                        <tr>
+                            <td><span class="label label-default current-theme">@(++count)</span></td>
+                            <td>@(item.IssuedItemId)</td>
+                            <td>@item.IssueDate.ToShortDateString()</td>
+                            <td>@(item.Department?.DepartmentName)</td>
+                            <td>@item.CreatedOn.Value.ToShortDateString()</td>
+                            <td>@(item.UserCreated?.Username)</td>
+                            <td>@Html.YesNoString(item.IsPosted)</td>
+                            <td>
+                                <a href="@Url.Action("AddEditIssuedItem", "Issue", new { id = item.IssuedItemId})" class="btn btn-info btn-xs">View</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

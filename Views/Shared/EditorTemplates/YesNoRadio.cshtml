@@ -1,0 +1,25 @@
+﻿@*<style>
+    .vd_radio label:before {
+        top: 13px;
+    }
+
+    .vd_radio label:after {
+        top: 13px;
+    }
+</style>*@
+@model bool?
+@{
+    var o = ViewData.ModelMetadata;
+    var isChecked = Model.HasValue ? Model.Value : false;
+    var radioId = ViewData.TemplateInfo.GetFullHtmlFieldId("");
+    var random = new Random();
+    var id1 = random.Next(5555);
+    var id2 = random.Next(5555);
+}
+
+<div class="vd_radio radio-success">
+    @Html.RadioButton("", "true", isChecked, new { id = @radioId + $"__1{id1}" , @class = "yes" })
+    <label for="@(radioId)__1@(id1)"> Yes </label>
+    @Html.RadioButton("", "false", !isChecked, new { id = @radioId + $"__2{id2}", @class = "no noradio" })
+    <label for="@(radioId)__2@(id2)"> No </label>
+</div>

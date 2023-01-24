@@ -1,0 +1,228 @@
+﻿@model FAPP.Areas.AM.ViewModels.AddOrderPurchaseViewModel
+<script>
+    $("#PurchaseOrderDate").val('@String.Format("{0:yyyy/MM/dd}", Model.PurchaseOrderDate)')
+    $("#PurchaseOrderId").val('@(Model.PurchaseOrderId == 0 ? "" : Model.PurchaseOrderId.ToString())')
+    if (@Json.Encode(Request.IsAjaxRequest()))
+        changeHref(@Model.PurchaseOrderId);
+</script>
+<div class="vbox">
+    <div class="row clearfix" style="padding:5px">
+        <div hidden class="col-md-1">
+            Order No.
+        </div>
+        <div hidden class="col-md-3">
+            @Html.EditorFor(x => x.PurchaseOrderId, new { htmlAttributes = new { @class = "form-control", @placeholder = "Order No" } })
+        </div>
+        <div class="col-md-1">
+            Date
+        </div>
+        <div class="col-md-3">
+            @Html.EditorFor(x => x.PurchaseOrderDate, new { htmlAttributes = new { @class = "datepicker form-control", @placeholder = "Order Date" } })
+        </div>
+        <div class="col-md-1">
+            Supplier
+        </div>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.SupplierId, new SelectList(Model.SuppliersDD, "Value", "Text", Model.SupplierId), "--Select Supplier--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+        </div>
+
+        <div class="col-md-1">
+            Status
+        </div>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.StatusId, new SelectList(ViewBag.Statuses, "Value", "Text", Model.StatusId), htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+        </div>
+    </div>
+    <div class="row" style="padding:5px">
+        <div class="col-md-1">
+            Description
+        </div>
+        <div class="col-md-11">
+            @Html.EditorFor(x => x.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "Description" } })
+        </div>
+    </div>
+</div>
+<div style="display:none">
+    <input type="submit" onclick="return IsValid()" name="name" value="" id="SubmitPOBtn" />
+    @Html.HiddenFor(s => s.PurchaseOrderId)
+</div>
+<table class="table table-hover" id="trans_details">
+    @{
+        int count = 1;
+    }
+    <thead>
+        <tr>
+            <th>Sr.</th>
+            <th width="10%">Barcode</th>
+            <th width="35%">Item</th>
+            @*<th>Item Code</th>*@
+            <th width="5%">Qty</th>
+            <th width="50%">Description</th>
+            <th>Condition</th>
+        </tr>
+
+    </thead>
+    <tr id="tr_clone" style="display: none;">
+        <td width="20px" class="td-Padding-top"><span class="Sr label label-default current-theme numeric cloneable">@(count)</span></td>
+        <td style="width:10%; border-top:none !important " class="move">
+            @Html.TextBox("Details[-1].Barcode", null, new { @class = "barcodeField form-control cloneable .barcodeField", @placeholder = "BarCode" })
+        </td>
+        <td style="width:20% ; border-top:none !important " class="move">
+            @Html.DropDownList("Details[-1].ProductId", new SelectList(Model.ItemsDD, "Value", "Text"), "--Select Item--", new { @class = "form-control getItemCodes cloneable nochosen chosenafterclone", @style = "width:100%" })
+            <div class="help-block" id="Details[-1].item_no_lbl"></div>
+        </td>
+        @*<td style="width:10%; border-top:none !important " class="move">
+                @Html.DropDownList("Details[-1].ItemCode", new SelectList(string.Empty, "Value", "Text"), "--Select Item Code--", new { @class = "getSelectedValue form-control cloneable nochosen chosenafterclone", @style = "width:100%" })
+            </td>*@
+        <td style="width:7%; border-top:none !important" class="move">
+            @Html.TextBox("Details[-1].Quantity", null, new { @value = "1", @class = "form-control cloneable ", @placeholder = "Qty" })
+        </td>
+        <td style="width:25%; border-top:none !important" class="move">
+            @Html.TextBox("Details[-1].Description", null, new { @class = "form-control cloneable ", @placeholder = "Description" })
+        </td>
+        <td class="move">
+            @Html.DropDownList("Details[-1].ConditionTypeId", new SelectList(ViewBag.ConditionTypesDD, "Value", "Text"), "--Select Condition--", new { @class = "form-control cloneable nochosen chosenafterclone", @style = "width:150px" })
+        </td>
+    </tr>
+
+    @if (Model != null)
+    {
+        if (Model.Details != null)
+        {
+
+            for (int i = 0; i < Model.Details.Count(); i++)
+            {
+                var item = Model.Details[i];
+                <tr>
+                    <td width="20px" class="td-Padding-top"><span class="Sr label label-default current-theme numeric cloneable">@(count++)</span></td>
+                    <td style="border-top:none !important " class="move">
+                        <div class="displayNone">
+                            <input type="hidden" name="Details[@i].POProductId" value="@Model.Details[i].POProductId" />
+                        </div>
+                        @Html.EditorFor(x => x.Details[i].Barcode, new { htmlAttributes = new { @class = "barcodeField form-control cloneable", @placeholder = "Barcode" } })
+                    </td>
+                    <td style="border-top:none !important " class="move">
+                        @Html.DropDownListFor(model => model.Details[i].ProductId, new SelectList(Model.ItemsDD, "Value", "Text", Model.Details[i].ProductId), "--Select Item--", htmlAttributes: new { @class = "form-control getItemCodes cloneable nochosen chosenafterclone", @style = "width:100%;-webkit-appearance: textfield;" })
+                        <div class="help-block" style="display:none;" id="Details_[@i]__item_no_lbl"></div>
+                    </td>
+                    @*<td style="border-top:none !important " class="move">
+                            @if (item.ItemCode != null && item.ItemCode!= 0)
+                            {
+                                var aho = Model.ItemCodes.Where(s=> s.Id == item.ItemId);
+                                @Html.DropDownListFor(m => m.Details[i].ItemCode,
+                                                             new SelectList(aho, "Value", "Text", Model.Details[i].ItemCode),
+                                                         "--Select Item Code--",
+                                                        new { @class = "form-control getSelectedValue" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(m => m.Details[i].ItemCode,
+                                                        new SelectList(string.Empty, "Value", "Text", Model.Details[i].ItemCode),
+                                                         "--Select Item Code--",
+                                                             new { @class = "form-control getSelectedValue", @readonly = "readonly", @disabled = "disabled" })
+                            }
+                        </td>*@
+                    <td style="border-top:none !important " class="move">
+                        @Html.EditorFor(x => x.Details[i].Quantity, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Qty" } })
+                        @*@if (item.ItemCode!=null)
+                            {
+                                @Html.EditorFor(x => x.Details[i].Quantity, new { htmlAttributes = new {  @class = "form-control cloneable", @placeholder = "Qty" ,@readonly = "readonly"} })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(x => x.Details[i].Quantity, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Qty" } })
+                            }*@
+                    </td>
+                    <td style="border-top:none !important " class="move">
+                        @Html.EditorFor(x => x.Details[i].Description, new { htmlAttributes = new { @class = "form-control cloneable", @placeholder = "Description" } })
+                    </td>
+                    <td style="border-top:none !important " class="move">
+                        @Html.DropDownListFor(m => m.Details[i].ConditionTypeId, new SelectList(ViewBag.ConditionTypesDD, "Value", "Text", Model.Details[i].ConditionTypeId), "--Select Condition--", new { @class = "cloneable", @style = "width:150px" })
+                    </td>
+                </tr>
+            }
+        }
+    }
+
+</table>
+@if (Model.EditMode)
+{
+    <div id="PrintSection" class="displayNone">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row" style="margin-bottom:50px">
+                    <div class="col-md-12">
+                        <div class="Noline text-center" style="vertical-align: top;">
+                            <img src="~/uploads/Logos/BranchLogo@(FAPP.DAL.SessionHelper.BranchId).png" width="63" height="80" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            @FAPP.DAL.SessionHelper.BranchAddress
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            @FAPP.DAL.SessionHelper.BranchPhone
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-hover table-condensed table-responsive table-bordered">
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                    <strong>Purchase Order</strong> # @Model.PurchaseOrderCode
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="50%">Date : @String.Format("{0:D}", Model.PurchaseOrderDate)</td>
+                                <td width="50%">
+                                    @{
+                                        string supplier = (from sup in Model.SuppliersDD
+                                                           where sup.Value == Model.SupplierId.ToString()
+                                                           select sup.Text).FirstOrDefault();
+                                    }
+                                    Supplier : @supplier
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Description : @Model.Description</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-hover table-condensed table-responsive table-bordered">
+                            <thead>
+                                <tr>
+                                    <th width="5%">Sr.</th>
+                                    <th width="35%">Item Name</th>
+                                    <th width="5%">Quantity</th>
+                                    <th width="45%">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Details != null)
+                                {
+                                    var count = 1;
+                                    foreach (var item in Model.Details)
+                                    {
+                                        <tr>
+                                            <td><span class="label label-default current-theme">@(count++)</span></td>
+                                            @{var itemName = Model.ItemsDD.FirstOrDefault(s => s.Value == item.ProductId.ToString()).Text + " (" + +item.ProductId + ")";}
+                                            <td>@Html.DisplayFor(m => itemName)</td>
+                                            <td>@Html.DisplayFor(m => item.Quantity)</td>
+                                            <td>@Html.DisplayFor(m => item.Description)</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

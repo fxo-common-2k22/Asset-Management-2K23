@@ -1,0 +1,32 @@
+﻿
+@model IEnumerable<FAPP.Model.TemplateFilter>
+@using PagedList.Mvc;
+
+<div id="table">
+    <table class="table table-hover table-condensed table-striped">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Module</th>
+            <th>Filter Name</th>
+            <th>Filter Type</th>
+            <th>View Name</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+        @{ int count = 1;}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><span class="label label-default current-theme">@(count++)</span></td>
+                <td>@Html.DisplayFor(m => item.ModuleId)</td>
+                <td>@Html.DisplayFor(m => item.FilterName)</td>
+                <td>@Html.DisplayFor(m => item.FilterType)</td>
+                <td>@Html.DisplayFor(m => item.FilterView)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</div>

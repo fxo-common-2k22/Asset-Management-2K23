@@ -1,0 +1,75 @@
+﻿@model FAPP.Model.SetupModel
+<div class="modal-header HeaderColor">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+    <h4 class="modal-title" id="myModalLabel">New Contact</h4>
+</div>
+@using (Ajax.BeginForm("InsertContact", "Clients", new AjaxOptions { OnSuccess = "OnResponceBackFromServer" }))
+{
+    <div class="modal-body">
+        <div class="form-horizontal" id="form_account">
+            <div class="form-group">
+                <label class="control-label col-md-4">Contact Name</label>
+                <div class="col-md-8">
+                    @Html.TextBox("Name", null, new { @class = "form-control", @placeholder = "Contact Name" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Mobile</label>
+                <div class="col-md-8">
+                    @Html.TextBox("Mobile", null, new { @class = "form-control", @placeholder = "Mobile" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">NIC</label>
+                <div class="col-md-8">
+                    @Html.TextBox("NIC", null, new { @class = "form-control", @placeholder = "NIC" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Email</label>
+                <div class="col-md-8">
+                    @Html.TextBox("Email", null, new { @class = "form-control", @placeholder = "Email" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Passport</label>
+                <div class="col-md-8">
+                    @Html.TextBox("Passport", null, new { @class = "form-control", @placeholder = "Passport" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Address</label>
+                <div class="col-md-8">
+                    @Html.TextBox("Address", null, new { @class = "form-control", @placeholder = "Address" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Contact Type</label>
+                <div class="col-md-8">
+                    @Html.DropDownList("ClientTypeId", new SelectList(ViewBag.ClientTypes, "ClientTypeId", "ClientTypeName"), "=Select Type=", new { @class = "form-control chosen-select", @style = "width:100%;" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer background-login">
+        @Html.Hidden("IsClient", true)
+        <button type="submit" class="btn btn-success inputenabledisable" onclick="return isvalid();">Save</button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+    </div>
+}
+<script>
+    function isvalid() {
+        if (StringIsNullOrEmpty($('#Name').val())) {
+            DisplayMessage('error', 'Contact Name is required')
+            $('#Name').focus();
+            return false;
+        }
+        if (StringToFloat($('#ClientTypeId').val()) == 0) {
+            DisplayMessage('error', 'Client Type is required')
+            $('#ClientTypeId').select2('open');
+            return false;
+        }        
+    }
+
+</script>

@@ -1,0 +1,41 @@
+﻿
+@model List<FAPP.Models.ActionLinks>
+@using FAPP.Models
+
+@using FAPP.Helpers
+
+
+@{
+
+    //display route links
+    @helper  TopMenu()
+    {
+        var action = Request.RequestContext.RouteData.Values["action"].ToString();
+        var controller = Request.RequestContext.RouteData.Values["controller"].ToString();
+//var area = Request.RequestContext.RouteData.Values["area"];
+        var area = HttpContext.Current.Request.RequestContext.RouteData.DataTokens["area"] ?? "";
+        string ViewId ="";
+        if (TempData["MTempId"] != null)
+        {
+            ViewId =  TempData["MTempId"].ToString();//Check selected menu with section variable because FormId is int
+        }
+        foreach (var item in Model)
+        {
+            string url = item.FormUrl;
+            <li> 
+                <a href="@url" style="@(ViewId==item.Section? "background-color: #FFF": "")">
+                    @item.FormName
+                </a>
+            </li>
+        }
+    }
+}
+
+@functions {
+    public static ActionLinks GetParentMenu(string action, string controller, string area, List<ActionLinks> nodeList)
+    {
+        return nodeList.Where(s => s.Action == action && s.Controller == controller && s.Area == area).FirstOrDefault();
+    }
+}
+
+@TopMenu()

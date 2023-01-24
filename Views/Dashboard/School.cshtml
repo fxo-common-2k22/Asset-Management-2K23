@@ -1,0 +1,65 @@
+﻿
+@model FAPP.ViewModel.Common.GraphsModel
+@Html.Partial("~/Views/Dashboard/_PartialSchoolDashboard.cshtml", Model)
+
+<script>
+$('#extendedPageHeader').html(`<p style="margin:13px 0px">
+    @{
+        <label class="label label-darkblue" title="Current Session">@(FAPP.DAL.SessionHelper.CurrentSession)</label>
+        <label class="label label-green" title="Current Term">  @(FAPP.DAL.SessionHelper.CurrentTerm)</label>
+    }
+</p>`);
+</script>
+<script>
+    $(window).load(function () {
+
+        //------------------****------------------
+        var ParentForm = 201; //int
+        var MenuItemPriority = 1; //short
+        var isActive = "Yes"; //string //"Yes" and "No"
+        var PageType = "";//string For Child page // "HaveChild"
+        var IsMenuItem = false;//bool
+        var IsDashboardPart = true;//bool only for Dashboard
+        var ShowOnDesktop = false;//bool for quick links
+        var IsMasterMenu = false;//bool for Main Menu
+        var IsQuickLink = false;//bool for quick links
+        //-----------------****------------------
+        var FormId = 20101;
+        InsertInMembershipFormsWithStaticFormId("Show Stats", ParentForm, "_PartialShowStats", "Show Stats", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-----------------****------------------
+        var FormId = 20102;
+        InsertInMembershipFormsWithStaticFormId("All Sent Messages", ParentForm, "_PartialAllSentMessages", "All Sent Messages", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-----------------****------------------
+        var FormId = 20103;
+        InsertInMembershipFormsWithStaticFormId("Employees Todays Attendance Stats", ParentForm, "_PartialEmployeesTodaysAttendanceStats", "Employees Todays Attendance Stats", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-----------------****------------------
+        var FormId = 20104;
+        InsertInMembershipFormsWithStaticFormId("Students Todays Attendance Stats", ParentForm, "_PartialStudentsTodaysAttendanceStats", "Students Todays Attendance Stats", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-----------------****------------------
+        var FormId = 20105;
+        InsertInMembershipFormsWithStaticFormId("Current Month Fee Stats", ParentForm, "_PartialCurrentMonthFeeStats", "Current Month Fee Stats", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-----------------****------------------
+        var FormId = 20106;
+        InsertInMembershipFormsWithStaticFormId("Academic Attendance Stats", ParentForm, "_PartialAcademicAttendanceStats", "Academic Attendance Stats", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-----------------****------------------
+        var FormId = 20107;
+        InsertInMembershipFormsWithStaticFormId("Student Strength Graph", ParentForm, "_PartialStudentStrengthGraph", "Student Strength Graph", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-----------------****------------------
+        var FormId = 20108;
+        InsertInMembershipFormsWithStaticFormId("Student Admission/Withdrawl Graph", ParentForm, "_PartialStudentAdmissionWithdrawl", "Student Admission/Withdrawl Graph", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-----------------****------------------
+        var FormId = 20109;
+        InsertInMembershipFormsWithStaticFormId("Academic Attendance Top Checkins", ParentForm, "_PartialAcademicAttendanceTopCheckin", "Academic Attendance Top Checkins", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-----------------****------------------
+        var FormId = 20110;
+        InsertInMembershipFormsWithStaticFormId("Academics Attendance Available Teachers", ParentForm, "_PartialAcademicsAttendanceAvailableTeachers", "Academics Attendance Available Teachers", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-----------------****------------------
+        var FormId = 20111;
+        InsertInMembershipFormsWithStaticFormId("Academics Attendance PieChart Graph", ParentForm, "_PartialAcademicsAttendancePieChartGraph", "Academics Attendance PieChart Graph", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-----------------****------------------
+        var FormId = 20112;
+        InsertInMembershipFormsWithStaticFormId("Academics Gender Wise Graph", ParentForm, "_PartialAcademicGenderWiseStrength", "Academics Gender Wise Graph", MenuItemPriority, isActive, PageType, IsMenuItem, IsDashboardPart, ShowOnDesktop, IsMasterMenu, IsQuickLink, FormId);
+        //-------------%%%%%%%%%%%%%-------------------------
+    });
+</script>
+

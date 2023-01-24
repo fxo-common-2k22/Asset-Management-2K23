@@ -1,0 +1,57 @@
+﻿@model FAPP.ViewModel.TemplatesViewModel
+@{
+    ViewBag.Title = " Add Report Template";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+@section TopRightMenu{
+    <div id="topRightBtns">
+        <ul class="minitiles">
+            <li class="blue" id="editbtn">
+                <a href="@FAPP.DAL.SessionHelper.ReturnUrl" data-toggle="tooltip" title="Back to Dashboard">
+                    <i class="fa fa-mail-reply"></i>
+                </a>
+            </li>
+            <li class="darkblue" data-toggle="tooltip" title="" data-original-title="Save Template">
+                <a href="javascript:" onclick="$('#saveTempBtn').click();">
+                    <i class="fa fa-save"></i>
+                </a>
+            </li>
+
+            @*<li class="blue">
+            <a href="@Url.Action("Templates","CustomReporting")" data-toggle="tooltip" title="Templates List">
+                <i class="fa fa-bars"></i>
+            </a>
+        </li>*@
+        </ul>
+    </div>
+
+}
+
+<link href="~/Content/plugins/multiselect/multi-select.css" rel="stylesheet" />
+<div id="tempGrid">
+    @Html.Partial("_PartialTemplateFrm")
+</div>
+<script src="~/Scripts/plugins/multiselect/jquery.multi-select.js"></script>
+
+<script>
+    $(document).ready(function () {
+        if ($("#Template_TemplateTitle").val() === "")
+        {
+            $("#pageHeading").html("Add " + $("#View_ViewName").val()+" Template" );
+        }
+        else {
+            $("#pageHeading").html("Edit " + $("#Template_TemplateTitle").val());
+        }
+        //$('select#Template_ReportViewId').select2('readonly', true);
+        if (Number($("#Template_ReportTemplateId").val()) > 0)
+        {
+            $(".select2-selection").hide();
+        }
+
+       // $('#Template_SelectedFields').parent().hide();
+        //$("#SelectedFields").multiSelect();
+
+        $('#SelectedFields').multiSelect( );
+    });
+</script>

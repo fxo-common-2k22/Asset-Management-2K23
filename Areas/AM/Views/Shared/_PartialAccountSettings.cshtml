@@ -1,0 +1,60 @@
+﻿@model FAPP.Areas.AM.ViewModels.AMAccountSettingsViewModel
+
+<div style="display:none">
+    <input type="submit" name="name" value="" id="SaveNatureAccountBtn" />
+</div>
+<table class="table table-hover no-head-border table-responsive table-striped">
+    @*<thead>
+        <tr>
+            <th>Account</th>
+            <th>Parent Account</th>
+        </tr>
+    </thead>*@
+    <tr>
+        <td>
+            <label>
+                Inventory Parent Account
+            </label>
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.Nature.InventoryParentAccountId, new SelectList(ViewBag.AccountsDD, "autokey", "TITLES", Model.Nature.InventoryParentAccountId), "--Select Account--", htmlAttributes: new { @class = "chosen-select form-control", @style = "width:100%" })
+        </td>
+    @*</tr>
+    <tr>*@
+        <td>
+            <label>COGI Parent Account</label>
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.Nature.COGIParentAccountId, new SelectList(ViewBag.AccountsDD, "autokey", "TITLES", Model.Nature.COGIParentAccountId), "--Select Account--", htmlAttributes: new { @class = "chosen-select form-control", @style = "width:100%" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label>Depreciation Parent Account</label>
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.Nature.DepreciationParentAccountId, new SelectList(ViewBag.AccountsDD, "autokey", "TITLES", Model.Nature.DepreciationParentAccountId), "--Select Account--", htmlAttributes: new { @class = "chosen-select form-control", @style = "width:100%" })
+        </td>
+        <td>
+        <label>Default Supplier</label>
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.Nature.DefaultSupplierId, new SelectList(ViewBag.SupplierDD, "ClientId", "PresentableName", Model.Nature.DefaultSupplierId), "--Select Supplier--", htmlAttributes: new { @class = "chosen-select form-control", @style = "width:100%" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="checkbox2">
+                Create Individual Item Accounts
+            </label>
+        </td>
+        <td>
+            @Html.EditorFor(m => m.Nature.CreateItemAccounts)
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+<script>
+    RefreshAllScripts();
+</script>

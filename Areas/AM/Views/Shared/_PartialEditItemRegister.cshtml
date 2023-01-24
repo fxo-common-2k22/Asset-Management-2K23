@@ -1,0 +1,99 @@
+﻿@model FAPP.Areas.AM.ViewModels.ItemRegisterVM
+
+
+
+<div class="modal-header" style="background-color: #368ee0 !important;color:white;">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title" id="myModalLabel">Edit Item : (@Model.ItemRegisterItem.Product.ProductName) on : @Model.ItemRegisterItem.DateOfEntry.ToddMMMyyyyString() </h4>
+</div>
+
+
+@using (Ajax.BeginForm("EditItemRegister", "Issue", new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnComplete = "OnComplete('frmModal')", OnSuccess = "OnCreateUpdateSuccess", OnFailure = "OnFailure" }, new { @class = "new-task-form form-horizontal form-bordered" }))
+{
+    Html.EnableClientValidation(true);
+    @Html.HiddenFor(m => m.ItemRegisterItem.ItemRegisterId)
+    @Html.HiddenFor(m => m.ItemRegisterItem.ItemCode)
+
+    <div class="modal-body nopadding">
+        <div class="form-group">
+            <label for="tasktitel" class="col-sm-3 control-label">Product </label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(m => m.ItemRegisterItem.ProductId, new SelectList(ViewBag.Products, "Value", "Text", Model.ItemRegisterItem.ProductId), "--- Select Product ----", new { @class = "form-control chosen-select", @style = "width:300px;" })
+                @Html.ValidationMessageFor(model => model.ItemRegisterItem.ProductId, null, new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="tasktitel" class="col-sm-3 control-label">Code</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.ItemRegisterItem.ItemManualCode, new { @required = true, @class = "form-control ", @placeholder = "Item Code" })
+                @Html.ValidationMessageFor(model => model.ItemRegisterItem.ItemManualCode, null, new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="tasktitel" class="col-sm-3 control-label">Condition</label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(m => m.ItemRegisterItem.ConditionTypeId, new SelectList(ViewBag.ConditionTypes, "Value", "Text", Model.ItemRegisterItem.ConditionTypeId), "---- Select Condition ----", new { @class = "form-control chosen-select", @style = "width:300px;" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="tasktitel" class="col-sm-3 control-label">Value</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.ItemRegisterItem.Value, new { @required = true, @class = "form-control ", @placeholder = "Value" })
+                @Html.ValidationMessageFor(model => model.ItemRegisterItem.Value, null, new { @class = "text-danger" })
+            </div>
+        </div>
+        @*<div class="form-group">
+                <label for="tasktitel" class="col-sm-3 control-label">Qty</label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.ItemRegisterItem.Qty, new { @required = true, @class = "form-control ", @placeholder = "Address" })
+                    @Html.ValidationMessageFor(model => model.ItemRegisterItem.Value, null, new { @class = "text-danger" })
+                </div>
+            </div>*@
+        <div class="form-group">
+            <label for="tasktitel" class="col-sm-3 control-label">Date</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.ItemRegisterItem.DateOfEntry, new { @class = "datepicker form-control", @placeholder = "Entry Date", @style = "width:100%" })
+                @Html.ValidationMessageFor(model => model.ItemRegisterItem.DateOfEntry, null, new { @class = "text-danger" })
+            </div>
+        </div>
+        @*<div class="form-group">
+                <label for="tasktitel" class="col-sm-3 control-label">Location</label>
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.ItemRegisterItem.CurrentLocationId, new SelectList(ViewBag.Locations, "Value", "Text", Model.ItemRegisterItem.CurrentLocationId), "---- Select Location ----", new { @class = "form-control chosen-select", @style = "width:300px;" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="tasktitel" class="col-sm-3 control-label">Department</label>
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.ItemRegisterItem.CurrentdepartmentId, new SelectList(ViewBag.Departments, "Value", "Text", Model.ItemRegisterItem.CurrentdepartmentId), "---- Select Department ----", new { @class = "form-control chosen-select", @style = "width:300px;" })
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="tasktitel" class="col-sm-3 control-label">Employee</label>
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.ItemRegisterItem.EmployeeId, new SelectList(ViewBag.Employees, "Value", "Text", Model.ItemRegisterItem.EmployeeId), "---- Select Employee ----", new { @class = "form-control chosen-select", @style = "width:300px;" })
+                </div>
+            </div>*@
+        <div class="form-group">
+            <label for="tasktitel" class="col-sm-3 control-label">Status</label>
+            <div class="col-sm-9">
+                @Html.EnumDropDownListFor(x => x.ItemRegisterItem.Status, "-- Select status --", new { @class = "form-control", @style = "width:300px;" })
+                @*@Html.EditorFor(m => m.ItemRegisterItem.sta, new SelectList(ViewBag.Employees, "Value", "Text", Model.ItemRegisterItem.EmployeeId), "---- Select Employee ----", new { @class = "form-control chosen-select", @style = "width:300px;" })*@
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="tasktitel" class="col-sm-3 control-label">Description</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.ItemRegisterItem.Description, new { @class = "form-control", @placeholder = "Description", @style = "width:100%" })
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-footer">
+        <input type="button" class="btn btn-orange" data-dismiss="modal" value="Cancel">
+        <input type="submit" class="btn btn-primary" value="Update Item Register ">
+    </div>
+
+}

@@ -1,0 +1,26 @@
+﻿@model FAPP.ViewModel.TemplatesViewModel
+@{
+    ViewBag.Title = "Manage Report Templates";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+} 
+@section TopRightMenu{
+    <div id="topRightBtns">
+        <ul class="minitiles">
+            <li class="blue">
+                <a href="@Url.Action("Add","CustomReporting")" data-toggle="tooltip" title="Add New Template">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+}
+@*<div id="resultFrm">
+
+    </div>*@
+<div id="tempGrid">
+    @Html.Partial("_TemplatesGrid", Model.TemplateList)
+</div>
+
+
+

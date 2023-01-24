@@ -1,0 +1,149 @@
+﻿@model FAPP.Areas.AM.ViewModels.WarehouseViewModel
+
+
+@{
+    ViewBag.Title = "Stock Position";
+}
+@section topRightMenu{
+    <ul class="minitiles">
+        <li class="orange">
+            <a title="Print" onclick="printGV();">
+                <i class="fa fa-print"></i>
+            </a>
+        </li>
+    </ul>
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div id="Vouchers">
+        <div class="alert alert-success" id="messageDiv" style="display: none;">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+            <div class="help-block" id="messagelabel"></div>
+        </div>
+        <div class="vbox">
+            <div class="form-inline">
+                <div class="form-group">
+                    @Html.DropDownListFor(m => m.WarehouseId, new SelectList(ViewBag.Warehouses, "WarehouseId", "WarehouseName", Model.WarehouseId), "Select Warehouse", new { @class = "form-control chosen-select", @style = "width:200px;",onchange= "$('#WarehouoseLable').text($(this).children('option:selected').text())" })
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="TextBoxFromDate">From Date</label>
+                    @Html.TextBoxFor(model => model.FromDate, new { @class = "datepicker form-control", @placeholder = "From Date", @style = "width:90px;" })
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="TextBoxToDate">To Date</label>
+                    @Html.TextBoxFor(model => model.ToDate, new { @class = "datepicker form-control", @placeholder = "To Date", @style = "width:90px;" })
+                </div>
+                <input type="submit" onclick="return Isvalid();" class="btn" value="Search" title="Search" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 downpadding">
+                <table class="table table-hover no-head-border table-responsive table-striped" id="gv">
+                    <thead class="vd_bg-green vd_white">
+                        <tr>
+                            <th></th>
+                            <th>Product Name</th>
+                            <th>Product Code</th>
+                            <th>OS</th>
+                            <th>Pur</th>
+                            @*<th>In</th>
+                                <th>Out</th>*@
+                            <th>Sale</th>
+                            <th>PR</th>
+                            <th>SR</th>
+                            <th>Damage</th>
+                            <th>Bal</th>
+                            <th>Value</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            if (Model.v_mnl_OpenningstockList != null)
+                            {
+                                decimal? ProdBal = 0;
+                                for (int i = 0; i < Model.v_mnl_OpenningstockList.Count; i++)
+                                {
+                                    ProdBal = (Model.v_mnl_OpenningstockList[i].OS +
+                                        Model.v_mnl_OpenningstockList[i].Pur +
+                                        Model.v_mnl_OpenningstockList[i].SR) - 
+                                        (Model.v_mnl_OpenningstockList[i].Sale +
+                                        Model.v_mnl_OpenningstockList[i].PR +
+                                        Model.v_mnl_OpenningstockList[i].Damage);
+                                    <tr class="tr_row">
+                                        <td></td>
+                                        <td>@(Model.v_mnl_OpenningstockList[i].ItemName)</td>
+                                        <td>@(Model.v_mnl_OpenningstockList[i].ShortName)</td>
+                                        <td>@(Model.v_mnl_OpenningstockList[i].OS)</td>
+                                        <td>@(Model.v_mnl_OpenningstockList[i].Pur)</td>
+                                        <td>@(Model.v_mnl_OpenningstockList[i].Sale)</td>
+                                        <td>@(Model.v_mnl_OpenningstockList[i].PR)</td>
+                                        <td>@(Model.v_mnl_OpenningstockList[i].SR)</td>
+                                        <td>@(Model.v_mnl_OpenningstockList[i].Damage)</td>
+                                        <td>@(Math.Round(Convert.ToDouble(ProdBal),2))</td>
+                                        <td>@(Math.Round(Convert.ToDouble(Model.v_mnl_OpenningstockList[i].SalePrice * ProdBal),2))</td>
+                                        <td>@(Math.Round(Convert.ToDouble(Model.v_mnl_OpenningstockList[i].CostPrice * ProdBal),2))</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+
+                </table>
+                @if (Model.v_mnl_OpenningstockList == null || Model.v_mnl_OpenningstockList.Count == 0)
+                {
+                    <div style="text-align: center">
+                        No data found
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+
+
+
+}
+<iframe id="myIframe" style="display: none;" seamless="seamless"></iframe>
+
+
+@section scripts{
+<script>
+        function printGV() {
+            var  title = @Html.Raw(Json.Encode(ViewBag.title));
+            printData('gv', title, '', '');
+        }
+        function Isvalid() {
+            var validated = true;
+            if (!$('#WarehouseId').val()) {
+                DisplayMessage('error', 'Select Warehouse');
+                $('#WarehouseId').focus();
+                validated = false;
+                return false;
+            }
+            if (!$('#FromDate').val()) {
+                DisplayMessage('error', 'Date range is required');
+                $('#FromDate').focus();
+                validated = false;
+                return false;
+            }
+            if (!$('#ToDate').val()) {
+                DisplayMessage('error', 'Date range is required');
+                $('#ToDate').focus();
+                validated = false;
+                return false;
+            }
+            return validated;
+        }
+    $(document).ready(function () {
+        $('#WarehouseId').trigger('change')
+    })
+        $('#extendedPageHeader').html(`<p style="margin:12px 0px">
+        @{
+        <label id='WarehouoseLable' class="label label-darkblue" title="WareHouse">@(Model?.WarehouseProductList?.Select(s => s.Warehouse.WarehouseName).FirstOrDefault())</label>
+         } </p>`);
+</script>
+}

@@ -1,0 +1,94 @@
+﻿@model FAPP.Areas.Academics.ViewModels.StudentNumUpdateToolViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .valmsg {
+        margin-left: 5px !important;
+    }
+</style>
+@section PageHeader {
+    Mobile No Correction Tool
+}
+@section TopRightMenu{
+    <div id="topRightBtns">
+        <ul class="stats" style="margin-right: 10px">
+            <li class="satgreen ms-hover">
+                <i class="fa fa-check"></i>
+                <div class="details">
+                    <span class="big">Correct </span>
+                    <span> @TempData["correctNum"]</span>
+                </div>
+            </li>
+            <li class="orange ms-hover">
+                <i class="fa fa-info"></i>
+                <div class="details">
+                    <span class="big">Invalid </span>
+                    <span>@TempData["invalidNum"]</span>
+                </div>
+            </li>
+            <li class="lightred ms-hover">
+                <i class="fa fa-times"></i>
+                <div class="details">
+                    <span class="big">Missing</span>
+                    <span>@TempData["noNum"]</span>
+                </div>
+            </li>
+        </ul>
+        <ul class="minitiles">
+
+            <li class="blue">
+                <a href="javascript:;" onclick="fixaall()" data-toggle="tooltip" title="Fix All Students Mobile Numbers">
+                    <i class="fa fa-wrench"></i>
+                </a>
+            </li>
+        </ul>
+
+    </div>
+
+}
+
+@using (Ajax.BeginForm("LoadStudents", "Messaging", new AjaxOptions { HttpMethod = "POST", OnSuccess = "onSearchSuccess", OnFailure = "OnSearchFailure" }, new { @class = "form-inline" }))
+{
+    Html.EnableClientValidation(true);
+    <div class="vbox">
+        <div class="form-group col-md-3">
+            @Html.DropDownListFor(model => model.GroupId, new SelectList(Model.GroupsDD, "Value", "Text"), "--Select Group--", new { @class = "btn-xs form -control" })
+            @Html.ValidationMessageFor(model => model.GroupId, "", new { @class = "text-danger" })
+        </div>
+        <input type="submit" value="Load Students" class="btn btn-primary btn-xs" />
+    </div>
+}
+<div id="studentsList"></div>
+
+
+<script type="text/javascript">
+    function fixaall() {
+        //var isnum = /^\d+$/.test(e.value);
+        //if (isnum === true) {
+        OnBegin();
+            $.ajax({
+                url: '@Url.Action("FixAll")',
+                method: "GET",
+                async:true,
+                global: false,
+               // data: {  },
+                success: function (data) {
+                    //ErrorSuccess(data);
+                    DisplayMessage('Success', data.Message);
+                    // fadeInOutText($(e).next(), data.Message, data.Status);
+                },
+                error: function (jqXHR, exception) {
+                    ErrorSuccess(exception);
+                    DisplayMessage('error', 'Failed to update records!');
+                    //fadeInOutText($(e).next(), 'Failed', 'error');
+                }
+            });
+        //} else {
+        //    fadeInOutText($(e).next(), 'Failed! Only numbers are allowed..', 'error');
+        //}
+    }
+</script>
+
+

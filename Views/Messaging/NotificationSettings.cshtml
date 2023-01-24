@@ -1,0 +1,71 @@
+﻿@model FAPP.ViewModel.MessagingVM
+@using FAPP.DAL;
+@{
+    ViewBag.Title = "NotificationSettings";
+}
+@section TopRightMenu{
+    <ul class="minitiles">
+        <li class="blue" style="margin-right:0">
+            <a href="@Url.Action("Templates","Messaging",new { id = Model.ModuleId })" data-toggle="tooltip" title="Dashboard">
+                <i class="fa fa-tachometer"></i>
+            </a>
+        </li>
+        <li class="darkblue" style="margin-right:0">
+            <a href="@Url.Action("Batch","Messaging",new { id = Model.ModuleId})" data-toggle="tooltip" title="SMS Batches">
+                <i class="fa fa-bars"></i>
+            </a>
+        </li>
+        <li class="green" style="margin-right:0">
+            <a onclick="AddNotificationSettings()" data-toggle="tooltip" title="Add Notification Settings">
+                <i class="fa fa-cogs"></i>
+            </a>
+        </li>
+    </ul>
+}
+<div class="vbox col-lg-12" style="height:42px;margin-top: 0%;"></div>
+<div id="notificationGrid" style="margin-top:1%;">
+    @Html.Partial("~/Views/Messaging/_PartialNotificationsGrid.cshtml", Model)
+</div>
+
+<script>
+ $('#extendedPageHeader').html('<p style="margin-top:13px"><label class="label label-green" title="Module Name">@ViewBag.ModuleName</label> </p>');
+
+    $('.save').change('change', function () {
+         ;
+        let i = $(this).data('index');
+        //let studentId = $(this).data('stdid');
+        let message = '';
+        let NotificationSettingId = $("#NotificationSettingsList_" + i + "__NotificationSettingId").val();
+        let SMSTemplateId = $("#NotificationSettingsList_" + i + "__SMSTemplateId").val();
+        let EmailTemplateId = $("#NotificationSettingsList_" + i + "__EmailTemplateId").val();
+        let SendMobileNotification = $("#NotificationSettingsList_" + i + "__SendMobileNotification").prop('checked');
+        let SendMessage = $("#NotificationSettingsList_" + i + "__SendMessage").prop('checked');
+        let SendEmail = $("#NotificationSettingsList_" + i + "__SendEmail").prop('checked');
+
+        $.ajax({
+            url: '@Url.Action("SaveInfo")',
+            method: "POST",
+            global: false,
+            data: { NotificationSettingId: NotificationSettingId, SMSTemplateId: SMSTemplateId, EmailTemplateId: EmailTemplateId, SendMobileNotification: SendMobileNotification, SendMessage: SendMessage, SendEmail: SendEmail },
+            success: function (data) {
+                 ;
+                fadeInOutText($('#rfid_' + i), data.Message, data.Status);
+            },
+            error: function (jqXHR, exception) {
+                fadeInOutText($('#rfid_' + i), 'Failed', 'error');
+            }
+        });
+    });
+
+    function AddNotificationSettings()
+    {
+        $.ajax({
+            url: '@Url.Action("AddNotificationSettings")',
+            method: "POST",
+            data: { id:@Model.ModuleId},
+            success: onSearchSuccess,
+            error: OnFailure
+        });
+    }
+</script>
+

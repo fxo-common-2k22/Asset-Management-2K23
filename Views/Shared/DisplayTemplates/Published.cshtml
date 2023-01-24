@@ -1,0 +1,19 @@
+﻿@model bool?
+@{
+    var o = ViewData.ModelMetadata;
+    var isChecked = Model.HasValue ? Model.Value : false;
+    var radioId = ViewData.TemplateInfo.GetFullHtmlFieldId("");
+}
+
+@if (Model.HasValue)
+{
+    if (Model.Value)
+    {
+        <p>Yes</p>
+    }
+    else
+    {
+        <p>No</p>
+    }
+}
+

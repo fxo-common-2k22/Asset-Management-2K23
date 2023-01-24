@@ -1,0 +1,138 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageRequestsViewModel
+@using FAPP.Model
+@using System.Collections.Generic
+@using System.Linq
+
+@{
+    ViewBag.Title = "Manage Requests";
+    IEnumerable<FormActionGroupRight> formactiongrouprightlist = ViewBag.FormActionGroupRights;
+}
+<style>
+    .table tr th, .table tr td {
+        border: 0px !important;
+    }
+</style>
+
+
+
+
+
+@section topRightMenu{
+    <ul class="minitiles link">
+        @if (formactiongrouprightlist.Where(x => x.FormAction.ActionName == "AddNewRequests").Any())
+        {
+        <li title="Add New Request" class="blue">
+            <a href="@Url.Action("AddEditRequest", "Requests")">
+                <i class="fa fa-plus"></i>
+            </a>
+        </li>
+        }
+
+    </ul>
+
+    @*<ul class="stats">
+            <li class='satgreen' title="Approved">
+                <i class="fa fa-slack"></i>
+                <div class="details">
+                    <span class="big largeFont" id="totalApproved">
+                        @(Model.Requests == null ? "" : Model.Requests.Where(u => u.StatusName == "Approved").Count().ToString())
+                    </span>
+                </div>
+            </li>
+            <li class='red' title="Draft">
+                <i class="fa fa-slack"></i>
+                <div class="details">
+                    <span class="big largeFont" id="totalDraft">
+                        @(Model.Requests == null ? "" : Model.Requests.Where(u => u.StatusName == "Draft").Count().ToString())
+                    </span>
+                </div>
+            </li>
+            <li class='orange' title="Pending">
+                <i class="fa fa-slack"></i>
+                <div class="details">
+                    <span class="big largeFont" id="totalPending">
+                        @(Model.Requests == null ? "" : Model.Requests.Where(u => u.StatusName == "Pending").Count().ToString())
+                    </span>
+                </div>
+            </li>
+        </ul>*@
+}
+@using (Ajax.BeginForm("SearchRequests", "Requests",
+                                            new AjaxOptions
+                                            {
+                                                OnSuccess = "OnSearchSuccess",
+                                                OnFailure = "OnSearchFailure",
+                                                UpdateTargetId = "UpdateRequests"
+                                            }))
+{
+    Html.EnableClientValidation(false);
+    <div class="vbox row">
+        <table class="table" style="border:0px">
+            <tr>
+                <td>@Html.EditorFor(x => x.RequestId, new { htmlAttributes = new { @class = "form-control", @placeholder = "Request No" } })</td>
+                <td>@Html.EditorFor(x => x.RequestDate, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "Request Date" } })</td>
+                <td>@Html.DropDownListFor(model => model.EmployeeId, new SelectList(Model.EmployeeDD, "Value", "Text", Model.EmployeeId), "--Select Employee--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })</td>
+                <td>@Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.DepartmentsDD, "Value", "Text", Model.DepartmentId), "--Select Department--", htmlAttributes: new { @class = "form-control", @style = "width:100%" })</td>
+                <td>@Html.DropDownListFor(model => model.StatusId, new SelectList(ViewBag.Statuses, "Value", "Text", Model.StatusId), "=All=", htmlAttributes: new { @class = "form-control", @style = "width:100%" })</td>
+                <td><input type="submit" name="name" value="Search" class="btn btn-primary" /></td>
+            </tr>
+        </table>
+    </div>
+}
+<div id="UpdateRequests">
+    @Html.Partial("_PartialManageRequests", Model)
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#RequestDate").val("");
+        })
+        function DeleteRequest(id) {
+            bootbox.confirm({
+                title: "Delete Request?",
+                message: "Are you sure? This cannot be undone.",
+                buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Cancel'
+                    },
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> Confirm'
+                    }
+                },
+                callback: function (result)
+                {
+                    if (result == true) {
+                        $.ajax({
+                            url: "@Url.Action("DeleteRequest","Requests")",
+                            method: "POST",
+                            data: { id: id },
+                            success: function (data) {
+                                if (data.Messages != "" && data.Messages != undefined) {
+                                    $("#rowReq_" + id).remove();
+                                    DisplayMessage('', data.Messages);
+                                } else {
+                                    DisplayMessage('error', data.Error);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        };
+
+        function OnBegin(request) {
+        }
+        function OnSearchSuccess(response) {
+        }
+        function OnSearchFailure(response) {
+        }
+
+$('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+@{
+<label class="label label-satgreen" title="Approved">Approved: @(Model.Requests == null ? "" : Model.Requests.Where(u => u.StatusName == "Approved").Count().ToString())</label>
+<label class="label label-red" title="Draft">Draft:   @(Model.Requests == null ? "" : Model.Requests.Where(u => u.StatusName == "Draft").Count().ToString())</label>
+<label class="label label-orange" title="Pending">Pending:    @(Model.Requests == null ? "" : Model.Requests.Where(u => u.StatusName == "Pending").Count().ToString())</label>
+} </p>`);
+    </script>
+}
+

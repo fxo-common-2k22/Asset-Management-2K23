@@ -1,0 +1,12 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+
+
+<div id="PanelNote" class="notes" style="background: #33993342;">
+    <ol>
+        <li>
+            <span>Use this window to <span>save</span> matched <span>invoices</span></span>
+            <span class="bold">Adjust Amount <span class="bold" id="adjustableAmount">@(Model.SupplierPayment.Amount - Model.SupplierInvoicePaymentList.Sum(m => m.Amount)) </span></span>
+        </li>
+    </ol>
+</div>
+

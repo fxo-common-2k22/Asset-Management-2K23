@@ -1,0 +1,135 @@
+﻿@model FAPP.Model.CHECKINOUT
+<div id="mdlBiometricAttendanceTest" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" style="width:30%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Biometric Attendance Test</h5>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-horizontal form-bordered" id="AccountSetting">
+                            @using (Ajax.BeginForm("UserCheckInOut", "BiometricAttendance", new { @Area = "Academics" }, new AjaxOptions { OnSuccess = "OnResponceBack" }, new { @id = "frmCheckInOut" }))
+                            {
+                                Html.EnableClientValidation(false);
+                                <div class="col-sm-12" style="background: #f6f6f6;">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.USERID, htmlAttributes: new { @style = "font-weight: normal;padding-top: 3%;" })
+                                        @Html.TextBoxFor(m => m.USERID, new { @class = "form-control", @placeholder = "Enter User Id" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" style="background: #f6f6f6;">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CHECKTIME, htmlAttributes: new { @style = "font-weight: normal; padding-top: 3%;" })
+                                        @Html.TextBoxFor(m => m.CHECKTIME, new { @class = "datetimepicker" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" style="background: #f6f6f6;">
+                                    @Html.LabelFor(model => model.CHECKTYPE, "In/Out", htmlAttributes: new { @style = "font-weight: normal; padding-top: 3%;" })
+                                    <div class="form-group col-sm-12">
+                                        <label>
+                                            @Html.RadioButtonFor(m => m.CHECKTYPE, "I", new { })
+                                            Check In
+                                        </label>
+                                        <label>
+                                            @Html.RadioButtonFor(m => m.CHECKTYPE, "O", new { })
+                                            Check Out
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="/HP/Attendances/RawAttendanceLog" target="_blank" style="float:left">Raw User Attendance</a>
+                <button id="btnSaveAccount" @*onclick="return IsValid();"*@ type="submit" form="frmCheckInOut" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //function IsValid() {
+    //    var validated = true;
+    //    if (!$('#USERID').val()) {
+    //        DisplayMessage('error', 'Employee Is required');
+    //        $('#USERID').select2('open');
+    //        return false;
+    //    }
+    //    if (!$('#CHECKTIME').val()) {
+    //        DisplayMessage('error', 'Time is required');
+    //        $('#CHECKTIME').focus();
+    //        return false;
+    //    }
+    //    return validated;
+    //}
+
+    function OnResponceBack(data) {
+        OnResponceBackFromServer(data);
+
+    }
+    //$('.timepicker').datetimepicker({
+    //    timepicker: true,
+    //    datepicker: false,
+    //    format: 'H:i'
+    //});
+    $('.datetimepicker').val(getCurrentDateTime());
+    
+    $('#mdlBiometricAttendanceTest').on('shown.bs.modal', function () {
+            var pagesize = 20;
+            $ajaxRemoteSearchUrl = '@Url.Action("SearchUsers")';
+            $ajaxRemotePlaceHolder = "--(Ctrl+F) Seacrh User --";
+            $ajaxRemoteRedirectUrl = '/Academics/BiometricAttendance/BiometricAttendance/';
+
+            //Method which is to be called for populating options in dropdown //dynamically
+            $('#ddlUserId').select2({
+                ajax: {
+                    delay: 150,
+                    global: false,
+                    url: $ajaxRemoteSearchUrl,
+                    dataType: 'json',
+                    data: function (params) {
+                        params.page = params.page || 1;
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                        };
+                    }
+                },
+                placeholder: $ajaxRemotePlaceHolder,
+                minimumInputLength: 2,
+                allowClear: true,
+                templateSelection: formatRepoSelection
+        });
+        document.onkeydown = function (e) {
+            e = e || window.event;//Get event
+            if (e.ctrlKey) {
+                var c = e.which || e.keyCode;//Get key code
+                switch (c) {
+                    case 70://Ctrl+f
+                        e.preventDefault();
+                        if (($("element").data('bs.modal') || {}).isShown) {
+                            $("#ddlUserId").focus();
+                            $("#ddlUserId").select2('open');
+                        }
+                        break;
+                }
+            }
+        };
+        });
+    function formatRepoSelection(repo) {
+        if (repo.id) {
+            window.location.replace($ajaxRemoteRedirectUrl + repo.id);
+            return 'please wait...';
+        }
+        return repo.title || repo.text;
+    }
+</script>

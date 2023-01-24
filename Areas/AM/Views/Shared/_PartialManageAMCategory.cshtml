@@ -1,0 +1,34 @@
+﻿@model FAPP.Areas.AM.ViewModels.ManageAMCategoryViewModel
+<div id="todisplay">
+    <table class="table table-hover">
+        <tr>
+            <th width="20px">Sr #</th>
+            <th>Name</th>
+            <th>Category Code</th>
+            <th>Action</th>
+        </tr>
+        @{var count = 0;}
+        @foreach (var item in Model.Categories)
+        {
+            <tr>
+                <td><span class="label label-default current-theme">@(++count)</span></td>
+                <td id="Name_@item.CategoryId">@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                <td id="Name_@item.CategoryId">@Html.DisplayFor(modelItem => item.CategoryCode)</td>
+                <td>
+                    @using (Ajax.BeginForm("EditCategory", "Setup",
+                        new AjaxOptions
+                        {
+                            OnSuccess = "OnResponceBackFromServer"
+                        }))
+                    {
+                        <input type="hidden" name="CategoryId" value="@item.CategoryId" />
+                        <input type="submit" class="btn btn-primary load" value="Edit" />
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+

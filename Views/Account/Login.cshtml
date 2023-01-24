@@ -1,0 +1,124 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Login | @System.Web.HttpContext.Current.Session["CompanyName"]</title>
+    <link rel="shortcut icon" type="image/x-png" href="~/App_Themes/Assets/assets-favicon.png" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <link href="~/App_Themes/Flat/bootstrap5.css" rel="stylesheet" />
+    <link href="~/App_Themes/Flat/fontawesome-free-6.0.0/css/all.css" rel="stylesheet" />
+    <link href="~/App_Themes/Flat/css/Style.css" rel="stylesheet" />
+    @*<script src="~/Scripts/jquery-3.3.1.min.js"></script>*@
+
+</head>
+
+<body class="p-md-7 d-flex" style="background: #f3fbfe url('/App_Themes/Assets/am-bg.jpg') no-repeat left; background-size: contain; background-attachment: fixed ">
+    <div class="h-100 w-100 loaded">
+        <div class="d-md-flex h-100 loaded">
+            <div class="col-xl-8 col-md-6 loaded"></div>
+
+            <div class="col-xl-4 col-md-6 bg-white-90 h-100 rounded-6 d-flex align-items-center  position-relative loaded" style="background:url(/assets/images/bg-login.jpg) no-repeat right bottom">
+                <div class="wrapper text-center p-5 w-100 position-relative loaded">
+                    <div id="loader-wrapper" class="p-0  loaded">
+
+
+
+                    </div>
+                    <div class="d-flex flex-column align-items-center justify-content-center h-95 loaded">
+                        <div class="app-auth-body w-100 loaded">
+                            <div class="h-100" id="loaderbg" style="background:rgba(255, 255, 255, 0.86); display:none; width:100%; position:absolute; z-index:1; top:0; left:0">
+                                <div>
+                                    <div id="form-loader" style="display:none"></div>
+                                    <h3 class="ath">Authenticating</h3>
+                                </div>
+                            </div>
+                            <form action="/Account/Login" method="post" data-ajax="true" data-ajax-begin="onLoginBegin" data-ajax-failure="onLoginFailure" data-ajax-method="Post" data-ajax-success="onLoginSuccess" id="signupForm">
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary()
+                                <div class="app-auth-branding  loaded">
+                                    <a>
+                                        <img src="~/Branding/login-logo.png" alt="" class="mb-3" style="width:130px">
+                                    </a>
+                                </div>
+                                <p class="mb-3">Please enter your username <br>and password.</p>
+                                <div class="alert alert-danger rounded" role="alert" id="error-message" style="display:none">
+                                    <i class="fa-solid fa-circle-exclamation"></i>  <span id="response-message">Login Failed Try Again</span>
+                                </div>
+
+                                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                                <div class="email controls loaded">
+                                    <div class="form-group mb-3 loaded">
+                                        <input type="text" name="UserName" placeholder="Username..." class="form-control focus-shadow" style="height:45px" autocomplete="off" id="UserName">
+                                    </div>
+                                </div>
+                                <div class="email controls loaded">
+                                    <div class="email controls loaded">
+                                        <input type="password" name="Password" placeholder="Password..." class="form-control focus-shadow" style="height:45px" autocomplete="off" id="Password">
+                                    </div>
+                                </div>
+                                <div class="form-input-item text-center mt-5 loaded">
+                                    <button type="submit" class="btn btn-primary p-2 ps-3 pe-3" id="btn_contact" data-wow-delay="0.3s">Log in</button>
+                                    <button type="submit" class="btn btn-danger p-2 ps-3 pe-3">Forgot Password</button>
+                                    <p class="alert"></p>
+                                    <div class="form-message loaded"></div>
+                                </div>
+                                <div  style="display: block;">
+                                    @*<button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="icon-cross"></i></button>*@
+                                    <span class="vd_alert-icon"><i class="fa fa-exclamation-circle vd_red"></i></span><strong></strong>
+                                  @ViewBag.LastBuild
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--//flex-column-->
+            </div>
+
+        </div>
+    </div>
+    <link href="/css/newsletterloader.css" rel="stylesheet">
+
+    <script src="~/assets/js/jquery/dist/jquery.min.js"></script>
+    <script src="~/assets/js/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/assets/js/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/assets/js/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+
+    <script type="text/javascript">
+        function onLoginBegin() {
+
+            $('#form-loader').css('display', 'block');
+            $('#loaderbg').css('display', 'block');
+        }
+        function onLoginSuccess(res) {
+            debugger
+            if (res.response == "success") {
+
+                window.location.href = res.url;
+            }
+            else {
+                onLoginFailure(res)
+            }
+
+        }
+        function onLoginFailure(res) {
+            debugger
+
+            $('#form-loader').css('display', 'none');
+            $('#loaderbg').css('display', 'none');
+
+
+            $('#error-message').css('display', 'block');
+            $('#response-message').html(res.message);
+            setTimeout(function () {
+                $('#error-message').css('display', 'none');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
+

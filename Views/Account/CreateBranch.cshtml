@@ -1,0 +1,194 @@
+﻿@model FAPP.Model.Branch
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Branch</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link href="~/css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/form-elements.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="shortcut icon" type="image/x-png" href="~/Images/ez-favicon.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+</head>
+<body class="container-fluid">
+<style>
+    .first {
+        height:0% !important;
+    }
+    .inner-bg {
+        background: rgb(238, 238, 238) !important;
+    }
+    .form-top {
+        background: rgb(238, 238, 238) !important;
+        padding: 0;
+    }
+    .form-top-left {
+        background: rgb(238, 238, 238) !important;
+    }
+</style>
+    <!-- Top content -->
+    <div class="top-content">
+        <div class="inner-bg">
+            <div class="first">
+                <div class="col-sm-4 col-sm-offset-4 form-box f">
+                    <div class="form-top form-top1">
+                        <div class="form-top-left" id="topdiv" style="text-align:center; width:100%">
+                            @if (ViewBag.logoimage != null)
+                            {
+                                <h3><img src="data:image;base64,@System.Convert.ToBase64String(ViewBag.logoimage)" id="logo" /></h3>
+                            }
+                            else
+                            {
+                                <h3>
+                                    <h3><img id="logo" src="~/uploads/Logos/CompanyLogo.png" /></h3>
+                                </h3>
+                            }
+                            @*<h3><img id="logo" /></h3>*@
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="second">
+
+                <div class="row">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        @Html.Partial("_PartialAlerts")
+                        <div class="box box-bordered blue">
+                            <div class="box-title">
+                                <h3 class="Bold">
+                                    <strong>  Create Branch</strong>
+                                </h3>
+                            </div>
+                            <div class="box-content nopadding">
+                                <form action="@Url.Action("CreateBranch")" method="POST" class="form-horizontal form-bordered" enctype="multipart/form-data" autocomplete="off">
+                                    <div class="" id="form_account">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.BranchId, htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(m => m.BranchId, new { htmlAttributes = new { @class = "form-control", @placeHolder = "Branch Id", @autofocus = "autofocus" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control", @placeHolder = "Branch Name", @autofocus = "autofocus" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.BranchCode, htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(m => m.BranchCode, new { htmlAttributes = new { @class = "form-control", @placeHolder = "Branch Id", @autofocus = "autofocus" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.AddressLine1, "Address", htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(m => m.AddressLine1, new { htmlAttributes = new { @class = "form-control", @placeHolder = "Address" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.PhoneNumber, "Phone", htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(m => m.PhoneNumber, new { htmlAttributes = new { @class = "form-control mobile", @placeHolder = "" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.EmailAddress, "Email", htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(m => m.EmailAddress, new { htmlAttributes = new { @class = "form-control", @placeHolder = "e@e.com" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.RegPrefix, "Reg Prefix", htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(m => m.RegPrefix, new { htmlAttributes = new { @class = "form-control", @placeHolder = "Reg Prefix" } })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.CompanyName, "Company", htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(m => m.CompanyName, new { htmlAttributes = new { @class = "form-control", @placeHolder = "Company Name" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.NTN, "NTN", htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(m => m.NTN, new { htmlAttributes = new { @class = "form-control", @placeHolder = "NTN" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.GSTN, "GSTN", htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(m => m.GSTN, new { htmlAttributes = new { @class = "form-control", @placeHolder = "GSTN" } })
+                                            </div>
+                                        </div>
+                                        @*<div class="form-group editcontrol">
+            <div class="col-md-4">
+                <label>
+                    <input type="file" name="LargeLogo" value="" /> Large Logo
+                </label>
+            </div>
+            <div class="col-md-4">
+                <label>
+                    <input type="file" name="SmallLogo" value="" /> Small Logo
+                </label>
+            </div>
+            <div class="col-md-4">
+                <label>
+                    <input type="file" name="MiniLogo" value="" /> Mini Logo
+                </label>
+            </div>
+        </div>*@
+                                    </div>
+                                    <div class="form-actions col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-primary" onclick="showBlockUI()">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Javascript -->
+    <script src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.backstretch.min.js"></script>
+    <script src="~/Scripts/scripts.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.mask.js"></script>
+    <script src="/frameworks/blockUI/jquery.blockUI.js"></script>
+    <script>
+        function showBlockUI() {
+            $.blockUI({ message: '<div style="font-size: 18px;padding: 9px;"><i class="fa fa-cog fa-spin fa-fw"></i><span class="">Please wait. We are setting you up.</span></div>' });
+        }
+        $('.mobile').mask("0000-0000000", { placeholder: "____-_______" });
+    </script>
+</body>
+
+</html>
+
+

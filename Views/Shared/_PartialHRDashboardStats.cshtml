@@ -1,0 +1,70 @@
+﻿@model FAPP.ViewModel.Common.GraphsModel
+<style>
+    .itag {
+        font-size: 36px;
+        color: #FFF;
+        float: left;
+        margin: 0;
+    }
+
+    .details {
+        margin-left: 55px;
+    }
+
+        .details span.big {
+            font-size: 16px;
+        }
+
+        .details span {
+            color: #FFF;
+            display: block;
+            font-size: 12px;
+        }
+</style>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="box box-color box-bordered green">
+            <div class="box-title">
+                <i class="itag fa fa-building"></i>
+                <div class="details ">
+                    <span class="big" id="deps">@(Model.Deparments != null ? Model.Deparments.ToString():"")</span>
+                    <span id="textspan1">Deparments</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="box box-color box-bordered lightred">
+            <div class="box-title">
+                <i class="itag fa fa-address-card"></i>
+                <div class="details ">
+                    <span class="big" id="degns">@(Model.Designations != null ? Model.Designations.ToString() : "")</span>
+                    <span id="textspan2">Designations</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="box box-color box-bordered blue">
+            <div class="box-title">
+                <i class="itag fa fa-male"></i>
+                <div class="details ">
+                    <span class="big" id="males">@(Model.Males != null ? Model.Males.ToString() : "")</span>
+                    <span id="textspan3">Male</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="box box-color box-bordered orange">
+            <div class="box-title">
+                <i class="itag fa fa-female"></i>
+                <div class="details ">
+                    <span class="big" id="females">@(Model.Females != null ? Model.Females.ToString() : "")</span>
+                    <span id="textspan4">Female</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>

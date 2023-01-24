@@ -1,0 +1,78 @@
+﻿
+@model FAPP.Areas.AM.ViewModels.ReportModel
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-hover no-head-border table-responsive table-striped" id="gv">
+            <thead>
+                <tr>
+                    <th>Sr</th>
+                    <th>Product Name</th>
+                    <th>Category Name</th>
+                    <th>Available</th>
+                    <th>Issued</th>
+                    <th>Damaged</th>
+                    <th>In Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    /**/
+
+                    if (Model.SummarizeReport != null)
+                    {
+                        var count = 0;
+                        <tr>
+                            <td colspan="3" class="bold">Total:</td>
+                            <td class="bold">@(Model.SummarizeReport.Sum(s => s.Available))</td>
+                            <td class="bold">@(Model.SummarizeReport.Sum(s => s.Issued))</td>
+                            <td class="bold">@(Model.SummarizeReport.Sum(s => s.Damaged))</td>
+                            <td class="bold">@(Model.SummarizeReport.Sum(s => s.InStock))</td>
+                        </tr>
+                        foreach (var item in Model.SummarizeReport)
+                        {
+
+                            <tr>
+                                <td>@(++count)</td>
+                                <td>@item.ProductName</td>
+                                <td>@item.CategoryName</td>
+                                <td>@item.Available</td>
+                                <td>@item.Issued</td>
+                                <td>@item.Damaged</td>
+                                <td>@item.InStock</td>
+                            </tr>
+                        }
+
+
+
+                    }
+                }
+
+
+            </tbody>
+        </table>
+
+        @if (Model.SummarizeReport == null || Model.SummarizeReport.Count == 0)
+        {
+            <div style="text-align: center">
+                No data found
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+         @*function printGV() {
+            var  title = @Html.Raw(Json.Encode(ViewBag.title));
+            printData('gv', title, '', '');
+        }*@
+
+$('#extendedPageHeader').html(`<p style="margin:11px 0px 0px 0px">
+@{
+<label class="label label-darkblue" title="">Total: @(Model?.SummarizeReport?.Count)</label>
+} </p>`);
+
+    });
+
+</script>

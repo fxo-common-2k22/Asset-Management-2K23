@@ -1,0 +1,67 @@
+﻿@model FAPP.ViewModel.MessagingVM
+@{
+    ViewBag.Title = "Add Edit Message";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section TopRightMenu{
+    <div id="topRightBtns">
+        <ul class="minitiles">
+
+            <li class="red">
+                <a href="@FAPP.DAL.SessionHelper.ReturnUrl" data-toggle="tooltip" title="Back to Dashboard">
+                    <i class="fa fa-mail-reply"></i>
+                </a>
+            </li>
+            @*@if (Model.Template.TemplateId != Guid.Empty)
+                {
+                    <li class="green" id="topDetBtn">
+                        <a href="javascript:;" onclick="GetModalData($('#Template_TemplateId').val(), '/Messaging/DetailsModal', 'frmModal', 'frmModalContent'); $('#frmModal').show();" data-toggle="tooltip" title="Details">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </li>
+
+                }*@
+            <li class="darkblue" data-toggle="tooltip" title="" data-original-title="Save Template">
+                <a href="javascript:" onclick="saveMessagingTemplate()" id="addBtn">
+                    <i class="fa fa-save"></i>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+}
+
+<link href="~/Scripts/iconPicker/bootstrap-iconpicker.min.css" rel="stylesheet" />
+@*<link href="~/Content/Content/font-awesome.min.css" rel="stylesheet" />*@
+<link href="~/Content/plugins/multiselect/multi-select.css" rel="stylesheet" />
+@*<link href="~/Scripts/summernote/summernote.css" rel="stylesheet" />*@
+
+<div id="msgGrid">
+    @Html.Partial("_MessagingTemplateFrm", Model)
+</div>
+
+@section scripts{
+    <script src="~/Scripts/plugins/multiselect/jquery.multi-select.js"></script>
+    <script>
+        function saveMessagingTemplate() {
+             ;
+            $('#saveBtn').click();
+        }
+    </script>
+    @*<script src="~/Scripts/summernote/summernote.min.js"></script>
+        <script src="~/Scripts/summernote/summernote-data.js"></script>*@
+    <script>
+    if ($("#Template_Title").val() === "") {
+        $("#pageHeading").html("Add " + $("#TemplateType_TemplateTypeName").val() + " Message");
+    } else {
+        $("#pageHeading").html("Edit Template " +"' "+ $("#Template_Title").val()+" '");
+    }
+        $('#extendedPageHeader').html(`<p style="margin:8px 0px">
+                @{
+                <label class="label label-green" title="Selected Template Type Name">  @(Model.TemplateType.TemplateTypeName)</label>
+                } </p>`);
+
+    </script>
+}

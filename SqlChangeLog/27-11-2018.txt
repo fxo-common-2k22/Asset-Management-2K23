@@ -1,0 +1,17 @@
+﻿ 
+Alter TABLE POS.Products
+	ADD [AvailableQuantity] [decimal]  NULL 
+GO
+
+
+Alter TABLE POS.SaleReturns
+	add TaxDebitVoucherDetailId							long  NULL 
+	add TaxCreditVoucherDetailId        				long  NULL 
+	add DiscountDebitVoucherDetailId    				long  NULL 
+	add DiscountCreditVoucherDetailId   				long  NULL 
+	add CommisionDebitVoucherDetailId   				long  NULL 
+	add CommisionCreditVoucherDetailId  				long  NULL 
+GO
+
+Alter TABLE POS.SaleInvoiceProducts
+	ADD [AvailableQuantity] [CostPrice]  NULL 

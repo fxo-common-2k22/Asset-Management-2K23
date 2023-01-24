@@ -1,0 +1,148 @@
+﻿@model FAPP.Areas.AM.ViewModels.ItemRegisterVM
+@using PagedList.Mvc;
+@using FAPP.Model;
+
+<div class="downpadding">
+    <table class="table table-hover table-condensed table-striped">
+        <thead>
+            <tr>
+                <th width="20p">Sr.</th>
+                <th>Item Code</th>
+                <th>Item Manual Code</th>
+                <th width="200px">Item</th>
+                <th>Value</th>
+                <th>Qty</th>
+                <th>Date</th>
+                <th>Employee-Department</th>
+                <th>Condition</th>
+                <th width="100px">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                /**/
+
+                int count = 0;// (25 * (Model.CurrentItemRegister.PageNumber - 1)) + 1;
+                count = (Model.pagesize * Model.CurrentItemRegister.PageNumber) - (Model.pagesize);
+
+            }
+            @foreach (var item in Model.CurrentItemRegister)
+            {
+                <tr>
+                    <td width="20px"><span class="label label-default current-theme">@(++count)</span></td>
+                    <td>
+                        @item.ItemCode
+                        <br />
+                        @{
+                            var className = "";
+                            switch (item.Status)
+                            {
+                                case FAPP.AM.Models.ItemRegisterEnum.Available:
+                                    className = "green-span";
+                                    break;
+                                case FAPP.AM.Models.ItemRegisterEnum.Issued:
+                                    className = "orange-span";
+                                    break;
+                                case FAPP.AM.Models.ItemRegisterEnum.Damaged:
+                                    className = "red-span";
+                                    break;
+
+
+
+                            }
+                        }
+                        <span title="Status : @(item.Status)" class="label label-default colored-span @(className) Status-span">
+                            @(item.Status)
+                        </span>
+                    </td>
+                    <td>@item.ItemManualCode</td>
+                    <td>@Html.DisplayFor(m => item.Product.ProductName)</td>
+                    <td>@item.Value</td>
+
+                    <td>@item.Qty</td>
+                    <td>@item.DateOfEntry.ToddMMMyyyyString()</td>
+                    <td>@(item.EmployeeId.HasValue ? item.Employee.EmpName : "") - @(item.CurrentdepartmentId.HasValue ? item.Department.DepartmentName : "")</td>
+                    <td>@(item.AMConditionType.Name)</td>
+                    <td>
+
+
+                        @Ajax.ActionLink("Edit", "EditItemRegister", new { id = item.ItemRegisterId }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "onEditSuccess", OnFailure = "OnFailure", }, new { @class = "btn btn-darkblue btn-xs " })
+
+
+                        <button class="btn btn-danger btn-sm" type="button" onclick="DeleteRow('@item.ItemRegisterId', '/AM/Issue/RemoveItemRegister', 'divStudents', 'Delete Item Register :   (@item.Product.ProductName)?')">
+                            Delete
+                        </button>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="targetContainer">
+        <div id='Paging' style="text-align: center">
+            Page @(Model.CurrentItemRegister.PageCount < Model.CurrentItemRegister.PageNumber ? 0 : Model.CurrentItemRegister.PageNumber)
+            of @Model.CurrentItemRegister.PageCount
+            @Html.PagedListPager(Model.CurrentItemRegister, page => Url.Action("ItemPosition", new { page = page
+           ,FromDate=Model.FromDate
+           , ToDate = Model.ToDate
+           , CategoryId = Model.CategoryId
+           , DepartmentId = Model.DepartmentId
+           , ConditionTypeId = Model.ConditionTypeId
+           , EmployeeId = Model.EmployeeId
+           ,RoomId = Model.RoomId
+           ,ItemCode = Model.ItemCode
+           ,status = Model.status
+       }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+       {
+           HttpMethod = "POST",
+           InsertionMode = InsertionMode.Replace,
+           UpdateTargetId = "divStudents"
+       }))
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<script>
+    showOrHide();
+    var message = @Html.Raw(Json.Encode(ViewBag.message));
+    var ReturnIssueId = @Html.Raw(Json.Encode(ViewBag.ReturnIssueId));
+    var IssueItemId = @Html.Raw(Json.Encode(ViewBag.IssueItemId));
+
+    if (message) {
+        DisplayMessage('', message);
+    }
+    if (ReturnIssueId) {
+        window.location.href="/AM/ReturnIssue/AddEditReturnIssue/"+ReturnIssueId;
+    }
+    if (IssueItemId) {
+        window.location.href="/AM/Issue/AddEditIssuedItem/"+IssueItemId;
+    }
+
+    //$(document).on('keyup', '#RoomDoorNo', function () {
+    //    $('#RoomCode').val($('#RoomDoorNo').val());
+    //})
+    $('#ItemRegisterItem_ProductId').change(function () {
+        try {
+            var txt = $('#ItemRegisterItem_ProductId option:selected').text();
+            if (txt) {
+                if (txt.length > 2) {
+                    var splittedCode = txt.slice(0, 2);
+                    $('#ItemRegisterItem_ItemCode').val(splittedCode.toLocaleUpperCase()+"-");
+                }
+            }
+        } catch (e) {
+
+        }
+    });
+    var topTotal = @Html.Raw(Json.Encode(Model.CurrentItemRegister?.TotalItemCount));
+    $('#topTotal').text(topTotal);
+    setTimeout(function () {
+        var text = $('.pagingalign').text();
+        $('.pagingalign').html('<div style="display: inline-block;">' + text + '</div><div id="footersection" style="display: inline-block;margin-left: 20px;"><button id="returnbtn" type="submit" class="small blue btn btn-small btn-primary" name="command" value="Retrun" title="Retrun Item(s)">Retrun Item(s)</button><button id="issuebtn" type="submit" class="small blue btn btn-small btn-primary" name="command" value="Issue" title="Issue Item(s)">Issue Item(s)</button></div>');
+        showOrHide();
+    }, 1000);
+</script>

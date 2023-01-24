@@ -1,0 +1,165 @@
+﻿@using FAPP.Helpers
+@model FAPP.ViewModel.MessagingVM
+@using PagedList.Mvc;
+
+<div id="table">
+    <div class="row">
+        <div class="col-sm-12 downpadding">
+            <div class="table-responsive">
+                <table class="table table-hover table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th width="1%">Sr.#</th>
+                            <th width="1%"><input name="SelectAll" id="SelectAll" type="checkbox" style="cursor:pointer" title="Select All" onclick="$('.checkBoxes').prop('checked', $(this).prop('checked')).change();" /></th>
+                            <th>Batch No</th>
+                            <th>Template</th>
+                            <th>Template Type</th>
+                            <th>Sent by</th>
+                            <th>Date</th>
+                            <th>Desc</th>
+                            <th>Delivered</th>
+                            <th>Sent</th>
+                            <th>Failed</th>
+                            <th>Pending</th>
+                            <th>Canceled</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int count = (25 * (Model.SmsBatchList.PageNumber - 1)) + 1;}
+                        @foreach (var item in Model.SmsBatchList)
+                        {
+
+                        <tr>
+                            <td><span class="label label-default current-theme">@(count++)</span></td>
+                            <td id="checkboxes">
+                                <input type="checkbox" name="SelectedSMSBatchNo" value="@item.BatchNo" data-id="@item.BatchNo" class="checkBoxes checkbox" style="cursor:pointer" />
+                            </td>
+                            <td>@Html.DisplayFor(m => item.BatchNo)</td>
+                            <td>@Html.DisplayFor(m => item.Template.Title)</td>
+                            <td>@Html.DisplayFor(m => item.TemplateType.TemplateTypeName)</td>
+                            <td>@Html.DisplayFor(m => Model.SmsBatchList[0].SentBy)</td>
+                            <td>@(item.BatchDate.ToShortDateString())</td>
+                            <td>@(item.SMSReference)</td>
+                            <td><span class="label label-primary">@Html.DisplayFor(m => item.Delivered)</span></td>
+                            <td><span class="label label-success">@Html.DisplayFor(m => item.Sent)</span></td>
+                            <td><span class="label label-danger">@Html.DisplayFor(m => item.Failed)</span></td>
+                            <td><span class="label label-warning">@Html.DisplayFor(m => item.Pending)</span></td>
+                            <td><span class="label label-brown">@Html.DisplayFor(m => item.Canceled)</span></td>
+                            <td><span class="label label-darkblue">@Html.DisplayFor(m => item.Total)</span></td>
+                            <td>
+                                <a class="btn btn-success btn-sm darkblue" href="/Messaging/Index/@Model.ModuleId?batch=@item.BatchNo">Details</a>
+                                @*<a class="btn btn-sm btn-info" href="javascript:;" onclick="GetModalData(@item.SmsQueueId, '/Messaging/SmsDetails', 'frmModal', 'frmModalContent');$('#frmModal').show();" data-toggle="tooltip" title="SMS Details">
+                <i class="fa fa-eye"></i>
+            </a>*@
+                                @*<button class="btn btn-danger" type="button" onclick="DeleteRow('@item.CertificateId', '/Certificates/DeleteCertificate', 'certGrid', 'Delete Certificate?')">
+                Delete
+            </button>*@
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                @*Page @(Model.SmsBatchList.PageCount < Model.SmsBatchList.PageNumber ? 0 : Model.SmsBatchList.PageNumber) of @Model.SmsBatchList.PageCount
+
+                    @Html.PagedListPager(Model.SmsBatchList, page => Url.Action("Batch", new { page = page  }))*@
+                <footer class="stickyFooter vbox" style="padding-bottom: 0px !important; width: 84%">
+                    <div class="footerContainer ">
+                        <div class="col-md-4 displayNone" style="padding-top: 5px;" id="stickyButtons">
+                            <a onclick="ConfirmSMSQueueUpdate('You Want To Resend Messages for Selected Batches?')" class="btn btn-primary btn-sm btn-xs" data-toggle="tooltip" title="Schedule SMS">
+                                <i class="fa fa-send"></i> Retry
+                            </a>
+
+                        </div>
+                        <div class="col-md-6 pull-right" id="stickyPagination">
+                            <div class="pull-right">
+                                @Html.PagedListPager(Model.SmsBatchList, page => Url.Action("Batch",
+                                new { page}), new PagedListRenderOptions {
+                                    DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded,
+                                    DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+                                    DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded,
+                                    DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded,
+                                    MaximumPageNumbersToDisplay = 10,
+
+                                })
+                            </div>
+
+                        </div>
+                        <div class="col-md-2 center-block text-center">
+                            <strong id="noOfSelectedItems" class="displayNone" style="vertical-align: -webkit-baseline-middle"></strong>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ConfirmBoxModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="frmModalContent">
+            <div class="modal-header modalHeader">
+                <h4 class="modal-title">Are You Sure?</h4>
+            </div>
+            <div class="modal-body">
+                <p id="prgConfirm">
+
+                </p>
+
+                <input id="txtCSVSmsBatchIds" type="hidden" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default bTn" id="btnCancelConfirmModal">Cancel</button>
+                <button type="button" id="btnConfirmAdmit" class="btn btn-primary bTn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.checkBoxes').change(function () {
+        $('#stickyButtons').addClass('displayNone');
+        $('#noOfSelectedItems').addClass('displayNone');
+        if ($('.checkBoxes:checked').length > 0) {
+            $('#stickyButtons').removeClass('displayNone');
+            $('#noOfSelectedItems').removeClass('displayNone');
+            $('#noOfSelectedItems').text($('.checkBoxes:checked').length + ' Batch(es) Selected');
+        }
+    })
+    var arr = [];
+    function ConfirmSMSQueueUpdate(confirmMessage){
+     
+        $("#prgConfirm").html(confirmMessage);
+        $('.checkBoxes').each(function () { //iterate all listed checkbox items
+                if (this.checked == true) {
+                    arr.push($(this).attr("data-id"));
+                }
+                if(arr.length > 0){
+                    var ids = arr.join(",");
+                    $("#txtCSVSmsBatchIds").val(ids);
+                 }else{
+                     $("#txtCSVSmsBatchIds").val('');
+                 }
+        });
+    $("#ConfirmBoxModal").modal('show');
+    }
+    $("#btnConfirmAdmit").click(function()
+    {
+
+        if (arr.length > 0) {
+
+            $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                url: '/Messaging/UpdateSMSQueueByBatchIds',
+                type: 'POST',
+                data: JSON.stringify({ SMSBatchIds: $("#txtCSVSmsBatchIds").val() }),
+                success: function (data) {
+                     
+                    var res = OnCreateUpdateSuccess(data);
+                }
+            });
+        } else {
+            toastr.warning('Please Select Messages.');
+        }
+    });
+</script>

@@ -1,0 +1,297 @@
+﻿@model FAPP.ViewModel.Common.Finance.VoucherAndReceiptModel
+@using FAPP.DAL
+@{
+    if (ViewBag.EditMode)
+    {
+        ViewBag.Title = Model.Voucher.VoucherType + "-" + Model.Voucher.VoucherId;
+    }
+}
+@section topRightMenu{
+
+    @*<span class="big largeFont">
+            @Model.Voucher.VoucherStatus
+        </span>*@
+    <ul class="stats">
+        <li class="satgreen">
+            <i class="fa fa-money"></i>
+            <div class="details">
+                <span id="BigDebitId" class="big debit">
+                    @(Model?.Voucher?.DebitAmount)
+                    <span>Debit</span>
+                </span>
+            </div>
+        </li>
+        <li class="lightred">
+            <i class="fa fa-money"></i>
+            <div class="details">
+                <span id="BigCreditId" class="big credit">
+                    @(Model?.Voucher?.CreditAmount)
+                    <span>Credit</span>
+                </span>
+            </div>
+        </li>
+
+    </ul>
+    @*<ul class="minitiles">
+        <li class="blue">
+            <a id="submitButton" class="voucherLink" title="Edit" href="/Finance/VoucherAndReceipt/JournalVoucher/@(Model?.Voucher?.VoucherId)">
+                <i class="fa fa-edit"></i>
+            </a>
+        </li>
+    </ul>*@
+}
+<div id="printsection">
+    <div class="row">
+        <div class="col-sm-12">
+            @*<div class="invoice-info">
+                    <table class="table">
+                        <tr>
+                            <td class="Noline text-center" style="vertical-align: top;">
+                                <br />
+                                <img src="~/uploads/Logos/BranchLogo@(FAPP.DAL.SessionHelper.BranchId).png" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="clearfix"></div>*@
+            <div class="invoice-info">
+                <table class="table">
+                    <tr class="AllBorder vbox">
+                        <td class="text-center" colspan="7"><b>@ViewBag.PageTitle</b></td>
+                    </tr>
+                    <tr style="background : #f5f5f5">
+                        <td class="text-left" id="tVoucherNo"><b>Voucher No.</b>&nbsp;&nbsp;@Model.Voucher.VoucherId</td>
+                        <td class="text-left" colspan="2"><b>Date</b>&nbsp;&nbsp;@(Model.Voucher.TransactionDate.ToString("dd MMM yyyy"))</td>
+                        <td class="text-left" colspan="2" id="tCurrency"><b>Currency:</b> @Model.Voucher.Currency.CurrencyName</td>
+                        <td class="text-right" colspan="2" id="tExchangeRate"><b>Exchange Rate:</b> @Model.Voucher.ExchangeRate.NumberWithComma()</td>
+                    </tr>
+                    <tr style="background : #f5f5f5">
+                        <td class="text-left" colspan="3" id="tParticulars"><b>Particular:</b> @Model.Voucher.Particulars</td>
+                        <td class="text-left" colspan="4" id="tCashBank"><b>Cash/Bank:</b> @Model.CashBankAccount</td>
+
+
+                    </tr>
+                </table>
+                <table class="table" id="maintable">
+                    <tr class="topbottomBorder">
+                        <td width="10px"><b>Sr.</b></td>
+                        <td><b>A/C Code</b></td>
+                        <td><b>Particulars</b></td>
+                        @if (Model.Voucher != null)
+                        {
+                            if (Model.Voucher.VoucherType == "JV")
+                            {
+                                <td><b>ChequeNo</b></td>
+                                <td><b>Cheque Date</b></td>
+                            }
+                        }
+                        <td><b>Debit</b></td>
+                        <td><b>Credit</b></td>
+                    </tr>
+                    <tr class="reAssignable"></tr>
+                    @if (Model.VoucherDetail != null)
+                    {
+                        int count = 1;
+                        foreach (var item in Model.VoucherDetail.OrderBy(u => u.TransactionId))
+                        {
+                            <tr class="reAssignable">
+                                <td>@(count++)</td>
+                                <td>
+                                    @(item.Account?.ACCOUNT_ID)<br />
+                                    @(item.Account?.TITLE) <span>(@(item?.Account?.Branch?.Name ?? "Branch Id Not Found"))</span>
+                                   
+                                </td>
+                                <td>@item.Narration</td>
+                                @if (Model.Voucher.VoucherType == "JV")
+                                {
+                                    <td>@item.ChequeNo</td>
+                                    <td>@item.ChequeDate</td>
+                                }
+                                <td>@item.Debit.NumberWithComma()</td>
+                                <td>@item.Credit.NumberWithComma()</td>
+                            </tr>
+                        }
+                    }
+                    <tr class="topbottomBorder" id="invoiceFooter" style="background:#f5f5f5">
+                        @if (Model.Voucher != null)
+                        {
+                            if (Model.Voucher.VoucherType == "JV")
+                            {
+                                <td colspan="4"><b></b></td>
+                            }
+                            else
+                            {
+                                <td colspan="2"><b></b></td>
+                            }
+                        }
+                        else
+                        {
+                            <td colspan="2"><b></b></td>
+                        }
+                        <td></td>
+                        <td id="tDebit" class="bold">@((Model.VoucherDetail == null ? 0 : Model.VoucherDetail.Sum(u => u.Debit)).NumberWithComma())</td>
+                        <td id="tCredit" class="bold">@((Model.VoucherDetail == null ? 0 : Model.VoucherDetail.Sum(u => u.Credit)).NumberWithComma())</td>
+
+                    </tr>
+
+                    @*<tr class="AllBorder">
+                            <td colspan="6" id="tParticulars"><b>Particular:</b> @Model.Voucher.Particulars</td>
+                        </tr>*@
+                </table>
+            </div>
+        </div>
+        @*<div class="col-sm-12">
+                <p class="mar">
+                    <span class="bold">
+                        Created On
+                        <span class="label label-default Status-span darkblue-span">
+                            @(Model.Voucher.CreatedOn != null ? Model.Voucher.CreatedOn.Value.Date.ToShortDateString() : "")
+                        </span>
+                    </span>&nbsp;
+                    <span class="bold">
+                        By
+                        <span class="label label-default Status-span darkblue-span">
+                            @(Model.Voucher.CreatedByUser != null ? Model.Voucher.CreatedByUser.Username : "")
+                        </span>
+                    </span>
+                </p>
+                @if (Model.Voucher != null)
+                {
+                    if (Model.Voucher.IsCancelled)
+                    {
+                        <p>
+                            <span class="bold">
+                                Cancelled On
+                                <span class="label label-default Status-span darkblue-span"> @(Model.Voucher.CancelledOn != null ? Model.Voucher.CancelledOn.Value.Date.ToShortDateString() : "") &nbsp;</span>
+                            </span>
+                            <span class="bold">
+                                By
+                                <span class="label label-default  Status-span darkblue-span">
+                                    @(Model.Voucher.CancelledByUser != null ? Model.Voucher.CancelledByUser.Username : "")
+                                </span>
+                            </span>
+                        </p>
+                    }
+
+                    if (Model.Voucher.ModifiedByUser != null)
+                    {
+                        <p>
+                            <span class="bold">
+                                Modified On
+                                <span class="label label-default Status-span darkblue-span"> @(Model.Voucher.ModifiedOn != null ? Model.Voucher.ModifiedOn.Value.Date.ToShortDateString() : "") &nbsp;</span>
+                            </span>
+                            <span class="bold">
+                                By
+                                <span class="label label-default  Status-span darkblue-span">
+                                    @(Model.Voucher.ModifiedByUser != null ? Model.Voucher.ModifiedByUser.Username : "")
+                                </span>
+                            </span>
+                        </p>
+                    }
+
+                }
+
+            </div>*@
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        jQuery(document).ready(function () {
+            $(".datepicker").each(function () {
+                $(this).val(RemoveTimeFromDate($(this).val()));
+            });
+            CalculateTotal();
+        });
+
+        function CalculateTotal() {
+            $rows = $('#trans_details tbody tr:visible');
+            var camount = 0, damount = 0;
+            $rows.each(function (index, value) {
+                camount += StringToFloat($(this).find('[id $= Credit]').val());
+                damount += StringToFloat($(this).find('[id $= Debit]').val());
+            });
+            $('#ftDTotal').val(damount.toFixed(2));
+            $('#ftCTotal').val(camount.toFixed(2));
+        }
+
+    </script>
+    @if (Model?.Voucher?.FiscalYear != null)
+    {
+        <script>
+         $(document).ready(function () {
+             $('#extendedPageHeader').html(`<p style="margin:10px 0"><label class="label label-green">@Html.DisplayFor(m=> m.Voucher.FiscalYear.FiscalYearName)</label>
+                    @if (Model.Voucher != null && Model.Voucher.VoucherId > 0) {
+                        <a class="label label-blue" title="View History"
+           data-ajax="true" data-ajax-begin="OnBegin" data-ajax-success="onEditSuccess" data-ajax-failure="onFailure"
+          style="color:white; text-decoration:none ; margin-right:5px"
+           href="/Finance/VoucherAndReceipt/VoucherHistory/@(Model?.Voucher?.VoucherId)"><i class="fa fa-clock-o"></i>
+        </a>
+                        if (Model.Voucher.IsCancelled == true) {
+
+                            <label class="label label-red">Cancelled</label>
+                            <label class="label label-orange">Draft</label>
+
+
+                        }
+
+                        else
+                        {
+
+                            if (Model.Voucher.IsPosted == true)
+                            {
+                            <label class="label label-blue">Posted</label>
+                        }
+                        else
+                        {
+                            <label class="label label-orange">Draft</label>
+
+                            }
+
+                        }
+                    }
+
+            </p>`);
+        })
+        </script>
+
+    }
+    else
+    {
+        <script>
+         $(document).ready(function () {
+             $('#extendedPageHeader').html(`<p style="margin:10px"><label class="label label-green">@SessionHelper.FiscalYearName</label>
+                  @if (Model.Voucher  != null && Model.Voucher.VoucherId > 0) {
+                       <a class="label label-blue" title="View History"
+           data-ajax="true" data-ajax-begin="OnBegin" data-ajax-success="onEditSuccess" data-ajax-failure="onFailure"
+          style="color:white; text-decoration:none ; margin-right:5px"
+           href="/Finance/VoucherAndReceipt/VoucherHistory/@(Model?.Voucher?.VoucherId)"><i class="fa fa-clock-o"></i>
+        </a>
+                      if (Model.Voucher.IsCancelled == true) {
+
+                            <label class="label label-red">Cancelled</label>
+                            <label class="label label-orange">Draft</label>
+
+
+                      }
+                      else {
+                      if (Model.Voucher.IsPosted == true)
+                      {
+                            <label class="label label-blue">Posted</label>
+                        }
+                        else {
+                            <label class="label label-orange">Draft</label>
+
+                          }
+                      }
+                  }
+                              <a class="label label-blue" title="View History"
+           data-ajax="true" data-ajax-begin="OnBegin" data-ajax-success="onEditSuccess" data-ajax-failure="onFailure"
+           href="/Finance/VoucherAndReceipt/VoucherHistory/@(Model?.Voucher?.VoucherId)"><i class="fa fa-clock-o"> </i>
+        </a>
+                 </p > `);
+        })
+        </script>
+    }
+
+}

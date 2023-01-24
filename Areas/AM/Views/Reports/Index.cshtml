@@ -1,0 +1,16 @@
+﻿@{
+    /**/
+
+  
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model  FAPP.Areas.AM.ViewModels.GraphsModel
+@Html.Partial("~/Areas/AM/Views/Reports/_PartialReportDashboard.cshtml", Model)
+<script>
+$('#extendedPageHeader').html(`<p style="margin:13px 0px">
+    @{
+        <label class="label label-darkblue" title="Current Date">@(DateTime.Today.ToString("MMMM dd,yyyy"))</label>
+    }
+</p>`);
+</script>

@@ -1,0 +1,88 @@
+﻿@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    if (Model == "Present")
+    {
+        @Html.TextBoxFor(model => model, new
+   {
+       @checked = true,
+       @Value = "Present",
+       id = "c7",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" style="padding-left: 2px">P</label>
+        @Html.TextBoxFor(model => model, new
+   {
+
+       @Value = "Absent",
+       id = "c8",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" style="padding-left: 2px">A</label>
+    }
+    else
+    {
+        @Html.TextBoxFor(model => model, new
+   {
+
+       @Value = "Present",
+       id = "c7",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" style="padding-left: 2px">P</label>
+        @Html.TextBoxFor(model => model, new
+   {
+       @checked = true,
+       @Value = "Absent",
+       id = "c8",
+       type = "radio",
+       @class = "icheck-me",
+       @data_skin = "square",
+       @data_color = "blue",
+       @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+   })
+        <label class="inline" style="padding-left: 2px">A</label>
+    }
+
+}
+else
+{
+    @Html.TextBoxFor(model => model, new
+{
+
+    @Value = "Present",
+    id = "c7",
+    type = "radio",
+    @class = "icheck-me",
+    @data_skin = "square",
+    @data_color = "blue",
+    @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+})
+    <label class="inline" style="padding-left: 2px">P</label>
+    @Html.TextBoxFor(model => model, new
+{
+    @checked = true,
+    @Value = "Absent",
+    id = "c8",
+    type = "radio",
+    @class = "icheck-me",
+    @data_skin = "square",
+    @data_color = "blue",
+    @style = "position: absolute; top: -10%; left: -10%; display: block; width: 120%; height: 120%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"
+})
+    <label class="inline" style="padding-left: 2px">A</label>
+}
+

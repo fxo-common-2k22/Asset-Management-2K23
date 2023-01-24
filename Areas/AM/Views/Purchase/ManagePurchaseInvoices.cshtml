@@ -1,0 +1,143 @@
+﻿@model FAPP.Areas.AM.ViewModels.PurchaseModelViewModel
+@section topRightMenu
+{
+    @if (ViewBag.CanCreate)
+    {
+
+
+
+        <ul class="minitiles">
+            <li class='blue' title="New Invoice">
+                <a href="/AM/Purchase/AddEditPurchaseInvoice">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </li>
+        </ul>
+
+        <ul hidden class="stats">
+            <li class='satgreen' title="Total Products">
+                <i class="fa fa-slack"></i>
+                <div class="details">
+                    <span class="big largeFont" id="topTotal">
+                        @(Model.v_mnl_PurchaseInvoicesPagedList.Count)
+                    </span>
+                </div>
+            </li>
+        </ul>
+
+    }
+}
+
+<style>
+    .red-span {
+        background: #e51400 !important;
+        color: #fff;
+        border: 1px solid #e51400;
+    }
+
+    .satgreen-span {
+        background: #56af45;
+        color: #fff;
+        border: 1px solid #56af45;
+    }
+
+    .darkblue-span {
+        background: #3F729B;
+        color: #fff;
+        border: 1px solid #3F729B;
+    }
+
+    .user-span {
+        background: #9e9e9e;
+        color: #fff;
+        border: 1px solid #9e9e9e;
+    }
+
+    .Status-span {
+        width: auto;
+        padding: 2px;
+        border-radius: 2px;
+    }
+
+    #targetContainer {
+        background: white;
+        text-align: left;
+        border: none;
+        padding-left: 5px;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    #unpostedAlert a {
+        text-decoration: none;
+        margin-left: 20px;
+    }
+</style>
+
+
+@using (Ajax.BeginForm("ManagePurchaseInvoices", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divStudents", LoadingElementId = "loader" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="vbox singleBoxPadding form-vertical">
+                <div class="">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            @Html.TextBoxFor(model => model.Search, new { @class = "form-control", @placeholder = "Search Supplier, Invoice No, Desc", @style = "width:300px;" })
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(model => model.FromDate, new { @class = "datepicker form-control", @placeholder = "From Date", @style = "width:90px;" })
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(model => model.ToDate, new { @class = "datepicker form-control", @placeholder = "From Date", @style = "width:90px;" })
+                        </div>
+                        <div class="form-group">
+                            @Html.CheckBoxFor(model => model.All) All
+                        </div>
+                        <div class="form-group">
+                            @Html.CheckBoxFor(model => model.WithBalance) WithBalance
+                        </div>
+                        <input type="submit" class="btn" value="Search" title="Search" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    if (Model.HasPendingInvoicePosts == true)
+    {
+        @*<div class="alert alert-success" id="unpostedAlert">
+                <strong>Attention !</strong> You have some unposted Invoices
+                <br />
+                <div style="text-align:right">
+                    <a href="/POS/Purchase/PostUnpostPurchaseInvoices"><i class="fa fa-clipboard"></i>Take me There</a>
+                </div>
+            </div>*@
+
+        <div class="alert alert-success alert-dismissable cannotAutoClose" style=" margin-bottom: 5px;" id="unpostedAlert">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <span class="h5">
+                <strong>Attention ! </strong>
+                There are some unpostd invoices
+                <a class="btn btn-primary btn-xs" href="/AM/Purchase/PostUnPostPurchaseInvoices" title="">
+                    <i class="fa fa-clipboard"></i> &nbsp;  Take me there
+                </a>
+            </span>
+        </div>
+    }
+
+    <div id="divStudents">
+        @Html.Partial("_PartialPurchaseInvoiceList", Model)
+    </div>
+
+}
+
+<script>
+        $('#extendedPageHeader').html(`<p style="margin:12px 0px">
+        @{
+        <label class="label label-darkblue" title="Total Invoices">Total: @(Model?.v_mnl_PurchaseInvoicesPagedList?.TotalItemCount??0)</label>
+        } </p>`);
+</script>

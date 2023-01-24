@@ -1,0 +1,46 @@
+﻿@model List<FAPP.Models.ActionLinks>
+@using FAPP.Models
+
+@helper  TopMenu(List<ActionLinks> nodeList)
+{
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="desktop-icons clearfix" style="clear: both; margin: 1em;">
+                <ul class="">
+                    @{
+                        var action = Request.RequestContext.RouteData.Values["action"].ToString();
+                        var controller = Request.RequestContext.RouteData.Values["controller"].ToString();
+                        var area = HttpContext.Current.Request.RequestContext.RouteData.DataTokens["area"] ?? "";
+                        ActionLinks node = GetParentMenu(action, controller, area.ToString(), nodeList);
+                        if (node!=null)
+                        {
+                            foreach (var item in nodeList.Where(s=> s.ParentForm == node.FormId &&  s.ShowOnDesktop == true))
+                            {
+                                if (item.FormName =="Dashboard")
+                                {
+                                    continue;
+                                }
+                                string url = item.FormUrl;
+                                <li>
+                                    <a id="HyperLink1" title="@item.FormName" href="@url" data-toggle="tooltip">
+                                        <span style="margin-left:5px">
+                                            <img src="@item.FontIcon">
+                                        </span>
+                                        <em style="padding-top:10px">@item.FormName</em>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+@functions {
+    public static ActionLinks GetParentMenu(string action, string controller, string area, List<ActionLinks> nodeList)
+    {
+        return nodeList.Where(s => s.Area == area && s.Action == action && s.Controller == controller).FirstOrDefault();
+    }
+}
+@TopMenu(Model)

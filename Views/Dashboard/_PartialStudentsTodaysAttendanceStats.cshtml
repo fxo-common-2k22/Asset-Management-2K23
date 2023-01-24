@@ -1,0 +1,91 @@
+﻿<div class="box box-color box-bordered darkblue" id="StudentsTodaysAttendanceGraphId" >
+    <div class="box-title">
+        <h3>
+            <i class="fa fa-calendar"></i>
+            <span id="LabelTitle">Students Today's Attendance Stats</span>
+        </h3>
+        <a href="/Academics/Attendance/Daily" style="margin-right: 2%;" target="_blank" class="btn btn-darkblue pull-right">Details</a>
+    </div>
+    <div class="box-content" style="min-height: 155px;">
+        <div id="StudentsTodaysAttendanceContainer">
+        </div>
+    </div>
+</div>
+<script>
+    $(window).on('load', function () {
+        $.ajax({
+            url: "/Academics/Dashboard/StudentsTodaysAttendanceStatsChartData",
+            type: "GET",
+            global: false,
+            success: function (data) {
+                 ;
+                if (data != null) {
+                    StudentsTodaysAttendanceStatsGraph(data);
+                    //$("#feestatsTotalGeneratedAmount").html(data.FeeStatsData.TotalGeneratedAmount);
+                    //$("#feestatsDefaulterAmount").html(data.FeeStatsData.DefaulterAmount);
+                    //$("#feestatsTotalRecievedAmount").html(data.FeeStatsData.TotalReceivedAmount);
+                }
+            }, error: function (jqXHR, exception) {
+                console.log(jqXHR);
+                toastr.error("Some Error Occured while loading Students Todays Attendance Stats");
+            }
+        }).fail(function (jqXHR, textStatus) {
+            toastr.error("Some Error Occured while loading Students Todays Attendance Stats");
+            });
+        $(".highcharts-credits").hide();
+    });
+    function StudentsTodaysAttendanceStatsGraph(d) {
+         ;
+
+        console.log(d.StudentsTodaysAttendanceStatsColoumns);
+        if ($('#StudentsTodaysAttendanceContainer').length) {
+            Highcharts.chart('StudentsTodaysAttendanceContainer', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Students Attendance Stats'
+                },
+                subtitle: {
+                    text: "Students Today's Attendance Stats"
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Amount'
+                    }
+
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f}'
+                        }
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+                },
+                series: [
+                    {
+                        name: "Student Attendance",
+                        colorByPoint: true,
+                        data: d.StudentsTodaysAttendanceStatsColoumns
+                    }
+                ],
+                drilldown: {
+                    series: null
+                }
+            });
+        }
+    }
+</script>

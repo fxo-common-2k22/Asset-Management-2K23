@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bundle xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://vswebessentials.com/schemas/v1/bundle.xsd">
+  <settings>
+    <!--Determines if the bundle file should be automatically optimized after creation/update.-->
+    <minify>true</minify>
+    <!--Determine whether to generate/re-generate this bundle on building the solution.-->
+    <runOnBuild>true</runOnBuild>
+    <!--Use absolute path in the generated CSS files. By default, the URLs are relative to generated bundled CSS file.-->
+    <adjustRelativePaths>false</adjustRelativePaths>
+    <!--Specifies a custom subfolder to save files to. By default, compiled output will be placed in the same folder and nested under the original file.-->
+    <outputDirectory />
+  </settings>
+  <!--The order of the <file> elements determines the order of the files in the bundle.-->
+  <files>
+    <file>/Area/Academics/Content/Styles/icons.css</file>
+
+    <file>/Area/Assets/Content/Styles/icons.css</file>
+    <file>/Area/Central/Content/Styles/icons.css</file>
+    <file>/Area/Fee/Content/Styles/icons.css</file>
+    <file>/Area/Finance/Content/Styles/icons.css</file>
+    <file>/Area/HRPayroll/Content/Styles/icons.css</file>
+
+    <file>/Area/Other/Library/Content/Styles/icons.css</file>
+    <file>/Area/Other/DM/Content/Styles/icons.css</file>
+    <file>/Area/Profile/Content/Styles/icons.css</file>
+
+    <file>/Area/Other/Reporting/Content/Styles/icons.css</file>
+    <file>/Area/Settings/Content/Styles/icons.css</file>
+    <file>/Area/Templates/Content/Styles/icons.css</file>
+    <file>/Area/Shop/Content/Styles/icons.css</file>
+    <file>/Area/Client/Content/Styles/icons.css</file>
+
+    <file>/Area/FrontDesk/Content/Styles/icons.css</file>
+
+	<file>/Area/Other/SB/Content/Styles/icons.css</file>
+
+    <file>/Area/TM/Content/Styles/icons.css</file>
+  </files>
+</bundle>

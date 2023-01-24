@@ -1,0 +1,107 @@
+﻿@model FAPP.Areas.AM.ViewModels.ReportModel
+@{
+
+}
+<style>
+    .pageTitle {
+        margin-bottom: 0px !important;
+    }
+</style>
+
+@section topRightMenu{
+    <ul class="minitiles">
+        <li class="orange">
+            <a title="Print" onclick="printGV();">
+                <i class="fa fa-print"></i>
+            </a>
+        </li>
+    </ul>
+}
+
+<style>
+    #main .page-header {
+        margin: 15px 0 1px 0 !important;
+        padding: 0px 0px !important;
+    }
+
+    .box .box-title {
+        margin-top: 1px !important;
+    }
+
+    #pageTitle {
+        margin-left: 0px !important;
+    }
+
+    /*.vbox {
+        margin-top: 12px !important;
+    }*/
+</style>
+@using (Ajax.BeginForm("AssetLog", "Reports", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divReports", LoadingElementId = "loader" }))
+{
+    Html.EnableClientValidation(false);
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="vbox form-vertical ">
+
+                <table>
+                    <tr>
+                        <td width="100px">
+                            @Html.TextBoxFor(model => model.FromDateTime, new { @class = "datepicker form-control", @placeholder = "From Date", })
+                        </td>
+                        <td width="100px">
+                            @Html.TextBoxFor(model => model.ToDateTime, new { @class = "datepicker form-control", @placeholder = "To Date", })
+                        </td>
+
+                        <td>
+                            @Html.DropDownListFor(model => model.CategoryId, new SelectList(ViewBag.Categories, "Value", "Text", Model.CategoryId), "---- All Categories ----", htmlAttributes: new { @class = "form-control", @style = "width:200px" })
+                        </td>
+
+                        <td>
+                            @Html.DropDownListFor(model => model.ProductId, new SelectList(ViewBag.Products, "Value", "Text", Model.ProductId), "---- All Product ----", htmlAttributes: new { @class = "form-control", @style = "width:200px" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.Search, new { @class = "form-control", @placeholder = "Search ItemCode,Category", @autofocus = "autofocus", @title = "Search ItemCode,Category", @style = "width:200px" })
+                        </td>
+                        <td>
+                            <input type="submit" class="btn btn-blue" value="Load Report" />
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="2">
+                            @Html.DropDownListFor(model => model.DepartmentId, new SelectList(ViewBag.Departments, "Value", "Text", Model.DepartmentId), "---- All Department ----", htmlAttributes: new { @class = "form-control", @style = "width:200px" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(model => model.EmployeeId, new SelectList(ViewBag.Employees, "Value", "Text", Model.EmployeeId), "---- All Employee ----", htmlAttributes: new { @class = "form-control", @style = "width:200px;" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(model => model.LocationId, new SelectList(ViewBag.Locations, "Value", "Text", Model.LocationId), "---- All Location ----", htmlAttributes: new { @class = "form-control", @style = "width:200px" })
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="divReports">
+        @Html.Partial("_AssetLog", Model)
+    </div>
+}
+<iframe id="myIframe" style="display: none;" seamless="seamless"></iframe>
+@section scripts{
+    <script>
+          function printGV() {
+    var  title = @Html.Raw(Json.Encode(ViewBag.title));
+    printData('gv', title, '', '');
+        }
+
+        $(document).ready(function () {
+
+            $(".datepicker").each(function () {
+                $(this).val(RemoveTimeFromDate($(this).val()));
+            });
+        });
+    </script>
+
+}

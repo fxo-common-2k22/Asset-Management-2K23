@@ -1,0 +1,20 @@
+﻿@model  FAPP.Areas.AM.ViewModels.GraphsModel
+<div class="box box-color box-bordered" id="ShowDashboardMenus">
+    <div class="box-title">
+        <h3>
+            <i class="fa fa-bar-chart-o"></i>
+            <span id="LabelTitle">Manage</span>
+        </h3>
+    </div>
+    <div class="box-content" style="min-height: 155px;">
+        <div id="PanelDeskItems">
+            <div class="desktop-icons clearfix" style="clear: both; margin: 1em;">
+                <ul>
+                    @Html.Action("GetDashboardMenus", "Primary", new { area = "", area2 = Model.Area, controller = Model.Contoller, action = Model.Action })
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,30 @@
+﻿@model List<FAPP.Model.Certificate>
+@{
+    ViewBag.Title = "Manage Certificates";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section TopRightMenu{
+    <div id="topRightBtns">
+        <ul class="minitiles">
+            <li class="blue" style="margin-right:0">
+                <a href="@Url.Action("AddEdit","Certificates", new { type = ViewBag.TemplateTypeId })" title="Add New Certificate">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+}
+<div class="vbox">
+    
+</div>
+<div id="certGrid">
+    @Html.Partial("_CertificatesGrid", Model)
+</div>
+
+<script>
+             $('#extendedPageHeader').html(`<p style="margin:13px 0px">
+                @{
+                      <label class="label label-darkblue" title="Module Name">@(ViewBag.ModuleName)</label>
+                } </p>`);
+</script>

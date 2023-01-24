@@ -1,0 +1,17 @@
+﻿.fw { width: 100%; }
+th { text-align: left; }
+.searchbox { font-size: 13px; background-color: #ECFDDA; /*border: 1px solid #64EC2E;*/ margin-bottom: 5px; }
+.searchbox td, .searchbox th { /*border: 1px solid #64EC2E;*/ }
+.searchbox .sbheader { background-color: #64EC2E; }
+.searchbox th { font-size: 14px; color: #FFF; padding: 4px; }
+.headerbox table { width: 100%; }
+.headerbox th { font-size: 23px;
+line-height: 33px;
+color: #7DA820;
+/*text-shadow: 0px 0px 2px #35A73E;*/
+text-indent: 5px;
+text-transform: uppercase; }
+/*.back { background: url("../images/icons/x32/back.png") no-repeat scroll left center #B0E77C; display: inline-block; width: 63px; height: 32px; line-height: 32px; border-radius: 4px; padding: 2px 3px; margin: 2px 0; border: 1px solid #61CC3F; background-origin: content-box; }
+    .back:hover { background-color:honeydew; margin-right:1px; }*/
+.searchbox strong { color: #2D5C12; font-size: 14px; font-weight: normal; }
+.headerbox { border-bottom: 1px dotted #83F03B; background-color: #FFF; }

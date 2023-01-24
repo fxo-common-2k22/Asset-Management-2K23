@@ -1,0 +1,111 @@
+﻿@model FAPP.Areas.AM.ViewModels.SetupModelViewModel
+@using FAPP.Model;
+@using PagedList.Mvc;
+
+
+<div class="downpadding">
+    <table class="table table-hover table-condensed table-striped">
+        <thead>
+            <tr>
+                <th width="20px">Sr.</th>
+                <th>Warehouse</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th width="96px">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int count = (25 * (Model.AMWarehousePagedList.PageNumber - 1)) + 1;
+
+            }
+            @foreach (var item in Model.AMWarehousePagedList)
+            {
+                <tr>
+                    <td><span class="label label-default current-theme">@(count++)</span></td>
+                    <td>@Html.DisplayFor(m => item.WarehouseName)</td>
+                    <td>@Html.DisplayFor(m => item.Address)</td>
+                    <td>@Html.DisplayFor(m => item.Phone)</td>
+                    <td>
+                        @Ajax.ActionLink("Edit", "EditWarehouse", new { id = item.WarehouseId }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "onEditSuccess", OnFailure = "OnFailure", }, new { @class = "btn btn-darkblue btn-xs " })
+                        <button class="btn btn-danger btn-xs btn-sm" type="button" onclick="DeleteRow('@item.WarehouseId', '/AM/Setup/RemoveWarehouse', 'WarehousesGrid', 'Delete Warehouse :   (@item.WarehouseName)?')">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="targetContainer">
+        <div class="col-md-12">
+            <div id='Paging' style="text-align: center">
+                Page @(Model.AMWarehousePagedList.PageCount < Model.AMWarehousePagedList.PageNumber ? 0 : Model.AMWarehousePagedList.PageNumber)
+                of @Model.AMWarehousePagedList.PageCount
+                @Html.PagedListPager(Model.AMWarehousePagedList, page => Url.Action("ManageWarehouses", new { page = page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+           {
+               HttpMethod = "GET",
+               InsertionMode = InsertionMode.Replace,
+               OnSuccess = "OnCreateUpdateSuccess",
+               UpdateTargetId = "WarehousesGrid"
+           }))
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="new-warehouse" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #368ee0 !important;color:white;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Add Warehouse</h4>
+            </div>
+            @using (Ajax.BeginForm("CreateWarehouse", "Setup",
+                new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBegin", OnComplete = "OnComplete('new-warehouse')", OnSuccess = "OnCreateUpdateSuccess", OnFailure = "OnFailure" },
+                new { @class = "new-task-form form-horizontal form-bordered" }))
+            {
+                Html.EnableClientValidation(true);
+                <div class="modal-body nopadding">
+                    <div class="form-group">
+
+
+                        <label for="tasktitel" class="col-sm-3 control-label">Warehouse Name </label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(model => model.AMWarehouse.WarehouseName, new { @required = true, @class = "form-control", @placeholder = "Warehouse Name" })
+                            @Html.ValidationMessageFor(model => model.AMWarehouse.WarehouseName, null, new { @class = "text-danger" })
+                        </div>
+
+                        <label for="tasktitel" class="col-sm-3 control-label">Address</label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(model => model.AMWarehouse.Address, new { @required = true, @class = "form-control ", @placeholder = "Address" })
+                            @Html.ValidationMessageFor(model => model.AMWarehouse.Address, null, new { @class = "text-danger" })
+                        </div>
+
+                        <label for="tasktitel" class="col-sm-3 control-label">Phone</label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(model => model.AMWarehouse.Phone, new { @required = true, @class = "form-control ", @placeholder = "Phone" })
+                            @Html.ValidationMessageFor(model => model.AMWarehouse.Phone, null, new { @class = "text-danger" })
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-orange" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-primary" value="Save warehouse">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<script>
+        $("#hashCountId").html(@Model.AMWarehousePagedList.TotalItemCount)
+</script>
+
+
+

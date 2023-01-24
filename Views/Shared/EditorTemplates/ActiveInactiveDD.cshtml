@@ -1,0 +1,10 @@
+﻿@model bool?
+@{
+    var list = new List<SelectListItem>()
+    {
+        new SelectListItem(){ Text = "Active", Value = true.ToString()},
+        new SelectListItem(){ Text = "Inactive", Value = false.ToString()}
+    };
+}
+
+@Html.DropDownList("", new SelectList(list, "Value", "Text", "true"), "--Status--", new { @class = "form-control" })
