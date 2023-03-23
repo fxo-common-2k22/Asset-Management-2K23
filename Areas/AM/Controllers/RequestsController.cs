@@ -49,10 +49,10 @@ namespace FAPP.Areas.AM.Controllers
                               where reqDetails.RequestId == id
                               select new RequestDetailsViewModel
                               {
-                                  RequestDetailId =reqDetails.RequestDetailId,
+                                  RequestDetailId = reqDetails.RequestDetailId,
                                   Description = reqDetails.Description,
                                   ProductId = reqDetails.ProductId,
-                                  Quantity =reqDetails.Quantity,
+                                  Quantity = reqDetails.Quantity,
                                   RoomNumber = reqDetails.RoomId,
                                   RoomId = reqDetails.RoomId
                               }).ToList();
