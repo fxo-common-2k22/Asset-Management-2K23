@@ -34,7 +34,7 @@ namespace FAPP.Model
         //public virtual DbSet<Application> Applications { get; set; }
         //public virtual DbSet<ApplicationModule> ApplicationModules { get; set; }
         public virtual DbSet<AppForm> AppForms { get; set; }
-        //public virtual DbSet<FormAction> FormActions { get; set; }
+        public virtual DbSet<FormAction> FormActions { get; set; }
         public virtual DbSet<FormActionGroupRight> FormActionGroupRights { get; set; }
         //public virtual DbSet<FormGroupRight> FormGroupRights { get; set; }
         //public virtual DbSet<AppFormLabel> AppFormLabels { get; set; }

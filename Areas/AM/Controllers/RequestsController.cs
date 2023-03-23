@@ -44,15 +44,15 @@ namespace FAPP.Areas.AM.Controllers
                 if (request.DepartmentId != null)
                     vm.DepartmentId = (short)request.DepartmentId;
                 vm.Description = request.Description;
-                vm.StatusId = request.StatusId;
+                vm.StatusId = request.StatusId??0;
                 vm.Details = (from reqDetails in db.InvRequestDetails
                               where reqDetails.RequestId == id
                               select new RequestDetailsViewModel
                               {
-                                  RequestDetailId = reqDetails.RequestDetailId,
+                                  RequestDetailId =reqDetails.RequestDetailId,
                                   Description = reqDetails.Description,
                                   ProductId = reqDetails.ProductId,
-                                  Quantity = reqDetails.Quantity,
+                                  Quantity =reqDetails.Quantity,
                                   RoomNumber = reqDetails.RoomId,
                                   RoomId = reqDetails.RoomId
                               }).ToList();
@@ -203,7 +203,7 @@ namespace FAPP.Areas.AM.Controllers
                 var req = db.InvRequests.Find(request.RequestId);
                 vm.RequestId = req.RequestId;
                 vm.RequestDate = req.RequestDate;
-                vm.StatusId = req.StatusId;
+                vm.StatusId = req.StatusId??0;
                 if (req.EmployeeId != null)
                     vm.EmployeeId = (int)req.EmployeeId;
                 if (req.DepartmentId != null)
@@ -265,12 +265,13 @@ namespace FAPP.Areas.AM.Controllers
                 vm.RequestId = req.RequestId;
                 vm.RequestNo = req.RequestId;
                 vm.RequestDate = req.RequestDate;
-                vm.StatusId = req.StatusId;
+                vm.StatusId = req.StatusId??0;
                 if (req.EmployeeId != null)
                     vm.EmployeeId = (int)req.EmployeeId;
                 if (req.DepartmentId != null)
                     vm.DepartmentId = (short)req.DepartmentId;
                 vm.Description = req.Description;
+
 
                 vm.Details = (from reqDetails in db.InvRequestDetails
                               where reqDetails.RequestId == request.RequestId
@@ -307,9 +308,9 @@ namespace FAPP.Areas.AM.Controllers
             try
             {
                 long maxId = 0;
-                if (db.AMPurchaseOrders.Count() > 0)
-                    maxId = db.AMPurchaseOrders.Max(s => s.PurchaseOrderId);
-                var code = db.AMPurchaseOrders.Max(s => s.PurchaseOrderCode);
+                if (db.InvPurchaseOrders.Count() > 0)
+                    maxId = db.InvPurchaseOrders.Max(s => s.PurchaseOrderId);
+                var code = db.InvPurchaseOrders.Max(s => s.PurchaseOrderCode);
                 if (string.IsNullOrEmpty(code))
                 {
                     //generate new code
@@ -323,7 +324,7 @@ namespace FAPP.Areas.AM.Controllers
                     int numaricPart = Convert.ToInt32(result.Value);
                     code = "PO-" + String.Format("{0:D5}", numaricPart + 1);
                 }
-                AMPurchaseOrder entity = new AMPurchaseOrder()
+                InvPurchaseOrder entity = new InvPurchaseOrder()
                 {
                     PurchaseOrderCode = code,
                     RequestId = vm.RequestId,
@@ -334,7 +335,7 @@ namespace FAPP.Areas.AM.Controllers
                     CreatedBy = CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
-                db.AMPurchaseOrders.Add(entity);
+                db.InvPurchaseOrders.Add(entity);
                 db.SaveChanges();
 
                 var requestDetails = from detail in db.AMRequestDetail
@@ -411,7 +412,7 @@ namespace FAPP.Areas.AM.Controllers
             {
                 if (id > 0)
                 {
-                    if (db.AMPurchaseOrders.Where(w => w.RequestId == id).Any())
+                    if (db.InvPurchaseOrders.Where(w => w.RequestId == id).Any())
                     {
                         return Json(new { Error = "Please delete Purchase Order associated to this Request Number first." }, JsonRequestBehavior.AllowGet);
                     }
@@ -456,7 +457,7 @@ namespace FAPP.Areas.AM.Controllers
         ManageRequestsViewModel RequestList(ManageRequestsViewModel vm)
         {
             vm.Requests = (from request in db.InvRequests
-                           join porder in db.AMPurchaseOrders on request.RequestId equals porder.RequestId into orders
+                           join porder in db.InvPurchaseOrders on request.RequestId equals porder.RequestId into orders
                            from porder in orders.DefaultIfEmpty()
                            join emp in db.Employees on request.EmployeeId equals emp.EmployeeId into emps
                            from emp in emps.DefaultIfEmpty()
@@ -469,7 +470,7 @@ namespace FAPP.Areas.AM.Controllers
                                RequestId = request.RequestId,
                                DepartmentId = request.DepartmentId,
                                EmployeeId = request.EmployeeId,
-                               StatusId = request.StatusId,
+                               StatusId = request.StatusId??0,
                                RequestDate = request.RequestDate,
                                Description = request.Description,
                                EmpName = emp.EmpName,
@@ -587,7 +588,7 @@ namespace FAPP.Areas.AM.Controllers
                     ViewBag.ModifiedBy = db.Users.FirstOrDefault(x => x.UserID == ex.Request.ModifiedBy)?.Username;
                     ViewBag.CreatedBy = db.Users.FirstOrDefault(x => x.UserID == ex.Request.CreatedBy)?.Username;
                     ex.PurchaseOrder = new InvPurchaseOrder();
-                    ex.PurchaseOrder.PurchaseOrderId = db.AMPurchaseOrders
+                    ex.PurchaseOrder.PurchaseOrderId = db.InvPurchaseOrders
                 .Where(u => u.RequestId == ex.Request.RequestId).Select(u => u.PurchaseOrderId).FirstOrDefault();
                 }
                 ex.RequestDetail = db.InvRequestDetails.Where(u => u.RequestId == id).ToList();

@@ -85,7 +85,7 @@ namespace FAPP.Areas.AM.Controllers
             }
             else
             {
-                ex.PurchaseInvoice = new Model.AMPurchaseInvoice();
+                ex.PurchaseInvoice = new InvPurchaseInvoice();
                 ex.PurchaseInvoice.PurchaseInvoiceDate = DateTime.Now;
             }
             return ex;
@@ -100,7 +100,7 @@ namespace FAPP.Areas.AM.Controllers
                     if (ex.InvoiceNo != null)
                     {
                         var prevId = ex.PurchaseInvoice.PurchaseInvoiceId;
-                        var isExists = db.AMPurchaseInvoices.Where(u => u.PurchaseInvoiceId == ex.InvoiceNo).FirstOrDefault();
+                        var isExists = db.InvPurchaseInvoices.Where(u => u.PurchaseInvoiceId == ex.InvoiceNo).FirstOrDefault();
                         if (isExists != null)
                         {
                             ex = GetPurchaseInvoice(ex, isExists.PurchaseInvoiceId);
@@ -210,7 +210,7 @@ namespace FAPP.Areas.AM.Controllers
                                 {
                                     if (ex.PurchaseInvoice.PurchaseInvoiceId > 0) // Updation
                                     {
-                                        var purchase = db.AMPurchaseInvoices.Where(u => u.PurchaseInvoiceId == ex.PurchaseInvoice.PurchaseInvoiceId).FirstOrDefault();
+                                        var purchase = db.InvPurchaseInvoices.Where(u => u.PurchaseInvoiceId == ex.PurchaseInvoice.PurchaseInvoiceId).FirstOrDefault();
                                         if (!purchase.IsPosted && !purchase.IsCancelled)
                                         {
                                             if (PurchaseInvoice_Update(ex.PurchaseInvoice))
@@ -402,7 +402,7 @@ namespace FAPP.Areas.AM.Controllers
             var value = db.CurrencyValues.Where(u => u.CurrencyId == CurrencyId).Select(p => p.Value).FirstOrDefault();
 
             InvPurchaseInvoice _PurchaseInvoice = new InvPurchaseInvoice();
-            var idd = db.AMPurchaseInvoices.Max(u => (Int64?)u.PurchaseInvoiceId);
+            var idd = db.InvPurchaseInvoices.Max(u => (Int64?)u.PurchaseInvoiceId);
             if (idd == null)
             {
                 idd = 1000;
@@ -459,7 +459,7 @@ namespace FAPP.Areas.AM.Controllers
             bool res = false;
             if (objPurchaseInvoice.PurchaseInvoiceId > 0)
             {
-                Model.AMPurchaseInvoice _PurchaseInvoice = db.AMPurchaseInvoices.Where(u => u.PurchaseInvoiceId == objPurchaseInvoice.PurchaseInvoiceId).FirstOrDefault();
+                InvPurchaseInvoice _PurchaseInvoice = db.InvPurchaseInvoices.Where(u => u.PurchaseInvoiceId == objPurchaseInvoice.PurchaseInvoiceId).FirstOrDefault();
                 if (_PurchaseInvoice != null)
                 {
                     _PurchaseInvoice.PurchaseOrderId = objPurchaseInvoice.PurchaseOrderId;
@@ -594,7 +594,7 @@ namespace FAPP.Areas.AM.Controllers
 
         bool PostSingleInvoice(long PurchaseInvoiceId)
         {
-            var isPosted = db.AMPurchaseInvoices.Where(u => u.PurchaseInvoiceId == PurchaseInvoiceId).Select(u => u.IsPosted).FirstOrDefault();
+            var isPosted = db.InvPurchaseInvoices.Where(u => u.PurchaseInvoiceId == PurchaseInvoiceId).Select(u => u.IsPosted).FirstOrDefault();
             if (!isPosted)
             {
                 if (!checkWarehouse(PurchaseInvoiceId))
@@ -761,7 +761,7 @@ namespace FAPP.Areas.AM.Controllers
             if (id > 0 && PurchaseInvoiceId > 0)
             {
                 bool isposted = false;
-                isposted = db.AMPurchaseInvoices.Where(w => w.PurchaseInvoiceId == PurchaseInvoiceId).Select(s => s.IsPosted).FirstOrDefault();
+                isposted = db.InvPurchaseInvoices.Where(w => w.PurchaseInvoiceId == PurchaseInvoiceId).Select(s => s.IsPosted).FirstOrDefault();
                 if (isposted)
                 {
                     Error = "Please unpost the purchase invoice and then try again!";

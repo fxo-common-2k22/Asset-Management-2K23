@@ -142,10 +142,10 @@ namespace FAPP.Controllers
             {
                 currentAction = new v_mnl_FormRights_Result();
             }
-            
+
             // old applicaiton code for rights 
-            //var CreateAction = form.Where(u => u.FormURL == Url && u.FormRightName == "Can Create").FirstOrDefault();
-            //ViewBag.CanCreate = CreateAction == null ? false : CreateAction.Allowed;
+            var CreateAction = form.Where(u => u.FormURL == Url && u.FormRightName == "Can Create").FirstOrDefault();
+            ViewBag.CanCreate = CreateAction == null ? false : CreateAction.Allowed;
 
             //var DeleteAction = form.Where(u => u.FormURL == Url && u.FormRightName == "Can Delete").FirstOrDefault();
             //ViewBag.CanDelete = DeleteAction == null ? false : DeleteAction.Allowed;
@@ -157,7 +157,12 @@ namespace FAPP.Controllers
            
             //Get rights of the page based on new rights mechanism
             var formId = db.AppForms.Where(x => x.FormURL == Url && x.ApplicationModule.ApplicationId == 16).Select(x => x.FormId).FirstOrDefault();
-            ViewBag.FormActionGroupRights = db.FormActionGroupRights.Where(x => x.FormAction.FormId == formId && x.UserGroupId == SessionHelper.UserGroupId && x.Allowed == true).ToList();
+            //ViewBag.FormActionGroupRights = db.FormActionGroupRights.Where(x => x.FormAction.FormId == formId && x.UserGroupId == SessionHelper.UserGroupId && x.Allowed == true).ToList();
+            ViewBag.FormActionGroupRights = (from x in db.FormActionGroupRights
+                                             join r in db.FormActions on x.FormActionId equals r.FormActionId
+                                             where x.UserGroupId == SessionHelper.UserGroupId & x.Allowed == true && r.FormId == formId
+                                             select new FormActionGroupRightVM() { FormActionGroupRight = x, FormActions = r }).ToList();
+
 
             //
             var Audit = new Audit();

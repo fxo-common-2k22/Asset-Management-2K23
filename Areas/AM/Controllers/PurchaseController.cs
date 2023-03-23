@@ -69,7 +69,7 @@ namespace FAPP.Areas.AM.Controllers
             ViewBag.EditMode = false;
             if (id > 0)
             {
-                ex.PurchaseInvoice = db.AMPurchaseInvoices.Where(u => u.PurchaseInvoiceId == id).FirstOrDefault();
+                ex.PurchaseInvoice = db.InvPurchaseInvoices.Where(u => u.PurchaseInvoiceId == id).FirstOrDefault();
                 if (ex.PurchaseInvoice != null)
                 {
                     ViewBag.IsCancelled = ex.PurchaseInvoice.IsCancelled;

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using AMSupplierPayment = FAPP.Areas.Contact.Models.SupplierPayment;
 using AMSupplierInvoicePayment = FAPP.Areas.Contact.Models.SupplierInvoicePayment;
 using FAPP.Areas.AM.BLL;
+using FAPP.INV.Models;
+
 namespace FAPP.Areas.AM.ViewModels
 {
     public class PurchaseModelViewModel
@@ -24,7 +26,7 @@ namespace FAPP.Areas.AM.ViewModels
         public string ToDate { get; set; }
         public Int64? InvoiceNo { get; set; }
         public string CalDigit { get; set; }
-        //public AMPurchaseInvoice PurchaseInvoice { get; set; }
+        public InvPurchaseInvoice PurchaseInvoice { get; set; }
         public AMSupplierPayment SupplierPayment { get; set; }
         public List<AMPurchaseInvoiceProduct> PurchaseInvoiceProduct { get; set; }
         public List<v_mnl_PurchaseInvoices_Result> v_mnl_PurchaseInvoiceList { get; set; }

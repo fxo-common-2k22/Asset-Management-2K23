@@ -2,10 +2,11 @@
 @using FAPP.Model
 @using System.Collections.Generic
 @using System.Linq
+@using FAPP.Areas.AM.ViewModels
 
 @{
     ViewBag.Title = "Manage Requests";
-    IEnumerable<FormActionGroupRight> formactiongrouprightlist = ViewBag.FormActionGroupRights;
+    IEnumerable<FormActionGroupRightVM> formactiongrouprightlist = ViewBag.FormActionGroupRights;
 }
 <style>
     .table tr th, .table tr td {
@@ -19,7 +20,7 @@
 
 @section topRightMenu{
     <ul class="minitiles link">
-        @if (formactiongrouprightlist.Where(x => x.FormAction.ActionName == "AddNewRequests").Any())
+        @if (formactiongrouprightlist.Where(x => x.FormActions.ActionName == "AddNewRequests").Any())
         {
         <li title="Add New Request" class="blue">
             <a href="@Url.Action("AddEditRequest", "Requests")">

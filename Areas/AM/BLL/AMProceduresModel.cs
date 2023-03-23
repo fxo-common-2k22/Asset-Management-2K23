@@ -868,10 +868,10 @@ select cast(@ProductCode as int) + 1",
             foreach (var items in PurchaseInvoiceIds.Split(','))
             {
                 pid = Convert.ToInt64(items);
-                var purchaseInvoice = db.AMPurchaseInvoices.Where(u => u.PurchaseInvoiceId == pid && u.BranchId == SessionHelper.BranchId).Select(u => u.PurchaseInvoiceId).ToArray();
+                var purchaseInvoice = db.InvPurchaseInvoices.Where(u => u.PurchaseInvoiceId == pid && u.BranchId == SessionHelper.BranchId).Select(u => u.PurchaseInvoiceId).ToArray();
                 if (purchaseInvoice != null)
                 {
-                    var purchaseInvoiceProduct = db.AMPurchaseInvoiceProducts.Where(u => purchaseInvoice.Contains(u.PurchaseInvoiceId)).Select(u => (long?)u.PurchaseInvoiceProductId).ToArray();
+                    var purchaseInvoiceProduct = db.InvPurchaseInvoiceProducts.Where(u => purchaseInvoice.Contains(u.PurchaseInvoiceId)).Select(u => (long?)u.PurchaseInvoiceProductId).ToArray();
                     if (purchaseInvoiceProduct != null)
                     {
                         var purchaseInvoiceProductDetail = db.AMPurchaseInvoiceProductDetails.Where(u => purchaseInvoiceProduct.Contains(u.PurchaseInvoiceProductId)).ToList();

@@ -43,7 +43,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>default</LangVersion>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -108,8 +108,9 @@
     <Reference Include="Humanizer, Version=2.5.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <HintPath>packages\Humanizer.Core.2.5.16\lib\netstandard1.0\Humanizer.dll</HintPath>
     </Reference>
-    <Reference Include="Main.Core.DB-2K23">
-      <HintPath>C:\Assemblies\Main.Core.DB-2K23.dll</HintPath>
+    <Reference Include="Main.Core.DB-2K23, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Assemblies\Main.Core.DB-2K23.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -242,8 +243,6 @@
     <Compile Include="Areas\AM\Controllers\IssueController.cs" />
     <Compile Include="Areas\AM\Controllers\AssetController.cs" />
     <Compile Include="Areas\AM\Controllers\MenuController.cs" />
-    <Compile Include="Areas\AM\Controllers\PurchaseController.cs" />
-    <Compile Include="Areas\AM\Controllers\PurchaseOrderController.cs" />
     <Compile Include="Areas\AM\Controllers\ReportsController.cs" />
     <Compile Include="Areas\AM\Controllers\RequestsController.cs" />
     <Compile Include="Areas\AM\Controllers\ReturnIssueController.cs" />
@@ -287,6 +286,7 @@
     <Compile Include="Areas\AM\ViewModels\ClientSaleInvoiceBalanceList.cs" />
     <Compile Include="Areas\AM\ViewModels\DepreciationMainViewModel.cs" />
     <Compile Include="Areas\AM\ViewModels\FixedAssetVM.cs" />
+    <Compile Include="Areas\AM\ViewModels\FormActionGroupRightVM.cs" />
     <Compile Include="Areas\AM\ViewModels\FormAndGroupRightsViewModel.cs" />
     <Compile Include="Areas\AM\ViewModels\GraphsModel.cs" />
     <Compile Include="Areas\AM\ViewModels\HomeVM.cs" />
